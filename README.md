@@ -1,2 +1,2 @@
 # Nexora
-A modern collections Ecommerce platform
+A modern Ecommerce platform
