@@ -56,3 +56,10 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## ADMIN
+INSERT INTO admin SET email='mailnayan@webgrity.net',password='Admin@43';   
+
+Email - mailnayan@webgrity.net
+Password - Admin@43

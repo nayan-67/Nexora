@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { flushSync } from "react-dom"
 
-import { cn } from "../lib/utils"
+import { cn } from "../../lib/utils"
 
 // 1. Define the possible animation types (UPDATED to include all demo types)
 // NOTE: Type is renamed from 'AnimationType' to 'ThemeAnimationType' 
@@ -309,7 +309,7 @@ export const ToggleTheme = ({
                 onClick={toggleTheme}
                 className={cn(
                     "p-2 rounded-full transition-colors duration-300",
-                    isDark ? "hover:text-amber-400" : "hover:text-blue-500",
+                    isDark ? "hover:text-amber-400" : "hover:text-primarylw",
                     className
                 )}
                 {...props}

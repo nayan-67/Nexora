@@ -1,5 +1,0 @@
-.login-container, .register-container {
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}

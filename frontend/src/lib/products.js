@@ -1,7 +1,7 @@
 export const products = [
   {
     id: 1,
-    name: " ",
+    name: "Premium Wireless Headphones",
     price: 299,
     originalPrice: 349,
     rating: 4.9,

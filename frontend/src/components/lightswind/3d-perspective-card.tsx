@@ -28,6 +28,10 @@ const ThreeDPerspectiveCard: React.FC<ThreeDPerspectiveCardProps> = ({
     }
 
     const handleMouseMove = (event: MouseEvent) => {
+      if (!cardRef.current || !shineRef.current || !shadowRef.current) {
+        return;
+      }
+
       // Get window dimensions
       const wHeight = window.innerHeight;
       const wWidth = window.innerWidth;
@@ -115,47 +119,43 @@ const ThreeDPerspectiveCard: React.FC<ThreeDPerspectiveCardProps> = ({
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: 100vh; /* Changed to 100vh for demonstration */
+          min-height: 400px;
           position: relative;
           width: 100%;
+          padding: 40px;
         }
 
         .wrap {
-          /* Defines the 3D space depth for children */
           perspective: 1000px; 
-          width: fit-content;
+          position: relative;
+          width: ${width};
+          height: ${height};
         }
 
         .card-shadow,
         .card {
-          position: absolute; /* Changed to absolute to stack shadow and card */
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
           border-radius: 10px;
-          margin: 0 auto;
-          /* Add a slight transition for smoother movement */
           transition: transform 0.15s ease-out, background-position 0.15s ease-out;
           will-change: transform, background-position;
         }
 
         .card {
-          /* Initial position for the card */
           background: #fff 50% 50%;
           z-index: 2;
         }
         
         .card-shadow {
-          /* Initial position for the shadow */
           background: rgba(0, 0, 0, 0.5); 
           filter: blur(25px);
           opacity: 0.8;
-          width: 95%; /* Make shadow slightly smaller than card */
-          height: 95%;
           z-index: 1;
-          /* Match initial card dimensions */
-          top: 2.5%; 
-          left: 2.5%;
-          /* Also needs a transition for smooth movement */
+          transform: scale(0.9) translateY(10px);
           transition: transform 0.15s ease-out;
-          will-change: transform;
         }
 
         .card-front {
@@ -164,7 +164,6 @@ const ThreeDPerspectiveCard: React.FC<ThreeDPerspectiveCardProps> = ({
           width: 100%;
           height: 100%;
           position: relative;
-          /* Adds a border for visual depth */
           border: 1px solid rgba(255, 255, 255, 0.2); 
         }
 
@@ -173,8 +172,7 @@ const ThreeDPerspectiveCard: React.FC<ThreeDPerspectiveCardProps> = ({
           width: 100%;
           height: 100%;
           border-radius: 10px;
-          z-index: 10; /* Bring the shine layer above the card background */
-          /* Initial shine gradient */
+          z-index: 10;
           background: linear-gradient(
             135deg,
             rgba(255, 255, 255, 0.1) 0%,

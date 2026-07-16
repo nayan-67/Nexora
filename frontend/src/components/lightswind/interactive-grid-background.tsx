@@ -23,10 +23,10 @@ export interface InteractiveGridBackgroundProps
 
 const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
   gridSize = 50,
-  gridColor = "#e5e7eb",
-  darkGridColor = "#27272a",
-  effectColor = "rgba(0, 0, 0, 0.5)",
-  darkEffectColor = "rgba(255, 255, 255, 0.5)",
+  gridColor = "#cbcbcb",
+  darkGridColor = "#303030",
+  effectColor = "rgba(0, 0, 0, 0.6)",
+  darkEffectColor = "rgba(255, 255, 255, 0.6)",
   trailLength = 3,
   width,
   height,
@@ -44,6 +44,8 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const lineColor = isDarkMode ? darkGridColor : gridColor;
+
   const trailRef = useRef<{ x: number; y: number }[]>([]);
   const idleTargetsRef = useRef<{ x: number; y: number }[]>([]);
   const idlePositionsRef = useRef<{ x: number; y: number }[]>([]);
@@ -53,12 +55,7 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
   // Detect dark mode
   useEffect(() => {
     const updateDarkMode = () => {
-      const prefersDark =
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setIsDarkMode(
-        document.documentElement.classList.contains("dark") || prefersDark
-      );
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
     };
     updateDarkMode();
     const observer = new MutationObserver(() => updateDarkMode());
@@ -68,10 +65,28 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
 
   // Mouse tracking
   useEffect(() => {
+    let rect: DOMRect | null = null;
+    const container = containerRef.current;
+
+    const updateRect = () => {
+      if (container) {
+        rect = container.getBoundingClientRect();
+      }
+    };
+
+    // Initialize rect
+    updateRect();
+
+    // Update rect on resize or scroll
+    window.addEventListener("resize", updateRect);
+    window.addEventListener("scroll", updateRect, { passive: true });
+
     const handleMouseMove = (e: MouseEvent) => {
-      const container = containerRef.current;
       if (!container) return;
-      const rect = container.getBoundingClientRect();
+      if (!rect) {
+        rect = container.getBoundingClientRect();
+      }
+
       const rawX = e.clientX - rect.left;
       const rawY = e.clientY - rect.top;
 
@@ -92,7 +107,11 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, [gridSize, trailLength]);
 
   // Drawing logic
@@ -110,7 +129,6 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
     const cols = Math.floor(canvasWidth / gridSize);
     const rows = Math.floor(canvasHeight / gridSize);
 
-    const lineColor = isDarkMode ? darkGridColor : gridColor;
     const glowColor = isDarkMode ? darkEffectColor : effectColor;
 
     // Initialize idle positions
@@ -122,22 +140,6 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
 
     const draw = () => {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      // Draw grid lines
-      ctx.strokeStyle = lineColor;
-      ctx.lineWidth = 1;
-      for (let x = 0; x <= canvasWidth; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvasHeight);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= canvasHeight; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvasWidth, y);
-        ctx.stroke();
-      }
 
       // Idle animation logic
       const idleThreshold = 2000;
@@ -217,6 +219,10 @@ const InteractiveGridBackground: React.FC<InteractiveGridBackgroundProps> = ({
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(to right, ${lineColor} 1px, transparent 1px), linear-gradient(to bottom, ${lineColor} 1px, transparent 1px)`,
+          backgroundSize: `${gridSize}px ${gridSize}px`,
+        }}
       />
 
       {showFade && (

@@ -1,0 +1,425 @@
+@import "tailwindcss";
+@import 'tw-animate-css';
+@plugin 'lightswind/plugin';
+
+@custom-variant dark (&:is(.dark *));
+
+body {
+  font-family: var(--font-sans);
+}
+
+
+:root {
+  --background: #fbfcfd;
+  --foreground: oklch(0.13 0.02 280);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.13 0.02 280);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.02 280);
+  --primary: #614afc;
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.01 280);
+  --secondary-foreground: oklch(0.25 0.05 280);
+  --muted: oklch(0.96 0.008 280);
+  --muted-foreground: oklch(0.5 0.03 280);
+  --accent: #e2e3f2;
+  --accent-foreground: oklch(0.25 0.05 280);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.96 0.008 280);
+  --border: oklch(0.92 0.01 280);
+  --input: oklch(0.94 0.01 280);
+  --ring: oklch(0.55 0.25 280);
+  --chart-1: oklch(0.55 0.25 280);
+  --chart-2: oklch(0.65 0.2 250);
+  --chart-3: oklch(0.45 0.18 300);
+  --chart-4: oklch(0.75 0.15 260);
+  --chart-5: oklch(0.6 0.22 270);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.55 0.25 280);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.55 0.25 280);
+}
+
+.dark {
+  --background: oklch(0.12 0.02 280);
+  --foreground: oklch(0.96 0.01 280);
+  --card: oklch(0.16 0.02 280);
+  --card-foreground: oklch(0.96 0.01 280);
+  --popover: oklch(0.16 0.02 280);
+  --popover-foreground: oklch(0.96 0.01 280);
+  --primary: oklch(0.65 0.25 280);
+  --primary-foreground: oklch(0.12 0.02 280);
+  --secondary: oklch(0.22 0.03 280);
+  --secondary-foreground: oklch(0.96 0.01 280);
+  --muted: oklch(0.22 0.03 280);
+  --muted-foreground: oklch(0.65 0.04 280);
+  --accent: oklch(0.25 0.04 280);
+  --accent-foreground: oklch(0.96 0.01 280);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.25 0.03 280);
+  --input: oklch(0.22 0.03 280);
+  --ring: oklch(0.65 0.25 280);
+  --chart-1: oklch(0.65 0.25 280);
+  --chart-2: oklch(0.7 0.2 250);
+  --chart-3: oklch(0.55 0.18 300);
+  --chart-4: oklch(0.8 0.15 260);
+  --chart-5: oklch(0.65 0.22 270);
+  --sidebar: oklch(0.16 0.02 280);
+  --sidebar-foreground: oklch(0.96 0.01 280);
+  --sidebar-primary: oklch(0.65 0.25 280);
+  --sidebar-primary-foreground: oklch(0.96 0.01 280);
+  --sidebar-accent: oklch(0.22 0.03 280);
+  --sidebar-accent-foreground: oklch(0.96 0.01 280);
+  --sidebar-border: oklch(0.25 0.03 280);
+  --sidebar-ring: oklch(0.65 0.25 280);
+}
+
+@theme inline {
+  --font-jakarta: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sora: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sora), 'Sora', ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: var(--ring);
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Custom Scrollbar Styling */
+.custom-thumb {
+  scrollbar-width: thin;
+  scrollbar-color: #d9dbf3 transparent;
+}
+
+/* .custom-thumb::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+} */
+
+.custom-thumb::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+
+/* .custom-thumb::-webkit-scrollbar-track {
+  background: transparent !important;
+  border-radius: 10px !important;
+}
+
+.custom-thumb::-webkit-scrollbar-thumb {
+  background: #614afc !important;
+  border-radius: 10px !important;
+  border: 2px solid transparent;
+  transition: background-color 0.3s ease !important;
+}
+
+.custom-thumb::-webkit-scrollbar-thumb:hover {
+  background: #4e3fd3 !important;
+} */
+
+/* Modal Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.new-address {
+  animation: fadeIn 0.3s ease-out !important;
+}
+
+.new-address>div {
+  animation: slideUp 0.3s ease-out !important;
+}
+
+
+.btn-3d-default:hover {
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--lw-primary-color) 95%, transparent) 0%, color-mix(in srgb, var(--lw-primary-color) 98%, transparent) 100%);
+  box-shadow: inset 0 1px #fff6, inset 0 0 0 1px #ffffff40, inset 0 -1.5px #00000059, 0 2px 4px #0000001a
+}
+
+.btn-3d-default:active {
+  background: var(--lw-primary-color);
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 2px 3px #0003
+}
+
+.dark .btn-3d-default {
+  background: linear-gradient(to bottom, var(--lw-primary-color) 0%, color-mix(in srgb, var(--lw-primary-color) 92%, transparent) 100%);
+  border-color: #ffffff59 #ffffff2e #ffffff2e;
+  box-shadow: inset 0 1px #ffffff59, inset 0 0 0 1px #ffffff2e, inset 0 -1.5px #0006, 0 1px 2px #00000026
+}
+
+.dark .btn-3d-default:hover {
+  background: linear-gradient(to bottom, var(--lw-primary-color) 0%, color-mix(in srgb, var(--lw-primary-color) 96%, transparent) 100%);
+  box-shadow: inset 0 1px #ffffff73, inset 0 0 0 1px #ffffff40, inset 0 -1.5px #00000080, 0 2px 4px #0003
+}
+
+.dark .btn-3d-default:active {
+  background: color-mix(in srgb, var(--lw-primary-color) 90%, transparent);
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 2px 3px #00000026
+}
+
+.btn-3d-destructive {
+  background: linear-gradient(to bottom, hsl(var(--destructive) / .9) 0%, hsl(var(--destructive)) 100%);
+  color: hsl(var(--destructive-foreground));
+  border-width: 1px;
+  border-color: #00000040;
+  transition-property: all;
+  transition-duration: .2s;
+  box-shadow: inset 0 1px #ffffff4d, inset 0 0 0 1px #ffffff26, inset 0 -1.5px #00000040, 0 1px 2px #0000000d
+}
+
+.btn-3d-destructive:hover {
+  background: linear-gradient(to bottom, hsl(var(--destructive) / .95) 0%, hsl(var(--destructive) / .98) 100%);
+  box-shadow: inset 0 1px #fff6, inset 0 0 0 1px #ffffff40, inset 0 -1.5px #00000059, 0 2px 4px #0000001a
+}
+
+.btn-3d-destructive:active {
+  background: hsl(var(--destructive));
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 2px 3px #00000040
+}
+
+.dark .btn-3d-destructive {
+  background: linear-gradient(#ed2c2c 0%, #d31212 100%);
+  border-color: #ffffff59 #ffffff2e #ffffff2e;
+  box-shadow: inset 0 1px #ffffff59, inset 0 0 0 1px #ffffff2e, inset 0 -1.5px #0006, 0 1px 2px #00000026
+}
+
+.dark .btn-3d-destructive:hover {
+  background: linear-gradient(#ef4343 0%, #eb1414 100%);
+  box-shadow: inset 0 1px #ffffff73, inset 0 0 0 1px #ffffff40, inset 0 -1.5px #00000080, 0 2px 4px #0003
+}
+
+.dark .btn-3d-destructive:active {
+  background: linear-gradient(#e11414 0%, #bc1010 100%);
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 2px 3px #0000004d
+}
+
+.btn-3d-secondary {
+  background: linear-gradient(to bottom, hsl(var(--secondary) / .9) 0%, hsl(var(--secondary)) 100%);
+  color: hsl(var(--secondary-foreground));
+  border-width: 1px;
+  border-color: #00000026;
+  transition-property: all;
+  transition-duration: .2s;
+  box-shadow: inset 0 1px #fff6, inset 0 0 0 1px #ffffff26, inset 0 -2px #0000001a, 0 1px 2px #0000000d
+}
+
+.btn-3d-secondary:hover {
+  background: linear-gradient(to bottom, hsl(var(--secondary) / .95) 0%, hsl(var(--secondary) / .98) 100%);
+  box-shadow: inset 0 1px #fff9, inset 0 0 0 1px #ffffff40, inset 0 -2px #00000026, 0 2px 3px #00000014
+}
+
+.btn-3d-secondary:active {
+  background: hsl(var(--secondary));
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 1.5px 2px #0000001a
+}
+
+.dark .btn-3d-secondary {
+  background: linear-gradient(to bottom, hsl(var(--secondary) / .95) 0%, hsl(var(--secondary) / .85) 100%);
+  border-color: #ffffff1f;
+  box-shadow: inset 0 1px #ffffff26, inset 0 0 0 1px #ffffff26, inset 0 -2px #00000059, 0 1px 2px #00000026
+}
+
+.dark .btn-3d-secondary:hover {
+  background: linear-gradient(to bottom, hsl(var(--secondary) / 1) 0%, hsl(var(--secondary) / .9) 100%);
+  box-shadow: inset 0 1px #fff3, inset 0 0 0 1px #fff3, inset 0 -2px #00000073, 0 2px 3px #0003
+}
+
+.dark .btn-3d-secondary:active {
+  background: hsl(var(--secondary) / .9);
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 1.5px 2px #0000004d
+}
+
+.btn-3d-github {
+  color: #000;
+  background: linear-gradient(#fffffffa 0%, #ffffffe6 100%);
+  border-width: 1px;
+  border-color: #0003;
+  transition-property: all;
+  transition-duration: .2s;
+  box-shadow: inset 0 1px #fff9, inset 0 0 0 1px #ffffff4d, inset 0 -2px #00000014, 0 1px 2px #0000000a
+}
+
+.btn-3d-github:hover {
+  background-color: #f9fafb;
+  box-shadow: inset 0 1.5px #fffc, inset 0 0 0 1px #fff6, inset 0 -2px #0000001f, 0 2px 3px #0000000f
+}
+
+.btn-3d-github:active {
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 1.5px 2px #00000014
+}
+
+.dark .btn-3d-github {
+  border-color: #fff6 #fff3 #fff3;
+  box-shadow: inset 0 1px #ffffff4d, inset 0 0 0 1px #ffffff26, inset 0 -2px #00000059, 0 1px 2px #0000001a
+}
+
+.btn-3d-outline {
+  border-width: 1px;
+  border-color: hsl(var(--border));
+  background-color: hsl(var(--background));
+  transition-property: all;
+  transition-duration: .2s;
+  box-shadow: inset 0 1px #fff6, inset 0 0 0 1px #ffffff26, inset 0 -1.5px #0000000d, 0 1px 2px #0000000d
+}
+
+.btn-3d-outline:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  box-shadow: inset 0 1px #ffffff80, inset 0 0 0 1px #fff3, inset 0 -1.5px #00000014, 0 2px 3px #00000014
+}
+
+.btn-3d-outline:active {
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 1.5px 2px #00000014
+}
+
+.dark .btn-3d-outline {
+  box-shadow: inset 0 1px #ffffff26, inset 0 0 0 1px #ffffff1a, inset 0 -1.5px #0000004d, 0 1px 2px #00000026
+}
+
+.btn-3d-ghost {
+  transition-property: all;
+  transition-duration: .2s
+}
+
+.btn-3d-ghost:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground))
+}
+
+.btn-3d-ghost:active {
+  background-color: hsl(var(--accent) / .8);
+  transition-duration: 0s;
+  transform: translateY(1.5px)
+}
+
+.btn-3d-custom {
+  background-image: linear-gradient(#ffffff2e 0%, #00000014 100%);
+  border-width: 1px;
+  border-color: #00000040;
+  transition-property: all;
+  transition-duration: .2s;
+  box-shadow: inset 0 1px #ffffff4d, inset 0 0 0 1px #ffffff26, inset 0 -1.5px #00000040, 0 1px 2px #0000000d
+}
+
+.btn-3d-custom:hover {
+  background-image: linear-gradient(#ffffff47 0%, #0000000a 100%);
+  box-shadow: inset 0 1px #fff6, inset 0 0 0 1px #ffffff40, inset 0 -1.5px #00000059, 0 2px 4px #0000001a
+}
+
+.btn-3d-custom:active {
+  background-image: linear-gradient(#0000001f 0% 100%);
+  transition-duration: 0s;
+  transform: translateY(1.5px);
+  box-shadow: inset 0 2px 3px #00000040
+}
+
+.dark .btn-3d-custom {
+  border-color: #ffffff59 #ffffff2e #ffffff2e;
+  box-shadow: inset 0 1px #ffffff59, inset 0 0 0 1px #ffffff2e, inset 0 -1.5px #0006, 0 1px 2px #00000026
+}
+
+.dark .btn-3d-custom:hover {
+  box-shadow: inset 0 1px #ffffff73, inset 0 0 0 1px #ffffff40, inset 0 -1.5px #00000080, 0 2px 4px #0003
+}
+
+.dark .btn-3d-custom:active {
+  box-shadow: inset 0 2px 3px #0006
+}
+
+.btn-3d-link {
+  color: var(--lw-primary-color);
+  text-underline-offset: 4px;
+  text-decoration-line: none;
+  transition-property: all;
+  transition-duration: .2s
+}
+
+.btn-3d-link:hover {
+  text-decoration-line: underline
+}

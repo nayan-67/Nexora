@@ -1,0 +1,77 @@
+.swal2-container.swal2-top-end {
+    width: 350px !important;
+}
+
+.swal2-toast {
+    padding: 10px !important;
+}
+
+.swal2-icon {
+    font-size: .8rem !important;
+}
+
+.swal2-icon-success {
+
+    & .swal2-title {
+        color: #28a745 !important;
+    }
+
+    & .swal2-timer-progress-bar {
+        background: #28a745 !important;
+    }
+
+}
+
+.swal2-icon.swal2-success {
+    color: #28a745 !important;
+}
+
+.swal2-icon-error {
+
+    & .swal2-title {
+        color: #e22e2e !important;
+    }
+
+    & .swal2-timer-progress-bar {
+        background: #e22e2e !important;
+    }
+}
+
+.swal2-icon.swal2-error {
+    border-color: #e22e2e !important;
+    color: #e22e2e !important;
+}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    background: #e22e2e !important;
+}
+
+.swal2-icon-warning {
+
+    & .swal2-title {
+        color: #ffc107 !important;
+    }
+
+    & .swal2-timer-progress-bar {
+        background: #ffc107 !important;
+    }
+
+}
+
+.swal2-icon.swal2-warning {
+    border-color: #ffc107 !important;
+    color: #ffc107 !important;
+}
+
+.swal2-icon-info {
+
+    & .swal2-title {
+        color: #4fd3ff !important;
+    }
+
+    & .swal2-timer-progress-bar {
+        background: #9de0f6 !important;
+    }
+
+}
+

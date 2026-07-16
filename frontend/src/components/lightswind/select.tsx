@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { Check, ChevronDown } from "lucide-react";
@@ -10,7 +9,7 @@ interface SelectContextType {
   onValueChange: (value: string) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
-  triggerRef: React.RefObject<HTMLButtonElement>;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
 }
@@ -141,15 +140,16 @@ const SelectValue = React.forwardRef<HTMLSpanElement, SelectValueProps>(
         if (displayValue) return;
 
         // Check if it's a SelectItem
+        const props = node.props as any;
         if (
           (node.type as any).displayName === "SelectItem" &&
-          node.props.value === context.value
+          props.value === context.value
         ) {
-          displayValue = node.props.children;
+          displayValue = props.children;
         }
         // Check if it's a SelectGroup and recurse
         else if ((node.type as any).displayName === "SelectGroup") {
-          findDisplayValue(node.props.children);
+          findDisplayValue(props.children);
         }
       });
     };
@@ -170,7 +170,7 @@ const SelectValue = React.forwardRef<HTMLSpanElement, SelectValueProps>(
 SelectValue.displayName = "SelectValue";
 
 interface SelectTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> { }
 
 const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
   ({ className, children, ...props }, ref) => {
@@ -196,7 +196,11 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
         type="button"
         data-state={open ? "open" : "closed"}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+          "flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-all duration-300",
+          "[.lw-3d_&]:bg-gradient-to-b [.lw-3d_&]:from-white [.lw-3d_&]:to-zinc-50/95 [.dark.lw-3d_&]:from-zinc-900 [.dark.lw-3d_&]:to-zinc-950",
+          "[.lw-3d_&]:border-black/10 [.dark.lw-3d_&]:border-white/10",
+          "[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.45),0_1.5px_2px_0_rgba(0,0,0,0.06),0_1px_1px_0_rgba(0,0,0,0.04)]",
+          "[.dark.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.15),0_1.5px_2px_0_rgba(0,0,0,0.3)]",
           className
         )}
         onClick={() => setOpen(!open)}
@@ -274,6 +278,11 @@ const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
     const [currentSide, setCurrentSide] = React.useState<"top" | "bottom">(
       "bottom"
     );
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+      setMounted(true);
+    }, []);
 
     React.useEffect(() => {
       if (!open || !triggerRef.current) return;
@@ -293,14 +302,14 @@ const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
         // Decide whether to show the dropdown below or above the trigger
         const showBelow =
           spaceBelow >= preferredMaxHeight || spaceBelow > spaceAbove;
-        
+
         const newSide = showBelow ? "bottom" : "top";
         setCurrentSide(newSide);
-        
+
         // Define the styles that will be applied
         const newStyles: React.CSSProperties = {
-            position: "absolute",
-            width: `${triggerRect.width}px`,
+          position: "absolute",
+          width: `${triggerRect.width}px`,
         };
 
         // --- START OF FIX ---
@@ -308,36 +317,36 @@ const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
         // for 'top' and 'bottom' to ensure it's always attached correctly.
 
         if (newSide === "bottom") {
-            const availableHeight = spaceBelow - sideOffset - 8; // 8px for margin
-            newStyles.maxHeight = `${Math.min(preferredMaxHeight, Math.max(0, availableHeight))}px`;
-            newStyles.top = `${triggerRect.bottom + window.scrollY + sideOffset}px`;
+          const availableHeight = spaceBelow - sideOffset - 8; // 8px for margin
+          newStyles.maxHeight = `${Math.min(preferredMaxHeight, Math.max(0, availableHeight))}px`;
+          newStyles.top = `${triggerRect.bottom + window.scrollY + sideOffset}px`;
         } else { // Position above the trigger
-            const availableHeight = spaceAbove - sideOffset - 8; // 8px for margin
-            newStyles.maxHeight = `${Math.min(preferredMaxHeight, Math.max(0, availableHeight))}px`;
-            // By setting `bottom`, we anchor the dropdown's bottom edge to the trigger's top edge.
-            // This solves the gap issue completely.
-            newStyles.bottom = `${viewportHeight - triggerRect.top - window.scrollY + sideOffset}px`;
+          const availableHeight = spaceAbove - sideOffset - 8; // 8px for margin
+          newStyles.maxHeight = `${Math.min(preferredMaxHeight, Math.max(0, availableHeight))}px`;
+          // By setting `bottom`, we anchor the dropdown's bottom edge to the trigger's top edge.
+          // This solves the gap issue completely.
+          newStyles.bottom = `${viewportHeight - triggerRect.top - window.scrollY + sideOffset}px`;
         }
-        
+
         // --- END OF FIX ---
 
         // Handle horizontal alignment
         let left = triggerRect.left;
         if (align === "center") {
-            // This calculation was slightly off, corrected to center based on content width if known,
-            // but for a select, centering on trigger is usually sufficient.
-            left = triggerRect.left + (triggerRect.width / 2) - (triggerRect.width / 2); // Assumes content width = trigger width
+          // This calculation was slightly off, corrected to center based on content width if known,
+          // but for a select, centering on trigger is usually sufficient.
+          left = triggerRect.left + (triggerRect.width / 2) - (triggerRect.width / 2); // Assumes content width = trigger width
         } else if (align === "end") {
-            left = triggerRect.right - triggerRect.width;
+          left = triggerRect.right - triggerRect.width;
         }
 
         // Prevent overflow from the right edge of the viewport
         if (left + triggerRect.width > viewportWidth) {
-            left = viewportWidth - triggerRect.width - 8; // 8px margin
+          left = viewportWidth - triggerRect.width - 8; // 8px margin
         }
         // Prevent overflow from the left edge of the viewport
         if (left < 0) {
-            left = 8; // 8px margin
+          left = 8; // 8px margin
         }
 
         newStyles.left = `${left + window.scrollX}px`;
@@ -385,69 +394,71 @@ const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
         if (typeof ref === "function") {
           ref(node);
         } else if (ref) {
-          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          (ref as any).current = node;
         }
       },
       [ref]
     );
 
     const filteredChildren = React.useMemo(() => {
-        if (!searchQuery) {
-            return children;
+      if (!searchQuery) {
+        return children;
+      }
+      const lowerCaseQuery = searchQuery.toLowerCase();
+
+      const getChildText = (child: React.ReactNode): string => {
+        if (typeof child === "string" || typeof child === "number") {
+          return child.toString();
         }
-        const lowerCaseQuery = searchQuery.toLowerCase();
+        if (React.isValidElement(child) && (child.props as any).children) {
+          return React.Children.map((child.props as any).children, getChildText).join(
+            ""
+          );
+        }
+        return "";
+      };
 
-        const getChildText = (child: React.ReactNode): string => {
-            if (typeof child === "string" || typeof child === "number") {
-                return child.toString();
+      return React.Children.map(children, (child) => {
+        if (!React.isValidElement(child)) {
+          return child;
+        }
+
+        if ((child.type as any).displayName === "SelectGroup") {
+          const matchedItems = React.Children.toArray(
+            (child.props as any).children
+          ).filter((groupChild) => {
+            if (
+              React.isValidElement(groupChild) &&
+              (groupChild.type as any).displayName === "SelectItem"
+            ) {
+              const text = getChildText((groupChild.props as any).children);
+              return text.toLowerCase().includes(lowerCaseQuery);
             }
-            if (React.isValidElement(child) && child.props.children) {
-                return React.Children.map(child.props.children, getChildText).join(
-                    ""
-                );
-            }
-            return "";
-        };
+            return false;
+          });
 
-        return React.Children.map(children, (child) => {
-            if (!React.isValidElement(child)) {
-                return child;
-            }
+          if (matchedItems.length > 0) {
+            return React.cloneElement(child, {
+              ...(child.props as any),
+              children: matchedItems,
+            });
+          }
+          return null;
+        }
 
-            if ((child.type as any).displayName === "SelectGroup") {
-                const matchedItems = React.Children.toArray(
-                    child.props.children
-                ).filter((groupChild) => {
-                    if (
-                        React.isValidElement(groupChild) &&
-                        (groupChild.type as any).displayName === "SelectItem"
-                    ) {
-                        const text = getChildText(groupChild.props.children);
-                        return text.toLowerCase().includes(lowerCaseQuery);
-                    }
-                    return false;
-                });
+        if ((child.type as any).displayName === "SelectItem") {
+          const text = getChildText((child.props as any).children);
+          return text.toLowerCase().includes(lowerCaseQuery) ? child : null;
+        }
 
-                if (matchedItems.length > 0) {
-                    return React.cloneElement(child, {
-                        ...child.props,
-                        children: matchedItems,
-                    });
-                }
-                return null;
-            }
-
-            if ((child.type as any).displayName === "SelectItem") {
-                const text = getChildText(child.props.children);
-                return text.toLowerCase().includes(lowerCaseQuery) ? child : null;
-            }
-
-            return child;
-        });
+        return child;
+      });
     }, [children, searchQuery]);
-    
+
     // Check if there are any children to render after filtering
     const hasVisibleChildren = React.Children.count(filteredChildren) > 0;
+
+    if (!mounted) return null;
 
     return createPortal(
       <AnimatePresence>
@@ -456,9 +467,13 @@ const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
             ref={combinedRef}
             style={calculatedStyle}
             className={cn(
-              "z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
+              "z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md transition-all duration-300",
+              "[.lw-3d_&]:bg-gradient-to-b [.lw-3d_&]:from-white [.lw-3d_&]:to-zinc-50/95 [.dark.lw-3d_&]:from-zinc-900 [.dark.lw-3d_&]:to-zinc-950",
+              "[.lw-3d_&]:border-black/10 [.dark.lw-3d_&]:border-white/10",
+              "[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.45),0_12px_24px_-4px_rgba(0,0,0,0.08),0_4px_12px_-2px_rgba(0,0,0,0.04)]",
+              "[.dark.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.15),0_12px_24px_-4px_rgba(0,0,0,0.3),0_4px_12px_-2px_rgba(0,0,0,0.2)]",
               position === "popper" &&
-                "data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1",
+              "data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1",
               className
             )}
             initial={{ opacity: 0, y: currentSide === "bottom" ? -10 : 10 }}

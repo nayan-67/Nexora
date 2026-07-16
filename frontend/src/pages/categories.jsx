@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 import { categoryData, products } from "@/lib/products"
+import api from "@/lib/api"
+import { useState } from "react";
+
 
 function CategoryCard({ category }) {
-  const productCount = products.filter(p => p.category === category.name).length
+
+  const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "");
 
   return (
     <Link
@@ -11,14 +15,14 @@ function CategoryCard({ category }) {
       className="group relative flex aspect-4/3 flex-col overflow-hidden rounded-2xl bg-muted"
     >
       <img
-        src={category.image}
+        src={`${apiBase}/uploads/cat_${category.image}`}
         alt={category.name}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
       <div className="absolute inset-0 bg-linear-to-t from-foreground/90 via-foreground/40 to-transparent transition-opacity duration-300 group-hover:from-foreground/95" />
 
       <div className="relative mt-auto p-6">
-        <span className="text-sm text-primary-foreground/80">{productCount} Products</span>
+        <span className="text-sm text-primary-foreground/80">{category.total_products} Products</span>
         <h3 className="mt-1 text-2xl font-bold text-primary-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
           {category.name}
         </h3>
@@ -35,6 +39,26 @@ function CategoryCard({ category }) {
 }
 
 export default function CategoriesPage() {
+  const [categories, setCategories] = useState([]);
+
+  useState(() => {
+    let active = true;
+
+    api.get("/categories")
+      .then((response) => {
+        if (active) {
+          setCategories(response.data || []);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.response?.data?.message || "Failed to load categories.");
+      });
+
+    return () => {
+      active = false;
+    };
+  });
+  
   return (
     <div className="flex min-h-screen flex-col bg-background pt-18.75">
       {/* <Header /> */}
@@ -53,7 +77,7 @@ export default function CategoriesPage() {
 
           {/* Categories Grid */}
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-            {categoryData.map((category) => (
+            {categories.map((category) => (
               <CategoryCard key={category.slug} category={category} />
             ))}
           </div>
