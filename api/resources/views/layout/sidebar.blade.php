@@ -51,7 +51,7 @@
 
                 <li class="nav-item @yield('scatmenuopen')">
                     <a href="#" class="nav-link @yield('scactive')">
-                        <i class="nav-icon bi bi-layers-half"></i>
+                        <i class="nav-icon bi bi-diagram-3"></i>
                         <p>Sub Category</p>
                         <i class="nav-arrow bi bi-chevron-right"></i>
                     </a>
