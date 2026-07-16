@@ -58,7 +58,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item sub-nav-item">
                             <a href="{{ route('subcategory.add') }}" class="nav-link @yield('sacatactive')">
-                                <i class="nav-icon bi-list-task"></i>
+                                <i class="nav-icon bi bi-plus-square"></i>
                                 <p>Add Sub Category</p>
                             </a>
                         </li>
@@ -114,14 +114,14 @@
 
                 <li class="nav-item @yield('dismenuopen')">
                     <a href="#" class="nav-link @yield('discactive')">
-                        <i class="nav-icon bi bi-percent"></i>
+                        <i class="nav-icon bi bi-ticket-perforated"></i>
                         <p>Coupon</p>
                         <i class="nav-arrow bi bi-chevron-right"></i>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item sub-nav-item">
                             <a href="{{ route('discount.add') }}" class="nav-link @yield('disaddactive')">
-                                <i class="nav-icon bi-list-task"></i>
+                                <i class="nav-icon bi bi-plus-square"></i>
                                 <p>Add Coupon</p>
                             </a>
                         </li>
