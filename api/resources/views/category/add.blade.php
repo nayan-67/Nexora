@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 cat-name" name="cat-name"
-                                                placeholder="Enter Name.." value="" required />
+                                                placeholder="Enter Name.." value="{{ old('cat-name') }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -64,16 +64,16 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 slug" name="slug"
-                                                placeholder="Enter Slug.." value="" required />
+                                                placeholder="Enter Slug.." value="{{ old('cat-name') }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Description<span
-                                                    class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Description<span class="text-danger ps-1">*</span>
+                                            </h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="form-control fs-7" name="cat-desc" placeholder="Enter Description.." required></textarea>
+                                            <textarea class="form-control fs-7" name="cat-desc" placeholder="Enter Description.." required>{{ old('cat-desc') }}</textarea>
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -82,7 +82,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7" name="order"
-                                                placeholder="Enter Order Number" value="0" />
+                                                placeholder="Enter Order Number" value="{{ old('order') ?? '0' }}" />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -109,8 +109,8 @@
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
                                                 aria-label="Default select example" name="status">
-                                                <option selected value="1">ACTIVE</option>
-                                                <option value="0">INACTIVE</option>
+                                                <option selected value="1">Active</option>
+                                                <option value="0">Inactive</option>
                                             </select>
                                         </div>
                                     </div>

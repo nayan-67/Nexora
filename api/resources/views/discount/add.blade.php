@@ -50,17 +50,18 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Name<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control fs-7" name="name"
-                                                placeholder="Enter Name.." value="" required />
+                                            <input type="text" class="form-control fs-7 coupon-name text-uppercase"
+                                                name="name" placeholder="Coupon Name.." value="{{ old('name') }}"
+                                                required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Valid From</h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Valid From<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="date" class="form-control fs-7 valid-from" name="valid-from"
-                                                value="" />
+                                                value="{{ old('valid-from') }}" />
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -69,28 +70,31 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="date" class="form-control fs-7" name="valid-till"
-                                                value="" />
+                                                value="{{ old('valid-till') }}" />
+                                            @error('valid-till')
+                                                <div class="err text-danger fs-7 mb-n3">Enter Valid Date</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Type<span class="text-danger">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Type<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
                                                 aria-label="Default select example" name="type">
-                                                <option selected value="1">PERCENTAGE</option>
-                                                <option value="2">FLAT</option>
+                                                <option selected value="1">Percentage</option>
+                                                <option value="2">Flat</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Amount<span class="text-danger">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Amount<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" class="form-control fs-7" name="amount"
-                                                placeholder="Enter Amount ..." value="" />
+                                                placeholder="Enter Amount ..." value="{{ old('amount') }}" />
                                         </div>
                                     </div>
 
@@ -101,8 +105,8 @@
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
                                                 aria-label="Default select example" name="status">
-                                                <option selected value="1">ACTIVE</option>
-                                                <option value="0">INACTIVE</option>
+                                                <option selected value="1">Active</option>
+                                                <option value="0">Inactive</option>
                                             </select>
                                         </div>
                                     </div>
