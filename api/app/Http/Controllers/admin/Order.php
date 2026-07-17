@@ -113,7 +113,7 @@ class Order extends Controller
                         <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . date('j-M-y', strtotime($date)) . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>$ " . $row->total_price . "</div>
                         <div class='col-sm-1 text-center d-flex align-items-center justify-content-center
-                        '><span class='badge " . $class . "'>" . $order_status . "</span></div>
+                        '><span class='list-badge " . $class . "'>" . $order_status . "</span></div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $name . "</div>
                         <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
                             <a href='" . route('order.edit', encrypt($row->id)) . "' class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>

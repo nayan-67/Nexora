@@ -145,7 +145,7 @@ class Category extends Controller
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->name . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->slug . "</div>
                         <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->order_number . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'><span class='badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
+                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'><span class='list-badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
                         </div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->total_products . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . count($sub_cat) . "</div>

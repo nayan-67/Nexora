@@ -232,13 +232,20 @@ class Product extends Controller
 
         if (count($data) > 0) {
             foreach ($data as $row) {
+                if ($row->type == 2) {
+                    $stock = Variant::where('product_id', $row->id)->sum('stock');
+                } else {
+                    $stock = $row->stock;
+                }
                 echo "  <hr class='m-2 text-body-tertiary opacity-10'>
                     <div class='row fs-7'>
                         <div class='col-sm-3 text-center d-flex align-items-center justify-content-center'>" . $row->name . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->category_id . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->sub_category_id . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->price . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center " . ($row->availability == 'In Stock' ? 'text-success' : 'text-danger') . "'>" . $row->availability . "</div>
+                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->price . "</div>
+                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . ($row->type == '1' ? 'Simple' : 'Variable') . " </div>
+                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'><span class='list-badge " . ($stock > 0 ? 'text-success' : 'text-danger') . "'> " . $stock . " </span>
+                        </div>
                         <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
                             <a href='" . route('product.edit', encrypt($row->id)) . "'  class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
                             <button type='button' class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;' onclick=\"openModal('" . $row->id . "');\"><i class='fa-regular fa-trash-can'></i>DELETE</button>

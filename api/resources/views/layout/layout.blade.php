@@ -72,7 +72,7 @@
             transition: .8s;
         }
 
-        .badge {
+        .list-badge {
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.75rem;
@@ -80,7 +80,7 @@
             letter-spacing: 0.05em;
         }
 
-        /* .badge:before {
+        /* .list-badge:before {
             content: '';
             display: inline-block;
             width: 0.5rem;
@@ -90,32 +90,32 @@
             color: inherit;
         } */
 
-        .badge.active {
+        .list-badge.active {
             background-color: #0f9b1866;
             color: #1b6e02;
         }
 
-        .badge.inactive {
+        .list-badge.inactive {
             background-color: #ff000047;
             color: #c52a2a;
         }
 
-        .badge.processing {
+        .list-badge.processing {
             background-color: #FFF3CD;
             color: #856404;
         }
 
-        .badge.shipped {
+        .list-badge.shipped {
             background-color: #CCE5FF;
             color: #004085;
         }
 
-        .badge.delivered {
+        .list-badge.delivered {
             background-color: #D4EDDA;
             color: #155724;
         }
 
-        .badge.cancelled {
+        .list-badge.cancelled {
             background-color: #F8D7DA;
             color: #721C24;
         }

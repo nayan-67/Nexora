@@ -70,10 +70,10 @@
                 <div class="container h-100  border-2 border-top border-primary p-0 rounded">
                     <div class="row mx-1 py-3">
                         <div class="col-sm-2 d-flex align-items-center">
-                            <h6 class="mb-0 page-head fs-7 fw-bold">Order ID</h6>
+                            <h6 class="page-head fs-7 fw-bold">Order ID</h6>
                         </div>
                         <div class="col-sm-8">
-                            <form class="d-flex" role="search">
+                            <form class="d-flex" role="search" action="javascript:void(0)">
                                 <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
                                     aria-label="Search" id="search" value="" autocomplete="off" />
                                 {{-- <button class="btn btn-success fs-7" type="submit"><i
@@ -122,7 +122,7 @@
                                             <div
                                                 class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
                                                 <span
-                                                    class="badge
+                                                    class="list-badge
                                                 @if ($row->order_status == 0) {{ 'cancelled' }}
                                                 @elseif($row->order_status == 1)
                                                     {{ 'processing' }}

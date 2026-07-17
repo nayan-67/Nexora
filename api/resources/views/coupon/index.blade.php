@@ -101,8 +101,8 @@
                     </div>
                     <hr class="m-0"> --}}
                     <div class="row mx-1 py-3">
-                        <div class="col-sm-2">
-                            <h6 class="mb-0 page-head fs-7 fw-bold">Discount Name</h6>
+                        <div class="col-sm-2 d-flex align-items-center">
+                            <h6 class="page-head fs-7 fw-bold">Coupon Name</h6>
                         </div>
                         <div class="col-sm-8">
                             <form class="d-flex" role="search">
@@ -123,7 +123,7 @@
                         <div class="page-deatails pt-2">
                             {{-- <hr class="m-2 text-secondery opacity-10"> --}}
                             <div class="header row fs-7">
-                                <div class="col-sm-2 text-center fw-bold">Discount Name</div>
+                                <div class="col-sm-2 text-center fw-bold">Coupon Name</div>
                                 <div class="col-sm-2 text-center fw-bold">Valid From</div>
                                 <div class="col-sm-2 text-center fw-bold">Valid Till</div>
                                 <div class="col-sm-2 text-center fw-bold">Amount</div>
@@ -153,7 +153,7 @@
                                             </div>
                                             <div
                                                 class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                <span class='badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                                <span class='list-badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
                                             </div>
                                             <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
                                                 <a href='{{ route('discount.edit', encrypt($row->id)) }}'

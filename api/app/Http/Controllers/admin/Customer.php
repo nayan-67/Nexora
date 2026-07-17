@@ -101,7 +101,7 @@ class Customer extends Controller
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $name . "</div>
                         <div class='col-sm-3 text-center d-flex align-items-center justify-content-center'>" . $row->email . "</div>
                         <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->phone . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'><span class='badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
+                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'><span class='list-badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
                         </div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . count($ordresult) . "</div>
                         <div class='col-sm-3 text-center d-flex gap-2 justify-content-center'>

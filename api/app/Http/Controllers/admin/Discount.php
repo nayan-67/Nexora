@@ -15,12 +15,12 @@ class Discount extends Controller
             return redirect()->route('admin.login');
         }
         $data = ModelsDiscount::orderBy('id', 'ASC')->get();
-        return view('discount.index', compact('data'));
+        return view('coupon.index', compact('data'));
     }
 
     public function add()
     {
-        return view('discount.add');
+        return view('coupon.add');
     }
 
     public function store(Request $request)
@@ -58,7 +58,7 @@ class Discount extends Controller
         }
         $id = decrypt($id);
         $item = ModelsDiscount::find($id);
-        return view('discount.edit', compact('item'));
+        return view('coupon.edit', compact('item'));
     }
 
     public function update(Request $request, string $id)
@@ -103,7 +103,7 @@ class Discount extends Controller
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->valid_from . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . ($row->valid_till ?? '---- -- --') . "</div>
                         <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . ($row->type == '1' ? $row->amount . ' %' : '$ ' . $row->amount) . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'><span class='badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
+                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'><span class='list-badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
                         </div>
                         <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
                             <a href='" . route('discount.edit', encrypt($row->id)) . "'  class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>

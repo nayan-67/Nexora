@@ -1,8 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Package, ChevronRight, Truck, CheckCircle2, Clock, XCircle, Calendar, AlertCircle, Filter, X, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/lightswind/button"
 import { cn } from "@/lib/utils"
 import { Link } from "react-router-dom"
+import api from "@/lib/api"
+import { toast } from "react-hot-toast"
+const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "")
+
 
 const orders = [
   {
@@ -270,8 +274,8 @@ export default function OrdersPage() {
     { value: "price-low", label: "Price: Low to High", icon: "↑" },
   ]
 
-  let filteredItems = selectedFilter === "all" 
-    ? allItems 
+  let filteredItems = selectedFilter === "all"
+    ? allItems
     : allItems.filter(item => item.status === selectedFilter)
 
   // Apply sorting
@@ -385,7 +389,7 @@ export default function OrdersPage() {
                 {allItems.length === 0 ? "No items yet" : "No items with this status"}
               </h2>
               <p className="mt-2 text-muted-foreground">
-                {allItems.length === 0 
+                {allItems.length === 0
                   ? "When you place an order, your items will appear here."
                   : "Try adjusting your filter to see more items."}
               </p>
@@ -395,7 +399,7 @@ export default function OrdersPage() {
                 </Button>
               )}
               {allItems.length > 0 && selectedFilter !== "all" && (
-                <Button 
+                <Button
                   onClick={() => setSelectedFilter("all")}
                   className="mt-6"
                 >

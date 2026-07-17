@@ -67,7 +67,7 @@
 
             <section class="bg-white h-100 page-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
+                    {{-- <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
                         <button type="button" class="btn s-btn fs-8" value="">ALL</button>
                         <button type="button" class="btn s-btn fs-8" value="A">A</button>
                         <button type="button" class="btn s-btn fs-8" value="B">B</button>
@@ -96,17 +96,17 @@
                         <button type="button" class="btn s-btn fs-8" value="Y">Y</button>
                         <button type="button" class="btn s-btn fs-8" value="Z">Z</button>
                     </div>
-                    <hr class="m-0">
+                    <hr class="m-0"> --}}
                     <div class="row mx-1 py-3">
-                        <div class="col-sm-2">
-                            <h6 class="mb-0 page-head fs-7 fw-bold">Customer Name</h6>
+                        <div class="col-sm-2 d-flex align-items-center">
+                            <h6 class="page-head fs-7 fw-bold">Customer Name</h6>
                         </div>
                         <div class="col-sm-8">
-                            <form class="d-flex" role="search">
+                            <form class="d-flex" role="search" action="javascript:void(0)">
                                 <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
                                     aria-label="Search" id="search" value="" autocomplete="off" />
-                                <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button>
+                                {{-- <button class="btn btn-success fs-7" type="submit"><i
+                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
                             </form>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                                             <div
                                                 class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
                                                 <span
-                                                    class='badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                                    class='list-badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
                                             </div>
                                             <div
                                                 class='col-sm-2 text-center d-flex align-items-center justify-content-center'>

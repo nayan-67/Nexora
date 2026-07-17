@@ -298,13 +298,7 @@ export default function OrdersPage() {
       .catch((error) => {
         toast.error(error.response?.data?.message || "Failed to load orders.")
       })
-    //     .finally(() => {
-    //       if (active) {
-    //         setLoading(false)
-    //       }
-    //     })
-
-
+      
     return () => { active = false }
   }, [])
 

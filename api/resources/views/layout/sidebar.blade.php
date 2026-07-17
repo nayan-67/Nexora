@@ -29,7 +29,7 @@
                 </li>
                 {{-- ---:: Category ::--- --}}
                 <li class="nav-item @yield('catmenuopen')">
-                    <a href="#" class="nav-link @yield('cactive')">
+                    <a href="javascript:void(0)" class="nav-link @yield('cactive')">
                         <i class="nav-icon bi bi-grid"></i>
                         <p>Category</p>
                         <i class="nav-arrow bi bi-chevron-right"></i>
@@ -51,7 +51,7 @@
                 </li>
                 {{-- ---:: Sub Category ::--- --}}
                 <li class="nav-item @yield('scatmenuopen')">
-                    <a href="#" class="nav-link @yield('scactive')">
+                    <a href="javascript:void(0)" class="nav-link @yield('scactive')">
                         <i class="nav-icon bi bi-diagram-3"></i>
                         <p>Sub Category</p>
                         <i class="nav-arrow bi bi-chevron-right"></i>
@@ -73,7 +73,7 @@
                 </li>
                 {{-- ---:: Product ::--- --}}
                 <li class="nav-item @yield('pmenuopen')">
-                    <a href="#" class="nav-link @yield('pactive')">
+                    <a href="javascript:void(0)" class="nav-link @yield('pactive')">
                         <i class="nav-icon bi bi-box-seam"></i>
                         <p>
                             Product
@@ -114,7 +114,7 @@
                 </li>
                 {{-- ---:: Coupon ::--- --}}
                 <li class="nav-item @yield('dismenuopen')">
-                    <a href="#" class="nav-link @yield('discactive')">
+                    <a href="javascript:void(0)" class="nav-link @yield('discactive')">
                         <i class="nav-icon bi bi-ticket-perforated"></i>
                         <p>Coupon</p>
                         <i class="nav-arrow bi bi-chevron-right"></i>

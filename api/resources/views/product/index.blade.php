@@ -117,7 +117,7 @@
 
             <section class="bg-white h-100 page-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
+                    {{-- <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
                         <button type="button" class="btn s-btn fs-8" value="">ALL</button>
                         <button type="button" class="btn s-btn fs-8" value="A">A</button>
                         <button type="button" class="btn s-btn fs-8" value="B">B</button>
@@ -146,17 +146,17 @@
                         <button type="button" class="btn s-btn fs-8" value="Y">Y</button>
                         <button type="button" class="btn s-btn fs-8" value="Z">Z</button>
                     </div>
-                    <hr class="m-0">
+                    <hr class="m-0"> --}}
                     <div class="row mx-1 py-3">
-                        <div class="col-sm-2">
-                            <h6 class="mb-0 page-head fs-7 fw-bold">Product Name</h6>
+                        <div class="col-sm-2 d-flex align-items-center">
+                            <h6 class="page-head fs-7 fw-bold">Product Name</h6>
                         </div>
                         <div class="col-sm-8">
-                            <form class="d-flex" role="search">
+                            <form class="d-flex" role="search" action="javascript:void(0)">
                                 <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
                                     aria-label="Search" id="search" value="" autocomplete="off" />
-                                <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button>
+                                {{-- <button class="btn btn-success fs-7" type="submit"><i
+                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
                             </form>
                         </div>
                     </div>
@@ -167,8 +167,8 @@
                                 Add New
                             </a>
                         </div> --}}
-                        <div class="page-deatails">
-                            <hr class="m-2 text-secondery opacity-10">
+                        <div class="page-deatails pt-2">
+                            {{-- <hr class="m-2 text-secondery opacity-10"> --}}
                             <div class="header row fs-7">
                                 <div class="col-sm-3 text-center fw-bold">Product Name</div>
                                 <div class="col-sm-2 text-center fw-bold">Category Name</div>
@@ -198,14 +198,15 @@
                                     <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
                                         {{ $subcat->name }}</div>
                                     <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
-                                        {{ $row->sale_price?? $row->price }}</div>
+                                        {{ $row->sale_price ?? $row->price }}</div>
                                     <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
                                         {{ $row->type == '1' ? 'Simple' : 'Variable' }}</div>
                                     <div
                                         class='col-sm-1 text-center d-flex align-items-center justify-content-center {{ $stock > 0 ? 'text-success' : 'text-danger' }}'>
-                                        {{ $stock }}</div>
+                                        {{ $stock }}
+                                    </div>
                                     <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                                        <a href='{{route('product.edit',encrypt($row->id))}}'
+                                        <a href='{{ route('product.edit', encrypt($row->id)) }}'
                                             class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
                                             style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
                                         <button type='button'
@@ -283,7 +284,6 @@
                 btn.style.background = "#196d54";
             });
         });
-
     </script>
 
 @endsection
