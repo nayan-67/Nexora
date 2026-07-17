@@ -4,11 +4,11 @@
         <!--begin::Brand Link-->
         <a href="#" class="brand-link">
             <!--begin::Brand Image-->
-            <img src="{{ asset('adminlte/dist/assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+            <img src="{{ asset('adminlte/dist/assets/img/nexora-logo2.svg') }}" alt="Nexora Logo"
                 class="brand-image opacity-75 shadow" />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">Nexora</span>
+            {{-- <span class="brand-text fw-light">Admin</span> --}}
             <!--end::Brand Text-->
         </a>
         <!--end::Brand Link-->
@@ -20,13 +20,14 @@
             <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation"
                 aria-label="Main navigation" data-accordion="false" id="navigation">
+                {{-- ---:: Dashboard ::--- --}}
                 <li class="nav-item border-bottom mb-3">
                     <a href="{{ route('dashboard') }}" class="nav-link @yield('dactive')">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
-
+                {{-- ---:: Category ::--- --}}
                 <li class="nav-item @yield('catmenuopen')">
                     <a href="#" class="nav-link @yield('cactive')">
                         <i class="nav-icon bi bi-grid"></i>
@@ -48,7 +49,7 @@
                         </li>
                     </ul>
                 </li>
-
+                {{-- ---:: Sub Category ::--- --}}
                 <li class="nav-item @yield('scatmenuopen')">
                     <a href="#" class="nav-link @yield('scactive')">
                         <i class="nav-icon bi bi-diagram-3"></i>
@@ -70,10 +71,10 @@
                         </li>
                     </ul>
                 </li>
-
+                {{-- ---:: Product ::--- --}}
                 <li class="nav-item @yield('pmenuopen')">
                     <a href="#" class="nav-link @yield('pactive')">
-                        <i class="nav-icon bi bi-box-seam-fill"></i>
+                        <i class="nav-icon bi bi-box-seam"></i>
                         <p>
                             Product
                         </p>
@@ -111,7 +112,7 @@
                         </li>
                     </ul>
                 </li>
-
+                {{-- ---:: Coupon ::--- --}}
                 <li class="nav-item @yield('dismenuopen')">
                     <a href="#" class="nav-link @yield('discactive')">
                         <i class="nav-icon bi bi-ticket-perforated"></i>
@@ -133,21 +134,21 @@
                         </li>
                     </ul>
                 </li>
-
+                {{-- ---:: Order ::--- --}}
                 <li class="nav-item">
                     <a href="{{ route('admin.order') }}" class="nav-link @yield('oactive')">
                         <i class="nav-icon bi bi-cart3"></i>
                         <p>Order</p>
                     </a>
                 </li>
-
+                {{-- ---:: Customer ::--- --}}
                 <li class="nav-item">
                     <a href="{{ route('admin.user') }}" class="nav-link @yield('uactive')">
-                        <i class="nav-icon bi bi-person-fill"></i>
+                        <i class="nav-icon bi bi-person"></i>
                         <p>Customer</p>
                     </a>
                 </li>
-
+                {{-- ---:: Setting ::--- --}}
                 <li class="nav-item">
                     <a href="{{ route('admin.setting') }}" class="nav-link @yield('sactive')">
                         <i class="nav-icon bi bi-gear"></i>

@@ -39,7 +39,7 @@
                                 <h3><?php echo $catdata ?? '0'; ?></h3>
                                 <p>Category</p>
                             </div>
-                            <i class="small-box-icon bi bi-layers-fill"></i>
+                            <i class="small-box-icon bi bi-grid"></i>
                         </div>
                         <!--end::Small Box Widget 1-->
                     </div>
@@ -49,9 +49,9 @@
                         <div class="small-box text-bg-success">
                             <div class="inner">
                                 <h3><?php echo $subcatdata ?? '0'; ?></h3>
-                                <p>SUB Category</p>
+                                <p>Sub Category</p>
                             </div>
-                            <i class="small-box-icon bi bi-layers-half"></i>
+                            <i class="small-box-icon bi bi-diagram-3"></i>
                         </div>
                         <!--end::Small Box Widget 2-->
                     </div>
@@ -63,7 +63,7 @@
                                 <h3><?php echo $productdata ?? '0'; ?></h3>
                                 <p>Product</p>
                             </div>
-                            <i class="small-box-icon bi bi-box-seam-fill"></i>
+                            <i class="small-box-icon bi bi-box-seam"></i>
                         </div>
                         <!--end::Small Box Widget 2-->
                     </div>
@@ -75,7 +75,7 @@
                                 <h3><?php echo $discountdata ?? '0'; ?></h3>
                                 <p>Discount Coupon</p>
                             </div>
-                            <i class="small-box-icon bi bi-percent"></i>
+                            <i class="small-box-icon bi bi-ticket-perforated"></i>
                         </div>
                         <!--end::Small Box Widget 2-->
                     </div>
@@ -99,12 +99,11 @@
                                 <h3><?php echo $userdata ?? '0'; ?></h3>
                                 <p>Customer</p>
                             </div>
-                            <i class="small-box-icon bi bi-person-fill"></i>
+                            <i class="small-box-icon bi bi-person"></i>
                         </div>
                         <!--end::Small Box Widget 2-->
                     </div>
                     <!--end::Col-->
-
                 </div>
                 <!--end::Row-->
                 <!-- /.row (main row) -->
