@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Cart;
+use App\Models\Order;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -42,8 +46,6 @@ class AuthController extends Controller
         ];
 
         $user = User::create($data);
-        // $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json(['status' => true], 201);
     }
 
@@ -61,17 +63,32 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where(['email' => $request->email, 'status' => 1])->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Your account is inactive. Please contact support.'
+            ], 403);
+        }
 
         // optional: delete old tokens
         $user->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
+        $address = Address::where(['user_id' => $user->id, 'is_default' => 1])->first();
+        $cartItems = Cart::where('u_id', $user->id)->get();
 
         return response()->json([
             'status' => true,
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'address' => $address,
+            'cartdata' => $cartItems,
+            'stats' => [
+                'orders' => Order::where('user_id', $user->id)->count(),
+                'wishlist' => Wishlist::where('u_id', $user->id)->count(),
+            ],
         ], 200);
     }
 }

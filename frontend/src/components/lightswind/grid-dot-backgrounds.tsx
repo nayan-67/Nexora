@@ -55,7 +55,7 @@ export const GridBackground = ({
   return (
     <div
       className={cn(
-        "relative flex h-200 w-full items-center justify-center bg-transparent",
+        "relative flex h-[50rem] w-full items-center justify-center bg-transparent",
         className
       )}
       {...props}
@@ -147,7 +147,7 @@ export const DotBackground = ({
   return (
     <div
       className={cn(
-        "relative flex h-200 w-full items-center justify-center bg-white dark:bg-black",
+        "relative flex h-[50rem] w-full items-center justify-center bg-white dark:bg-black",
         className
       )}
       {...props}

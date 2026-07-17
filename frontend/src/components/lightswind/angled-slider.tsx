@@ -2,9 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useAnimation, useMotionValue, animate, Variants } from "framer-motion";
-import { cn } from "@/app/component2/utils";
-import Image from "next/image";
-
+import { cn } from "../../lib/utils";
 interface AngledSliderProps {
     /**
      * Array of image objects or URLs
@@ -113,7 +111,7 @@ const AngledCard = ({
             {/* The Image Card */}
             <div className="relative h-full w-full overflow-hidden border border-white/10 bg-muted 
             min-h-[300px] shadow-2xl">
-                <Image
+                <img 
                     src={item.url}
                     alt={item.alt || "Slider Image"}
                     fill

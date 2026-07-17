@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 import { Dialog, DialogContent } from "./dialog";
@@ -83,8 +82,12 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>(
         <div
           ref={ref}
           className={cn(
-            `flex h-full w-full flex-col overflow-hidden rounded-md
-             bg-popover text-popover-foreground`,
+            `flex  h-full w-full flex-col overflow-hidden rounded-md
+             bg-popover text-popover-foreground transition-all duration-300`,
+            "[.lw-3d_&]:bg-gradient-to-b [.lw-3d_&]:from-white [.lw-3d_&]:to-zinc-50/95 dark:[.lw-3d_&]:from-zinc-900 dark:[.lw-3d_&]:to-zinc-950",
+            "[.lw-3d_&]:border-black/10 dark:[.lw-3d_&]:border-white/10",
+            "[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.45),0_12px_24px_-4px_rgba(0,0,0,0.08),0_4px_12px_-2px_rgba(0,0,0,0.04)]",
+            "dark:[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.15),0_12px_24px_-4px_rgba(0,0,0,0.3),0_4px_12px_-2px_rgba(0,0,0,0.2)]",
             className
           )}
           {...props}
@@ -150,15 +153,18 @@ const CommandDialog: React.FC<CommandDialogProps> = ({
     <>
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
-          aria-hidden="true"/>
+          className="fixed inset-0 z-[60] bg-transparent backdrop-blur-md"
+          aria-hidden="true" />
       )}
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
           className={cn(
-            `fixed overflow-hidden p-0 shadow-xl border-muted/50 bg-background/90
-             backdrop-blur-lg max-w-3xl z-50`,
-            "top-[10vh] max-h-[80vh]", // Position from top with max height
+            `overflow-hidden p-0 shadow-2xl border-muted/50 bg-background/95
+             backdrop-blur-xl max-w-3xl z-[70] transition-all duration-300`,
+            "[.lw-3d_&]:bg-gradient-to-b [.lw-3d_&]:from-white [.lw-3d_&]:to-zinc-50/95 dark:[.lw-3d_&]:from-zinc-900 dark:[.lw-3d_&]:to-zinc-950",
+            "[.lw-3d_&]:border-black/10 dark:[.lw-3d_&]:border-white/10",
+            "[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.45),0_12px_24px_-4px_rgba(0,0,0,0.08),0_4px_12px_-2px_rgba(0,0,0,0.04)]",
+            "dark:[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.15),0_12px_24px_-4px_rgba(0,0,0,0.3),0_4px_12px_-2px_rgba(0,0,0,0.2)]",
             className
           )}
           onClick={handleDialogClick}
@@ -257,6 +263,7 @@ const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
           "max-h-[300px] overflow-y-auto overflow-x-hidden",
           className
         )}
+        data-lenis-prevent
         {...props}
       >
         {isLoading && props.children && (
@@ -271,7 +278,7 @@ const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
 );
 CommandList.displayName = "CommandList";
 
-interface CommandEmptyProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CommandEmptyProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const CommandEmpty = React.forwardRef<HTMLDivElement, CommandEmptyProps>(
   (props, ref) => {
@@ -311,7 +318,7 @@ const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
 );
 CommandGroup.displayName = "CommandGroup";
 
-interface CommandSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CommandSeparatorProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const CommandSeparator = React.forwardRef<
   HTMLDivElement,
@@ -356,7 +363,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
 );
 CommandItem.displayName = "CommandItem";
 
-interface CommandShortcutProps extends React.HTMLAttributes<HTMLSpanElement> {}
+interface CommandShortcutProps extends React.HTMLAttributes<HTMLSpanElement> { }
 
 const CommandShortcut = ({ className, ...props }: CommandShortcutProps) => {
   return (

@@ -3,9 +3,9 @@ import { cn } from "../../lib/utils";
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="relative w-full max-h-[400px] overflow-auto scrollbar-hide rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-black shadow-sm">
+  React.TableHTMLAttributes<HTMLTableElement> & { noScroll?: boolean }
+>(({ className, noScroll, ...props }, ref) => {
+  const table = (
     <table
       ref={ref}
       className={cn(
@@ -14,8 +14,18 @@ const Table = React.forwardRef<
       )}
       {...props}
     />
-  </div>
-));
+  );
+
+  if (noScroll) return table;
+
+  return (
+    <div className="relative w-full rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-black shadow-sm overflow-hidden">
+      <div className="w-full overflow-auto max-h-[calc(80vh-70px)] custom-scrollbar" data-lenis-prevent>
+        {table}
+      </div>
+    </div>
+  );
+});
 Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<
@@ -83,9 +93,22 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      `h-12 px-6 text-left align-middle font-semibold 
-      text-background bg-foreground
-       [&:first-child]:rounded-tl-lg [&:last-child]:rounded-tr-lg`, // White text on dark header
+      `h-12 px-6 text-left align-middle font-semibold transition-all duration-200
+      [&:first-child]:rounded-tl-lg [&:last-child]:rounded-tr-lg
+      
+      /* Flat style (no .lw-3d) */
+      bg-foreground text-background
+      
+      /* 3D Shade Style (when .lw-3d is present on root/parent) */
+      [.lw-3d_&]:bg-zinc-900 [.lw-3d_&]:bg-gradient-to-b [.lw-3d_&]:from-zinc-800 [.lw-3d_&]:to-zinc-950
+      [.lw-3d_&]:text-white [.lw-3d_&]:border-t [.lw-3d_&]:border-t-white/10 [.lw-3d_&]:border-b [.lw-3d_&]:border-b-zinc-900/50
+      [.lw-3d_&]:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15),0_1px_2px_0_rgba(0,0,0,0.05)]
+      
+      /* 3D Shade Dark Styles */
+      dark:[.lw-3d_&]:bg-zinc-100
+      dark:[.lw-3d_&]:from-white dark:[.lw-3d_&]:to-zinc-200 dark:[.lw-3d_&]:text-zinc-950
+      dark:[.lw-3d_&]:border-t-white/80 dark:[.lw-3d_&]:border-b-zinc-300
+      dark:[.lw-3d_&]:shadow-[inset_0_1.5px_0_0_rgba(255,255,255,0.9),0_1px_2px_0_rgba(0,0,0,0.15)]`,
       className
     )}
     {...props}

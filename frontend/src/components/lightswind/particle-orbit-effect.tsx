@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useCallback } from "react";
 import { cn } from "../../lib/utils";
 
@@ -47,7 +46,7 @@ const ParticleOrbitEffect: React.FC<ParticleOrbitEffectProps> = ({
   particleSize = 2
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({
     x: 0,
@@ -296,7 +295,7 @@ const ParticleOrbitEffect: React.FC<ParticleOrbitEffectProps> = ({
   }
 
   return (
-    <div className={cn("fixed top-0 left-0 z-50 pointer-events-none w-full h-full", className)}>
+    <div className={cn("fixed top-0 left-0 z-[99999] pointer-events-none w-full h-full", className)}>
       <canvas
         ref={canvasRef}
         className="w-screen h-screen block"

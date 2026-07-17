@@ -1,60 +1,71 @@
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-// Utility function to merge class names with Tailwind
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 export function cn(...inputs) {
     return twMerge(clsx(inputs));
 }
-// Utility function to format a number with currency
-export function formatCurrency(amount, currency = "USD", options) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
+
+export function formatCurrency(amount, currency = 'USD', options) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
         currency,
         ...options,
     }).format(amount);
 }
-// Utility function to generate a unique ID
-export function generateUniqueId(prefix = "id") {
-    return `${prefix}-${Math.random().toString(36).substring(2, 9)}`;
+
+export function generateUniqueId(prefix = 'id') {
+    return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
 }
-// Utility function to truncate text
+
 export function truncateText(text, maxLength) {
-    if (text.length <= maxLength)
+    if (typeof text !== 'string') {
+        return '';
+    }
+
+    if (text.length <= maxLength) {
         return text;
-    return text.substring(0, maxLength) + "...";
+    }
+
+    return `${text.slice(0, maxLength)}...`;
 }
-// Utility function to format date
+
 export function formatDate(date, options) {
-    return new Intl.DateTimeFormat("en-US", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
+    return new Intl.DateTimeFormat('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
         ...options,
     }).format(date);
 }
-// Utility function to debounce function calls
-export function debounce(func, wait) {
+
+export function debounce(func, wait = 0) {
     let timeout = null;
-    return function (...args) {
-        const later = () => {
-            timeout = null;
-            func(...args);
-        };
+
+    return (...args) => {
         if (timeout !== null) {
             clearTimeout(timeout);
         }
-        timeout = setTimeout(later, wait);
+
+        timeout = setTimeout(() => {
+            timeout = null;
+            func(...args);
+        }, wait);
     };
 }
-// Utility function to throttle function calls
-export function throttle(func, limit) {
+
+export function throttle(func, limit = 0) {
     let inThrottle = false;
-    return function (...args) {
-        if (!inThrottle) {
-            func(...args);
-            inThrottle = true;
-            setTimeout(() => {
-                inThrottle = false;
-            }, limit);
+
+    return (...args) => {
+        if (inThrottle) {
+            return;
         }
+
+        inThrottle = true;
+        func(...args);
+
+        setTimeout(() => {
+            inThrottle = false;
+        }, limit);
     };
 }

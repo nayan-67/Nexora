@@ -1,43 +1,40 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Minus, Plus, X, ShoppingBag, ArrowRight, Tag, Truck, Lock } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/lightswind/button"
+import { toast } from "react-hot-toast";
+import { CartContext } from "@/context/CartContext"
+import api from "@/lib/api"
+const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "");
 
-const initialCartItems = [
-  {
-    id: 1,
-    name: "Premium Wireless Headphones",
-    price: 299,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop&q=80",
-    quantity: 1,
-    category: "Electronics",
-  },
-  {
-    id: 2,
-    name: "Minimalist Watch Collection",
-    price: 189,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop&q=80",
-    quantity: 2,
-    category: "Accessories",
-  },
-  {
-    id: 5,
-    name: "Leather Crossbody Bag",
-    price: 245,
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop&q=80",
-    quantity: 1,
-    category: "Fashion",
-  },
-]
+function CartItem({ item, prd, variants, cat, onUpdateQuantity, onRemove }) {
+  const isVariant = item.prd_type == 2
+  const prdDetails = prd?.find((p) => Number(p.id) === Number(item.prd_id))
+  const variantDetails = isVariant && variants?.find((v) => v.sku == item.sku)
+  const displayData = isVariant ? variantDetails : prdDetails
+  const catName = cat?.find((c) => Number(c.id) === Number(prdDetails?.category_id))?.name || "Uncategorized"
+  const imageType = isVariant ? 'var' : 'prd'
+  const attributes = variantDetails?.attributes
 
-function CartItem({ item, onUpdateQuantity, onRemove }) {
+  if (!displayData) {
+    return (
+      <div className="flex gap-4 border-b border-border/40 py-6 first:pt-0 last:border-0 pt-18.75">
+        <div className="h-24 w-24 overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-32 animate-pulse"></div>
+        <div className="flex-1">
+          <div className="h-4 bg-gray-300 rounded animate-pulse w-3/4"></div>
+          <div className="h-4 bg-gray-300 rounded animate-pulse w-1/2 mt-2"></div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="flex gap-4 border-b border-border/40 py-6 first:pt-0 last:border-0 pt-18.75">
-      <Link to={`/products/${item.id}`} className="shrink-0">
+    <div key={item.id} className="flex gap-4 border-b border-border/40 py-6 first:pt-0 last:border-0">
+      <Link to={`/products/${item.prd_id}`} className="shrink-0">
         <div className="h-24 w-24 overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-32">
           <img
-            src={item.image}
-            alt={item.name}
+            src={`${apiBase}/uploads/${imageType}_md_${displayData?.featured_image}`}
+            alt={prdDetails?.name}
             className="h-full w-full object-cover transition-transform hover:scale-105"
           />
         </div>
@@ -46,13 +43,20 @@ function CartItem({ item, onUpdateQuantity, onRemove }) {
       <div className="flex flex-1 flex-col">
         <div className="flex items-start justify-between">
           <div>
-            <span className="text-xs text-muted-foreground">{item.category}</span>
+            <span className="text-xs text-muted-foreground">{catName}</span>
             <Link
-              to={`/products/${item.id}`}
+              to={`/products/${item.prd_id}`}
               className="mt-1 block font-medium text-foreground transition-colors hover:text-primary"
             >
-              {item.name}
+              {prdDetails?.name}
             </Link>
+            {attributes && (
+              <div className="mt-1">
+                {attributes.map((val, id) => (
+                  <div key={id} className="text-xs text-muted-foreground font-bold">{val.name} :<span className="ps-2 font-medium">{val.value.name || val.value}</span></div>
+                ))}
+              </div>
+            )}
           </div>
           <button
             onClick={() => onRemove(item.id)}
@@ -72,13 +76,13 @@ function CartItem({ item, onUpdateQuantity, onRemove }) {
             </button>
             <span className="w-8 text-center text-sm font-medium text-foreground">{item.quantity}</span>
             <button
-              onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+              onClick={() => onUpdateQuantity(item.id, Math.min(displayData?.stock, item.quantity + 1))}
               className="flex h-8 w-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
             >
               <Plus className="h-3.5 w-3.5" />
             </button>
           </div>
-          <p className="text-lg font-semibold text-foreground">${item.price * item.quantity}</p>
+          <p className="text-lg font-semibold text-foreground">${(displayData?.sale_price ?? displayData?.price) * item.quantity}</p>
         </div>
       </div>
     </div>
@@ -86,34 +90,122 @@ function CartItem({ item, onUpdateQuantity, onRemove }) {
 }
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState(initialCartItems)
+  const [couponData, setCouponData] = useState(null)
   const [promoCode, setPromoCode] = useState("")
+  const [msg, setmsg] = useState("")
   const [promoApplied, setPromoApplied] = useState(false)
+  const [products, setProducts] = useState([])
+  const [variants, setVariants] = useState([])
+  const [sortCategory, setSortCategory] = useState([])
+  const { cartData, setCartData } = useContext(CartContext)
+
+  const checkCoupon = sessionStorage.getItem("coupon")
+
+  useEffect(() => {
+    let active = true;
+
+    const loadCatVarData = async () => {
+      try {
+        const [catResponse, variantResponse, productResponse] = await Promise.all([
+          api.get("/sortcategories"),
+          api.get("/product/variants"),
+          api.get("/products"),
+        ])
+
+        if (!active) return
+
+        setSortCategory(catResponse.status === 200 ? catResponse.data : [])
+        setVariants(variantResponse.status === 200 ? variantResponse.data : [])
+        setProducts(productResponse.status === 200 ? productResponse.data : [])
+
+        if (sessionStorage.getItem("coupon")) {
+          setPromoApplied(true)
+          const couponData = JSON.parse(sessionStorage.getItem("coupon"))
+          setCouponData(couponData)
+          setPromoCode(couponData.name)
+        }
+      } catch (error) {
+        if (!active) return
+
+        setSortCategory([])
+        setVariants([])
+        setProducts([])
+        console.error("Error fetching data:", error)
+      }
+    }
+
+    loadCatVarData()
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const updateQuantity = (id, quantity) => {
-    setCartItems(items =>
+    setCartData(items =>
       items.map(item =>
         item.id === id ? { ...item, quantity } : item
       )
     )
+    api.post("/card/update", { id, quantity })
+      .then((res) => {
+        setCartData(res.data.cartdata)
+      })
+      .catch((err) => {
+        console.error("Error updating cart item:", err)
+      })
   }
 
   const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id))
+    setCartData(items => items.filter(item => item.id !== id))
+    api.post("/card/remove", { id })
+      .then((res) => {
+        setCartData(res.data.cartdata)
+        toast.success("Item removed from cart");
+      })
+      .catch((err) => {
+        console.error("Error removing cart item:", err)
+        toast.error("Failed to remove item from cart");
+      })
   }
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const discount = promoApplied ? subtotal * 0.1 : 0
-  const shipping = subtotal > 100 ? 0 : 9.99
+  const subtotal = cartData.reduce((sum, item) => {
+    const isVariant = item.prd_type == 2
+    const prdDetails = products?.find((p) => Number(p.id) === Number(item.prd_id))
+    const variantDetails = isVariant && variants?.find((v) => v.sku == item.sku)
+    const displayData = isVariant ? variantDetails : prdDetails
+    return sum + ((displayData?.sale_price || displayData?.price) * item.quantity || 0)
+  }, 0)
+  const discount = promoApplied ? (couponData.type == 2 ? Number(couponData.amount) : subtotal * (couponData.amount / 100)) : 0
+  const shipping = subtotal > 50 ? 0 : 9.99
   const total = subtotal - discount + shipping
 
   const applyPromoCode = () => {
-    if (promoCode.toLowerCase() === "nexora10") {
-      setPromoApplied(true)
-    }
+    api.get(`/applydiscount/${promoCode}`)
+      .then((res) => {
+        if (res.status == 200) {
+          setCouponData(res.data)
+          setPromoApplied(true)
+          sessionStorage.setItem("coupon", JSON.stringify(res.data));
+          setmsg("")
+        } else {
+          setmsg(res.data.msg)
+          toast.error(res.data.msg)
+          setPromoApplied(false)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  const removePromoCode = () => {
+    sessionStorage.removeItem("coupon")
+    setCouponData(null)
+    setPromoApplied(false)
+    setPromoCode("")
   }
 
-  if (cartItems.length === 0) {
+  if (cartData.length === 0) {
     return (
       <div className="flex min-h-screen flex-col bg-background pt-18.75">
         {/* <Header /> */}
@@ -148,21 +240,30 @@ export default function CartPage() {
             Shopping Cart
           </h1>
           <p className="mt-2 text-muted-foreground">
-            {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in your cart
+            {cartData.length} {cartData.length === 1 ? "item" : "items"} in your cart
           </p>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-3">
             {/* Cart Items */}
             <div className="lg:col-span-2">
               <div className="rounded-2xl border border-border/60 bg-card p-6">
-                {cartItems.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    item={item}
-                    onUpdateQuantity={updateQuantity}
-                    onRemove={removeItem}
-                  />
-                ))}
+                {cartData && cartData.length > 0 ? (
+                  cartData.map((item) => (
+                    <CartItem
+                      key={item.id || item.sku}
+                      item={item}
+                      variants={variants}
+                      cat={sortCategory}
+                      prd={products}
+                      onUpdateQuantity={updateQuantity}
+                      onRemove={removeItem}
+                    />
+                  ))
+                ) : (
+                  <div className="py-8 text-center text-muted-foreground">
+                    <p>Loading cart items...</p>
+                  </div>
+                )}
               </div>
 
               {/* Continue Shopping */}
@@ -177,7 +278,7 @@ export default function CartPage() {
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="sticky top-24 rounded-2xl border border-border/60 bg-card p-6">
+              <div className="sticky top-28 rounded-2xl border border-border/60 bg-card p-6">
                 <h2 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
                   Order Summary
                 </h2>
@@ -192,22 +293,42 @@ export default function CartPage() {
                         type="text"
                         placeholder="Enter code"
                         value={promoCode}
-                        onChange={(e) => setPromoCode(e.target.value)}
-                        className="h-10 w-full rounded-lg border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                        onChange={(e) => {
+                          setPromoCode(e.target.value)
+                          e.target.value == "" ? setmsg("") : ''
+                        }}
+                        className="h-10 w-full rounded-lg border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-1 focus:ring-ring"
                         disabled={promoApplied}
                       />
                     </div>
-                    <Button
-                      variant="outline"
-                      onClick={applyPromoCode}
-                      disabled={promoApplied || !promoCode}
-                    >
-                      {promoApplied ? "Applied" : "Apply"}
-                    </Button>
+                    {checkCoupon ? (
+                      <Button
+                        variant="custom"
+                        onClick={removePromoCode}
+                        className="h-10 select-none cursor-pointer text-primary border-primary"
+                      // disabled={promoApplied || !promoCode}
+                      >
+                        Remove
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="custom"
+                        onClick={applyPromoCode}
+                        className="h-10 select-none cursor-pointer"
+                        disabled={!promoCode}
+                      >
+                        Apply
+                      </Button>
+                    )}
                   </div>
                   {promoApplied && (
                     <p className="mt-2 text-sm text-green-600">
-                      Promo code applied! You save 10%
+                      Promo code applied! You save {couponData.type == 2 ? `$${couponData.amount}` : `${couponData.amount}%`}
+                    </p>
+                  )}
+                  {msg && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {msg}
                     </p>
                   )}
                   <p className="mt-2 text-xs text-muted-foreground">
@@ -223,7 +344,7 @@ export default function CartPage() {
                   </div>
                   {promoApplied && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-600">Discount (10%)</span>
+                      <span className="text-green-600">Discount ({couponData.type == 2 ? `$${couponData.amount}` : `${couponData.amount}%`})</span>
                       <span className="text-green-600">-${discount.toFixed(2)}</span>
                     </div>
                   )}
@@ -235,7 +356,7 @@ export default function CartPage() {
                   </div>
                   {shipping > 0 && (
                     <p className="text-xs text-muted-foreground">
-                      Free shipping on orders over $100
+                      Free shipping on orders over $50
                     </p>
                   )}
                   <div className="flex justify-between border-t border-border/40 pt-3 text-lg font-semibold">
@@ -245,8 +366,8 @@ export default function CartPage() {
                 </div>
 
                 {/* Checkout Button */}
-                <Button asChild size="lg" className="mt-6 w-full gap-2">
-                  <Link to="/checkout">
+                <Button asChild variant="custom" className="mt-6 h-10 w-full bg-primary text-white font-bold">
+                  <Link to="/checkout" className="flex items-center gap-2">
                     Proceed to Checkout
                     <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -256,7 +377,7 @@ export default function CartPage() {
                 <div className="mt-6 space-y-3 border-t border-border/40 pt-6">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Truck className="h-4 w-4" />
-                    Free shipping on orders over $100
+                    Free shipping on orders over $50
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Lock className="h-4 w-4" />
