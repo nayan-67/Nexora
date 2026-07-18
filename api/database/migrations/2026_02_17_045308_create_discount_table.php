@@ -16,11 +16,10 @@ return new class extends Migration
             $table->string('name', 100);
             $table->date('valid_from');
             $table->date('valid_till')->nullable();
-            $table->enum('type', ['1', '2'])->comment('1: PERCENTAGE, 2: FIXED_AMOUNT');
+            $table->enum('type', ['1', '2'])->comment('1: Percentage, 2: Fixed_Amount');
             $table->decimal('amount', 10, 2);
             $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

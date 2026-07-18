@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('order_number', 100)->nullable();
-            $table->enum('order_status', ['0', '1', '2', '3'])->nullable()->default('1')->comment('0: Cancelled, 1: Processing, 2: Shipped, 3: Delivered');
+            $table->enum('order_status', ['1', '2'])->nullable()->default('1')->comment('1: Pending, 2: Complete');
             $table->enum('payment_status', ['0', '1', '2'])->nullable()->default('1')->comment('0: Pending, 1: Paid, 2: Refunded');
             $table->string('payment_mode', 100);
             $table->foreignId('billing_address_id')->constrained('order_address');
