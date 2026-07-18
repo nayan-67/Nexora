@@ -125,7 +125,7 @@
                                     @foreach ($data as $row)
                                         <?php
                                         $name = $row->first_name . ' ' . $row->last_name;
-                                        $ordresult = DB::table('order_table')->where('user_id', $row->id)->get();
+                                        $ordresult = DB::table('orders')->where('user_id', $row->id)->get();
                                         ?>
                                         <hr class='m-2 text-body-tertiary opacity-10'>
                                         <div class='row fs-7'>
