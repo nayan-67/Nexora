@@ -118,7 +118,7 @@
                                         <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
                                         <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
                                     </button>
-                                    <div class="btn-group">
+                                    {{-- <div class="btn-group">
                                         <button type="button" class="btn btn-tool dropdown-toggle"
                                             data-bs-toggle="dropdown">
                                             <i class="bi bi-wrench"></i>
@@ -130,10 +130,10 @@
                                             <a class="dropdown-divider"></a>
                                             <a href="#" class="dropdown-item">Separated link</a>
                                         </div>
-                                    </div>
-                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                                    </div> --}}
+                                    {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
                                         <i class="bi bi-x-lg"></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                             <!-- /.card-header -->
@@ -240,332 +240,198 @@
                 <!--begin::Row-->
                 <div class="row">
                     <!-- Start col -->
-                    <div class="col-md-8">
-                        <!--begin::Row-->
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-6">
-                                <!-- DIRECT CHAT -->
-                                <div class="card direct-chat direct-chat-warning">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Direct Chat</h3>
-                                        <div class="card-tools">
-                                            <span title="3 New Messages" class="badge text-bg-warning"> 3 </span>
-                                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-tool" title="Contacts"
-                                                data-lte-toggle="chat-pane">
-                                                <i class="bi bi-chat-text-fill"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body">
-                                        <!-- Conversations are loaded here -->
-                                        <div class="direct-chat-messages">
-                                            <!-- Message. Default to the start -->
-                                            <div class="direct-chat-msg">
-                                                <div class="direct-chat-infos clearfix">
-                                                    <span class="direct-chat-name float-start"> Alexander Pierce </span>
-                                                    <span class="direct-chat-timestamp float-end"> 23 Jan 2:00 pm </span>
-                                                </div>
-                                                <!-- /.direct-chat-infos -->
-                                                <img class="direct-chat-img" src="./assets/img/user1-128x128.jpg"
-                                                    alt="message user image" />
-                                                <!-- /.direct-chat-img -->
-                                                <div class="direct-chat-text">
-                                                    Is this template really for free? That's unbelievable!
-                                                </div>
-                                                <!-- /.direct-chat-text -->
-                                            </div>
-                                            <!-- /.direct-chat-msg -->
-                                            <!-- Message to the end -->
-                                            <div class="direct-chat-msg end">
-                                                <div class="direct-chat-infos clearfix">
-                                                    <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                                                    <span class="direct-chat-timestamp float-start">
-                                                        23 Jan 2:05 pm
-                                                    </span>
-                                                </div>
-                                                <!-- /.direct-chat-infos -->
-                                                <img class="direct-chat-img" src="./assets/img/user3-128x128.jpg"
-                                                    alt="message user image" />
-                                                <!-- /.direct-chat-img -->
-                                                <div class="direct-chat-text">You better believe it!</div>
-                                                <!-- /.direct-chat-text -->
-                                            </div>
-                                            <!-- /.direct-chat-msg -->
-                                            <!-- Message. Default to the start -->
-                                            <div class="direct-chat-msg">
-                                                <div class="direct-chat-infos clearfix">
-                                                    <span class="direct-chat-name float-start"> Alexander Pierce </span>
-                                                    <span class="direct-chat-timestamp float-end"> 23 Jan 5:37 pm </span>
-                                                </div>
-                                                <!-- /.direct-chat-infos -->
-                                                <img class="direct-chat-img" src="./assets/img/user1-128x128.jpg"
-                                                    alt="message user image" />
-                                                <!-- /.direct-chat-img -->
-                                                <div class="direct-chat-text">
-                                                    Working with AdminLTE on a great new app! Wanna join?
-                                                </div>
-                                                <!-- /.direct-chat-text -->
-                                            </div>
-                                            <!-- /.direct-chat-msg -->
-                                            <!-- Message to the end -->
-                                            <div class="direct-chat-msg end">
-                                                <div class="direct-chat-infos clearfix">
-                                                    <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                                                    <span class="direct-chat-timestamp float-start">
-                                                        23 Jan 6:10 pm
-                                                    </span>
-                                                </div>
-                                                <!-- /.direct-chat-infos -->
-                                                <img class="direct-chat-img" src="./assets/img/user3-128x128.jpg"
-                                                    alt="message user image" />
-                                                <!-- /.direct-chat-img -->
-                                                <div class="direct-chat-text">I would love to.</div>
-                                                <!-- /.direct-chat-text -->
-                                            </div>
-                                            <!-- /.direct-chat-msg -->
-                                        </div>
-                                        <!-- /.direct-chat-messages-->
-                                        <!-- Contacts are loaded here -->
-                                        <div class="direct-chat-contacts">
-                                            <ul class="contacts-list">
-                                                <li>
-                                                    <a href="#">
-                                                        <img class="contacts-list-img"
-                                                            src="./assets/img/user1-128x128.jpg" alt="User Avatar" />
-                                                        <div class="contacts-list-info">
-                                                            <span class="contacts-list-name">
-                                                                Count Dracula
-                                                                <small class="contacts-list-date float-end"> 2/28/2023
-                                                                </small>
-                                                            </span>
-                                                            <span class="contacts-list-msg">
-                                                                How have you been? I was...
-                                                            </span>
-                                                        </div>
-                                                        <!-- /.contacts-list-info -->
-                                                    </a>
-                                                </li>
-                                                <!-- End Contact Item -->
-                                                <li>
-                                                    <a href="#">
-                                                        <img class="contacts-list-img"
-                                                            src="./assets/img/user7-128x128.jpg" alt="User Avatar" />
-                                                        <div class="contacts-list-info">
-                                                            <span class="contacts-list-name">
-                                                                Sarah Doe
-                                                                <small class="contacts-list-date float-end"> 2/23/2023
-                                                                </small>
-                                                            </span>
-                                                            <span class="contacts-list-msg"> I will be waiting for...
-                                                            </span>
-                                                        </div>
-                                                        <!-- /.contacts-list-info -->
-                                                    </a>
-                                                </li>
-                                                <!-- End Contact Item -->
-                                                <li>
-                                                    <a href="#">
-                                                        <img class="contacts-list-img"
-                                                            src="./assets/img/user3-128x128.jpg" alt="User Avatar" />
-                                                        <div class="contacts-list-info">
-                                                            <span class="contacts-list-name">
-                                                                Nadia Jolie
-                                                                <small class="contacts-list-date float-end"> 2/20/2023
-                                                                </small>
-                                                            </span>
-                                                            <span class="contacts-list-msg"> I'll call you back at...
-                                                            </span>
-                                                        </div>
-                                                        <!-- /.contacts-list-info -->
-                                                    </a>
-                                                </li>
-                                                <!-- End Contact Item -->
-                                                <li>
-                                                    <a href="#">
-                                                        <img class="contacts-list-img"
-                                                            src="./assets/img/user5-128x128.jpg" alt="User Avatar" />
-                                                        <div class="contacts-list-info">
-                                                            <span class="contacts-list-name">
-                                                                Nora S. Vans
-                                                                <small class="contacts-list-date float-end"> 2/10/2023
-                                                                </small>
-                                                            </span>
-                                                            <span class="contacts-list-msg"> Where is your new... </span>
-                                                        </div>
-                                                        <!-- /.contacts-list-info -->
-                                                    </a>
-                                                </li>
-                                                <!-- End Contact Item -->
-                                                <li>
-                                                    <a href="#">
-                                                        <img class="contacts-list-img"
-                                                            src="./assets/img/user6-128x128.jpg" alt="User Avatar" />
-                                                        <div class="contacts-list-info">
-                                                            <span class="contacts-list-name">
-                                                                John K.
-                                                                <small class="contacts-list-date float-end"> 1/27/2023
-                                                                </small>
-                                                            </span>
-                                                            <span class="contacts-list-msg"> Can I take a look at...
-                                                            </span>
-                                                        </div>
-                                                        <!-- /.contacts-list-info -->
-                                                    </a>
-                                                </li>
-                                                <!-- End Contact Item -->
-                                                <li>
-                                                    <a href="#">
-                                                        <img class="contacts-list-img"
-                                                            src="./assets/img/user8-128x128.jpg" alt="User Avatar" />
-                                                        <div class="contacts-list-info">
-                                                            <span class="contacts-list-name">
-                                                                Kenneth M.
-                                                                <small class="contacts-list-date float-end"> 1/4/2023
-                                                                </small>
-                                                            </span>
-                                                            <span class="contacts-list-msg"> Never mind I found... </span>
-                                                        </div>
-                                                        <!-- /.contacts-list-info -->
-                                                    </a>
-                                                </li>
-                                                <!-- End Contact Item -->
-                                            </ul>
-                                            <!-- /.contacts-list -->
-                                        </div>
-                                        <!-- /.direct-chat-pane -->
-                                    </div>
-                                    <!-- /.card-body -->
-                                    <div class="card-footer">
-                                        <form action="#" method="post">
-                                            <div class="input-group">
-                                                <input type="text" name="message" placeholder="Type Message ..."
-                                                    class="form-control" />
-                                                <span class="input-group-append">
-                                                    <button type="button" class="btn btn-warning">Send</button>
-                                                </span>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!-- /.card-footer-->
+                    <div class="col-md-8 mb-4">
+                        <!-- PRODUCT LIST -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recently Added Products</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                    </button>
+                                    {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button> --}}
                                 </div>
-                                <!-- /.direct-chat -->
                             </div>
-                            <!-- /.col -->
-                            <div class="col-md-6">
-                                <!-- USERS LIST -->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Latest Members</h3>
-                                        <div class="card-tools">
-                                            <span class="badge text-bg-danger"> 8 New Members </span>
-                                            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                <div class="px-2">
+                                    <div class="d-flex border-top py-2 px-1">
+                                        <div class="col-2">
+                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
+                                                class="img-size-50" />
+                                        </div>
+                                        <div class="col-10">
+                                            <a href="javascript:void(0)" class="fw-bold">
+                                                Samsung TV
+                                                <span class="badge text-bg-warning float-end"> $1800 </span>
+                                            </a>
+                                            <div class="text-truncate">Samsung 32" 1080p 60Hz LED Smart HDTV.</div>
                                         </div>
                                     </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body p-0">
-                                        <div class="row text-center m-1">
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Alexander Pierce
-                                                </a>
-                                                <div class="fs-8">Today</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Norman
-                                                </a>
-                                                <div class="fs-8">Yesterday</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user7-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Jane
-                                                </a>
-                                                <div class="fs-8">12 Jan</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user6-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    John
-                                                </a>
-                                                <div class="fs-8">12 Jan</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user2-160x160.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Alexander
-                                                </a>
-                                                <div class="fs-8">13 Jan</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user5-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Sarah
-                                                </a>
-                                                <div class="fs-8">14 Jan</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user4-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Nora
-                                                </a>
-                                                <div class="fs-8">15 Jan</div>
-                                            </div>
-                                            <div class="col-3 p-2">
-                                                <img class="img-fluid rounded-circle" src="./assets/img/user3-128x128.jpg"
-                                                    alt="User Image" />
-                                                <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                                                    href="#">
-                                                    Nadia
-                                                </a>
-                                                <div class="fs-8">15 Jan</div>
+                                    <!-- /.item -->
+                                    <div class="d-flex border-top py-2 px-1">
+                                        <div class="col-2">
+                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
+                                                class="img-size-50" />
+                                        </div>
+                                        <div class="col-10">
+                                            <a href="javascript:void(0)" class="fw-bold">
+                                                Bicycle
+                                                <span class="badge text-bg-info float-end"> $700 </span>
+                                            </a>
+                                            <div class="text-truncate">
+                                                26" Mongoose Dolomite Men's 7-speed, Navy Blue.
                                             </div>
                                         </div>
-                                        <!-- /.users-list -->
                                     </div>
-                                    <!-- /.card-body -->
-                                    <div class="card-footer text-center">
-                                        <a href="javascript:"
-                                            class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">View
-                                            All Users</a>
+                                    <!-- /.item -->
+                                    <div class="d-flex border-top py-2 px-1">
+                                        <div class="col-2">
+                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
+                                                class="img-size-50" />
+                                        </div>
+                                        <div class="col-10">
+                                            <a href="javascript:void(0)" class="fw-bold">
+                                                Xbox One
+                                                <span class="badge text-bg-danger float-end"> $350 </span>
+                                            </a>
+                                            <div class="text-truncate">
+                                                Xbox One Console Bundle with Halo Master Chief Collection.
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- /.card-footer -->
+                                    <!-- /.item -->
+                                    <div class="d-flex border-top py-2 px-1">
+                                        <div class="col-2">
+                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
+                                                class="img-size-50" />
+                                        </div>
+                                        <div class="col-10">
+                                            <a href="javascript:void(0)" class="fw-bold">
+                                                PlayStation 4
+                                                <span class="badge text-bg-success float-end"> $399 </span>
+                                            </a>
+                                            <div class="text-truncate">PlayStation 4 500GB Console (PS4)</div>
+                                        </div>
+                                    </div>
+                                    <!-- /.item -->
                                 </div>
-                                <!-- /.card -->
                             </div>
-                            <!-- /.col -->
+                            <!-- /.card-body -->
+                            <div class="card-footer text-center">
+                                <a href="javascript:void(0)" class="btn btn-sm btn-primary float-end">
+                                    View All Products
+                                </a>
+                            </div>
+                            <!-- /.card-footer -->
                         </div>
-                        <!--end::Row-->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4">
+                        <!-- USERS LIST -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Latest Members</h3>
+                                <div class="card-tools">
+                                    <span class="badge text-bg-danger"> 8 New Members </span>
+                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0">
+                                <div class="row text-center m-1">
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Alexander Pierce
+                                        </a>
+                                        <div class="fs-8">Today</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Norman
+                                        </a>
+                                        <div class="fs-8">Yesterday</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user7-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Jane
+                                        </a>
+                                        <div class="fs-8">12 Jan</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user6-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            John
+                                        </a>
+                                        <div class="fs-8">12 Jan</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user2-160x160.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Alexander
+                                        </a>
+                                        <div class="fs-8">13 Jan</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user5-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Sarah
+                                        </a>
+                                        <div class="fs-8">14 Jan</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user4-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Nora
+                                        </a>
+                                        <div class="fs-8">15 Jan</div>
+                                    </div>
+                                    <div class="col-3 p-2">
+                                        <img class="img-fluid rounded-circle" src="./assets/img/user3-128x128.jpg"
+                                            alt="User Image" />
+                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+                                            Nadia
+                                        </a>
+                                        <div class="fs-8">15 Jan</div>
+                                    </div>
+                                </div>
+                                <!-- /.users-list -->
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer text-center">
+                                <a href="javascript:"
+                                    class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">View
+                                    All Users</a>
+                            </div>
+                            <!-- /.card-footer -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!--end::Row-->
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-md-12 mb-4">
                         <!--begin::Latest Order Widget-->
                         <div class="card">
                             <div class="card-header">
@@ -575,9 +441,9 @@
                                         <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
                                         <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
                                     </button>
-                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                                    {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
                                         <i class="bi bi-x-lg"></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                             <!-- /.card-header -->
@@ -677,200 +543,13 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer clearfix">
-                                <a href="javascript:void(0)" class="btn btn-sm btn-primary float-start">
-                                    Place New Order
-                                </a>
-                                <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-end">
-                                    View All Orders
+                                <a href="javascript:void(0)" class="btn btn-sm btn-primary float-end">
+                                    View all order
                                 </a>
                             </div>
                             <!-- /.card-footer -->
                         </div>
-                        <!-- /.card -->
                     </div>
-                    <!-- /.col -->
-                    <div class="col-md-4">
-                        <!-- USERS LIST -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Latest Members</h3>
-                                <div class="card-tools">
-                                    <span class="badge text-bg-danger"> 8 New Members </span>
-                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body p-0">
-                                <div class="row text-center m-1">
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Alexander Pierce
-                                        </a>
-                                        <div class="fs-8">Today</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Norman
-                                        </a>
-                                        <div class="fs-8">Yesterday</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user7-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Jane
-                                        </a>
-                                        <div class="fs-8">12 Jan</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user6-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            John
-                                        </a>
-                                        <div class="fs-8">12 Jan</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user2-160x160.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Alexander
-                                        </a>
-                                        <div class="fs-8">13 Jan</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user5-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Sarah
-                                        </a>
-                                        <div class="fs-8">14 Jan</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user4-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Nora
-                                        </a>
-                                        <div class="fs-8">15 Jan</div>
-                                    </div>
-                                    <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user3-128x128.jpg"
-                                            alt="User Image" />
-                                        <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
-                                            Nadia
-                                        </a>
-                                        <div class="fs-8">15 Jan</div>
-                                    </div>
-                                </div>
-                                <!-- /.users-list -->
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer text-center">
-                                <a href="javascript:"
-                                    class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">View
-                                    All Users</a>
-                            </div>
-                            <!-- /.card-footer -->
-                        </div>
-                        <!-- PRODUCT LIST -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Recently Added Products</h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body p-0">
-                                <div class="px-2">
-                                    <div class="d-flex border-top py-2 px-1">
-                                        <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
-                                        </div>
-                                        <div class="col-10">
-                                            <a href="javascript:void(0)" class="fw-bold">
-                                                Samsung TV
-                                                <span class="badge text-bg-warning float-end"> $1800 </span>
-                                            </a>
-                                            <div class="text-truncate">Samsung 32" 1080p 60Hz LED Smart HDTV.</div>
-                                        </div>
-                                    </div>
-                                    <!-- /.item -->
-                                    <div class="d-flex border-top py-2 px-1">
-                                        <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
-                                        </div>
-                                        <div class="col-10">
-                                            <a href="javascript:void(0)" class="fw-bold">
-                                                Bicycle
-                                                <span class="badge text-bg-info float-end"> $700 </span>
-                                            </a>
-                                            <div class="text-truncate">
-                                                26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.item -->
-                                    <div class="d-flex border-top py-2 px-1">
-                                        <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
-                                        </div>
-                                        <div class="col-10">
-                                            <a href="javascript:void(0)" class="fw-bold">
-                                                Xbox One
-                                                <span class="badge text-bg-danger float-end"> $350 </span>
-                                            </a>
-                                            <div class="text-truncate">
-                                                Xbox One Console Bundle with Halo Master Chief Collection.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.item -->
-                                    <div class="d-flex border-top py-2 px-1">
-                                        <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
-                                        </div>
-                                        <div class="col-10">
-                                            <a href="javascript:void(0)" class="fw-bold">
-                                                PlayStation 4
-                                                <span class="badge text-bg-success float-end"> $399 </span>
-                                            </a>
-                                            <div class="text-truncate">PlayStation 4 500GB Console (PS4)</div>
-                                        </div>
-                                    </div>
-                                    <!-- /.item -->
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer text-center">
-                                <a href="javascript:void(0)" class="uppercase"> View All Products </a>
-                            </div>
-                            <!-- /.card-footer -->
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!-- /.col -->
                 </div>
                 <!--end::Row-->
                 <!-- /.row (main row) -->

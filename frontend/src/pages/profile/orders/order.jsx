@@ -122,7 +122,7 @@ const statusConfig = {
 
 // Helper function to get delivery message
 function getDeliveryMessage(item) {
-  if (item.status === 'delivered') {
+  if (Number(item.status) === 3) {
     return {
       text: `Delivered on ${item.deliveredOn}`,
       subtext: "Your item has been delivered",
@@ -130,7 +130,7 @@ function getDeliveryMessage(item) {
       color: "text-green-600",
       bg: "bg-green-50",
     }
-  } else if (item.status === 'shipped') {
+  } else if (Number(item.status) === 2) {
     return {
       text: "Will deliver by April 5, 2026",
       subtext: "Your item is on its way",
@@ -138,7 +138,7 @@ function getDeliveryMessage(item) {
       color: "text-blue-600",
       bg: "bg-blue-50",
     }
-  } else if (item.status === 'processing') {
+  } else if (Number(item.status) === 1) {
     return {
       text: "Will deliver by April 3, 2026",
       subtext: "Your item is being processed",
@@ -158,29 +158,60 @@ function getDeliveryMessage(item) {
 }
 
 // Flatten all items from all orders
-function getAllItems() {
-  const allItems = []
-  orders.forEach((order) => {
-    order.items.forEach((item) => {
-      allItems.push({
-        ...item,
-        orderId: order.id,
-        orderDate: order.date,
-      })
-    })
-  })
-  // Sort by status (processing first, then shipped, then delivered)
-  const statusOrder = { processing: 0, shipped: 1, delivered: 2, cancelled: 3 }
-  return allItems.sort((a, b) => statusOrder[a.status] - statusOrder[b.status])
-}
+// function getAllItems() {
+//   const [orderItems, setOrderItems] = useState([])
+//   // const orderItems = []
+//   // orders.forEach((order) => {
+//   //   order.items.forEach((item) => {
+//   //     orderItems.push({
+//   //       ...item,
+//   //       orderId: order.id,
+//   //       orderDate: order.date,
+//   //     })
+//   //   })
+//   // })
+//   useEffect(() => {
+//     let active = true
+//     api.get("/orderproducts")
+//       .then((res) => {
+//         if (active) {
+//           setOrderItems(res.data)
+//           console.log(res.data)
+//         }
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       })
+//     return () => { active = false }
+//   }, [])
+//   // Sort by status (processing first, then shipped, then delivered)
+//   // const statusOrder = { processing: 0, shipped: 1, delivered: 2, cancelled: 3 }
+//   // return orderItems.sort((a, b) => statusOrder[a.status] - statusOrder[b.status])
+//   return orderItems
+// }
 
-function ItemCard({ item }) {
+function ItemCard({ item, products, variants }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const deliveryInfo = getDeliveryMessage(item)
   const Icon = deliveryInfo.icon
+  const orderDate = item.created_at
+    ? new Date(item.created_at).toLocaleString("en-US", { month: "long", day: '2-digit', year: "numeric" })
+    : null
+  const isVariant = item.product_type == 2
+  const prdDetails = products?.find((p) => Number(p.id) === Number(item.product_id))
+  const variantDetails = isVariant && variants?.find((v) => v.sku == item.sku)
+  const displayData = isVariant ? variantDetails : prdDetails
+  const imageType = isVariant ? 'var' : 'prd'
+  const attributes = variantDetails?.attributes
+  const name = []
+  if (attributes) {
+    attributes.map(val => (
+      name.push(val.value.name || val.value)
+    ))
+  }
 
   return (
-    <Link to={`/orders/${item.orderId}`}>
+    <Link to={`/orders/${item.order_id}`}>
       <div className="overflow-hidden rounded-2xl border border-border/40 bg-card transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 cursor-pointer mb-3">
         {/* Item Header */}
         <div className="p-5 sm:p-6">
@@ -188,12 +219,12 @@ function ItemCard({ item }) {
             {/* Image & Info */}
             <div className="flex items-start gap-4 flex-1">
               <div className="h-20 w-20 overflow-hidden rounded-xl bg-muted shrink-0">
-                <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                <img src={`${apiBase}/uploads/${imageType}_sm_${displayData?.featured_image}`} alt={prdDetails?.name} className="h-full w-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-foreground line-clamp-2">{item.name}</h3>
+                <h3 className="font-semibold text-foreground line-clamp-2">{prdDetails?.name} {name.length != 0 ? `(${name.join(',')})` : ''}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Order {item.orderId} • {item.orderDate}
+                  {orderDate}
                 </p>
                 <div className="mt-2 flex items-center gap-2 text-sm">
                   <span className="font-medium text-foreground">Qty: {item.quantity}</span>
@@ -255,16 +286,52 @@ function ItemCard({ item }) {
 }
 
 export default function OrdersPage() {
-  const allItems = getAllItems()
+  // const orderItems = getAllItems()
   const [selectedFilter, setSelectedFilter] = useState("all")
   const [selectedSort, setSelectedSort] = useState("recent")
+  const [orderItems, setOrderItems] = useState([])
+  const [products, setProducts] = useState([])
+  const [variants, setVariants] = useState([])
+
+  useEffect(() => {
+    let active = true;
+
+    const loadOrdPrdData = async () => {
+      try {
+        const [OrdItemResponse, variantResponse, productResponse] = await Promise.all([
+          api.get("/orderproducts"),
+          api.get("/product/variants"),
+          api.get("/products"),
+        ])
+
+        if (!active) return
+
+        setOrderItems(OrdItemResponse.status === 200 ? OrdItemResponse.data : [])
+        setVariants(variantResponse.status === 200 ? variantResponse.data : [])
+        setProducts(productResponse.status === 200 ? productResponse.data : [])
+      } catch (error) {
+        if (!active) return
+
+        setOrderItems([])
+        setVariants([])
+        setProducts([])
+        console.error("Error fetching data:", error)
+      }
+    }
+
+    loadOrdPrdData()
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filterOptions = [
-    { value: "all", label: "All Items", count: allItems.length },
-    { value: "processing", label: "Processing", count: allItems.filter(item => item.status === "processing").length },
-    { value: "shipped", label: "Shipped", count: allItems.filter(item => item.status === "shipped").length },
-    { value: "delivered", label: "Delivered", count: allItems.filter(item => item.status === "delivered").length },
-    { value: "cancelled", label: "Cancelled", count: allItems.filter(item => item.status === "cancelled").length },
+    { value: "all", label: "All Items", count: orderItems.length },
+    { value: 1, label: "Processing", count: orderItems.filter(item => Number(item.status) === 1).length },
+    { value: 2, label: "Shipped", count: orderItems.filter(item => Number(item.status) === 2).length },
+    { value: 3, label: "Delivered", count: orderItems.filter(item => Number(item.status) === 3).length },
+    { value: 0, label: "Cancelled", count: orderItems.filter(item => Number(item.status) === 0).length },
   ]
 
   const sortOptions = [
@@ -275,8 +342,8 @@ export default function OrdersPage() {
   ]
 
   let filteredItems = selectedFilter === "all"
-    ? allItems
-    : allItems.filter(item => item.status === selectedFilter)
+    ? orderItems
+    : orderItems.filter(item => Number(item.status) === selectedFilter)
 
   // Apply sorting
   if (selectedSort === "recent") {
@@ -377,7 +444,7 @@ export default function OrdersPage() {
           {filteredItems.length > 0 ? (
             <div className="space-y-3">
               {filteredItems.map((item) => (
-                <ItemCard key={`${item.orderId}-${item.id}`} item={item} />
+                <ItemCard key={`${item.orderId}-${item.id}`} item={item} products={products} variants={variants} />
               ))}
             </div>
           ) : (
@@ -386,19 +453,19 @@ export default function OrdersPage() {
                 <Package className="h-10 w-10 text-muted-foreground" />
               </div>
               <h2 className="mt-6 text-xl font-semibold text-foreground">
-                {allItems.length === 0 ? "No items yet" : "No items with this status"}
+                {orderItems.length === 0 ? "No items yet" : "No items with this status"}
               </h2>
               <p className="mt-2 text-muted-foreground">
-                {allItems.length === 0
+                {orderItems.length === 0
                   ? "When you place an order, your items will appear here."
                   : "Try adjusting your filter to see more items."}
               </p>
-              {allItems.length === 0 && (
-                <Button asChild className="mt-6">
+              {orderItems.length === 0 && (
+                <Button asChild varient="custom" className="mt-6">
                   <Link to={"/shop"}>Start Shopping</Link>
                 </Button>
               )}
-              {allItems.length > 0 && selectedFilter !== "all" && (
+              {orderItems.length > 0 && selectedFilter !== "all" && (
                 <Button
                   onClick={() => setSelectedFilter("all")}
                   className="mt-6"

@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/address', 'address');
         Route::post('/address/create', 'addAddr');
         Route::get('/address/default/{id}', 'updateDefault');
-        Route::get('address/{id}', 'addressData');
+        Route::get('/address/{id}', 'addressData');
         Route::post('/address/update', 'updateAddr');
         Route::post('/order/create', 'createOrder');
         Route::get('/order/{id}', 'orderData');
@@ -46,5 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/applydiscount/{code}', 'applyDiscount');
         Route::get('/userorders', 'userOrder');
         Route::get('/orderitems/{id}', 'orderItems');
+        Route::get('/orderproducts', 'orderProducts');
     });
 });

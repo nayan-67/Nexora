@@ -496,6 +496,7 @@ class ApiController extends Controller
                 $prd->stock -= $value['quantity'];
                 $prd->save();
                 Order_product::create([
+                    'user_id' => $user->id,
                     'order_id' => $order->id,
                     'product_id' => $value['prd_id'],
                     'product_type' => $value['prd_type'],
@@ -636,6 +637,20 @@ class ApiController extends Controller
         }
 
         $items = Order_product::where("order_id", $id)->get();
+        return response()->json($items, 200);
+    }
+
+    public function orderProducts()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $items = Order_product::where("user_id", $user->id)->orderBy('id', 'DESC')->get();
         return response()->json($items, 200);
     }
 }
