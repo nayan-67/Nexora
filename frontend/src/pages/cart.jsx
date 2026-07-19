@@ -220,7 +220,7 @@ export default function CartPage() {
             <p className="mt-2 text-muted-foreground">
               Looks like you haven&apos;t added any items to your cart yet.
             </p>
-            <Button asChild className="mt-6">
+            <Button asChild variant="custom" className="mt-6 bg-primary text-white">
               <Link to="/shop">Start Shopping</Link>
             </Button>
           </div>

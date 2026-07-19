@@ -359,7 +359,7 @@ export default function OrdersPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background pt-22">
       <main className="flex-1">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="flex items-center gap-3 mb-3">
@@ -461,7 +461,7 @@ export default function OrdersPage() {
                   : "Try adjusting your filter to see more items."}
               </p>
               {orderItems.length === 0 && (
-                <Button asChild varient="custom" className="mt-6">
+                <Button asChild variant="custom" className="mt-6 bg-primary text-white">
                   <Link to={"/shop"}>Start Shopping</Link>
                 </Button>
               )}

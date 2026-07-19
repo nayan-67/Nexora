@@ -69,36 +69,6 @@
 
             <section class="bg-white h-100 page-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    {{-- <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
-                        <button type="button" class="btn s-btn fs-8" value="">ALL</button>
-                        <button type="button" class="btn s-btn fs-8" value="A">A</button>
-                        <button type="button" class="btn s-btn fs-8" value="B">B</button>
-                        <button type="button" class="btn s-btn fs-8" value="C">C</button>
-                        <button type="button" class="btn s-btn fs-8" value="D">D</button>
-                        <button type="button" class="btn s-btn fs-8" value="E">E</button>
-                        <button type="button" class="btn s-btn fs-8" value="F">F</button>
-                        <button type="button" class="btn s-btn fs-8" value="G">G</button>
-                        <button type="button" class="btn s-btn fs-8" value="H">H</button>
-                        <button type="button" class="btn s-btn fs-8" value="I">I</button>
-                        <button type="button" class="btn s-btn fs-8" value="J">J</button>
-                        <button type="button" class="btn s-btn fs-8" value="K">K</button>
-                        <button type="button" class="btn s-btn fs-8" value="L">L</button>
-                        <button type="button" class="btn s-btn fs-8" value="M">M</button>
-                        <button type="button" class="btn s-btn fs-8" value="N">N</button>
-                        <button type="button" class="btn s-btn fs-8" value="O">O</button>
-                        <button type="button" class="btn s-btn fs-8" value="P">P</button>
-                        <button type="button" class="btn s-btn fs-8" value="Q">Q</button>
-                        <button type="button" class="btn s-btn fs-8" value="R">R</button>
-                        <button type="button" class="btn s-btn fs-8" value="S">S</button>
-                        <button type="button" class="btn s-btn fs-8" value="T">T</button>
-                        <button type="button" class="btn s-btn fs-8" value="U">U</button>
-                        <button type="button" class="btn s-btn fs-8" value="V">V</button>
-                        <button type="button" class="btn s-btn fs-8" value="W">W</button>
-                        <button type="button" class="btn s-btn fs-8" value="X">X</button>
-                        <button type="button" class="btn s-btn fs-8" value="Y">Y</button>
-                        <button type="button" class="btn s-btn fs-8" value="Z">Z</button>
-                    </div>
-                    <hr class="m-0"> --}}
                     <div class="row mx-1 py-3">
                         <div class="col-sm-2 d-flex align-items-center">
                             <h6 class="page-head fs-7 fw-bold">Category Name</h6>
@@ -198,15 +168,6 @@
     <script>
         let appUrl = <?= json_encode(url('/')) ?>;
 
-        let addBtn = document.querySelector(".add-btn");
-        let pageSection = document.querySelector(".page-section");
-        let addSection = document.querySelector(".add-section");
-
-        addBtn.addEventListener("click", () => {
-            pageSection.style.display = "none";
-            addSection.style.display = "block";
-        });
-
         const searchInput = document.getElementById('search');
         const resultsDiv = document.querySelector('.results');
 
@@ -219,29 +180,8 @@
                         resultsDiv.innerHTML = data;
                     })
                     .catch(error => console.error('Error:', error));
-            }, 1000);
+            }, 500);
         });
 
-        // const sBtn = document.querySelectorAll(".s-btn");
-
-        // sBtn.forEach(btn => {
-        //     btn.style.background = "#198754";
-        //     btn.style.color = "#fff";
-        //     btn.addEventListener("click", () => {
-        //         searchInput.value = "";
-        //         sBtn.forEach(button => {
-        //             button.style.background = "#198754";
-        //         });
-        //         const btnVal = btn.value == "" ? '0' : btn.value;
-        //         fetch(`${appUrl}/category/search/${btnVal}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
-
-        //         btn.style.background = "#196d54";
-        //     });
-        // });
     </script>
 @endsection

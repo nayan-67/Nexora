@@ -36,7 +36,7 @@ export default function LoginPage() {
         navigate(from, { state: { loginSuccess: true } });
       })
       .catch(error => {
-        console.error("Login error:", error.response?.data?.message || error.message);
+        // console.error("Login error:", error.response?.data?.message || error.message);
         if (error.response?.status === 401) {
           toast.error("Invalid email or password!");
         } else if (error.response?.status === 403) {

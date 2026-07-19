@@ -59,7 +59,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 
 ## ADMIN
-INSERT INTO admin SET email='mailnayan@webgrity.net',password='Admin@43';   
+INSERT INTO admin SET email='admin@nexora.com',password='Admin@43';   
 
-Email - mailnayan@webgrity.net
+Email - admin@nexora.com
 Password - Admin@43

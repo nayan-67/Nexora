@@ -85,7 +85,7 @@ export default function RegisterPage() {
     setIsLoading(true);
     api.post(`/register`, form)
       .then((res) => {
-        console.log("Registration successful:", res.data);
+        // console.log("Registration successful:", res.data);
         // Redirect or show success message
         toast.success("Registration successful!");
         form.firstName = "";
@@ -234,7 +234,7 @@ export default function RegisterPage() {
 
           {/* Right panel — form */}
           <div
-            className="flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-10 overflow-y-auto pt-32"
+            className="flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-10 pt-32"
           // style={{ background: "oklch(0.99 0.002 280)" }}
           >
             <div
