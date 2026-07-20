@@ -44,8 +44,8 @@ class Product extends Controller
                 'price' => 'required|numeric',
                 'sale_price' => 'nullable|numeric|lt:price',
                 'stock' => 'required|numeric',
-                'p-img' => 'required|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800|max:8192',
-                'g-img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800|max:8192',
+                'p-img' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif|dimensions:min_width=800|max:8192',
+                'g-img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|dimensions:min_width=800|max:8192',
             ]);
             $sku = 'NX-' . strtoupper(Str::random(3)) . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 3));
             $features = $request->features ? explode("|", preg_replace('/\s*\|\s*/', '|', trim($request->features))) : '';
@@ -137,8 +137,8 @@ class Product extends Controller
                 'name' => 'required',
                 'price' => 'required|numeric',
                 'sale_price' => 'nullable|numeric|lt:price',
-                'p-img' => 'nullable|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800|max:8192',
-                'g-img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800|max:8192',
+                'p-img' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|dimensions:min_width=800|max:8192',
+                'g-img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|dimensions:min_width=800|max:8192',
             ]);
             $features = $request->features ? explode("|", preg_replace('/\s*\|\s*/', '|', trim($request->features))) : '';
             $prddata->name = $request->name;

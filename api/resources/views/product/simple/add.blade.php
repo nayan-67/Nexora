@@ -131,7 +131,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
-                                                placeholder="Enter Name.." value="" required />
+                                                placeholder="Enter Name.." value="{{old('name')}}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -140,7 +140,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-slug" name="slug"
-                                                placeholder="Enter Slug.." value="" required />
+                                                placeholder="Enter Slug.." value="{{old('slug')}}" required />
                                         </div>
                                     </div>
 
@@ -149,7 +149,7 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Description</h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Description ..." value=""></textarea>
+                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Description ..." value="{{old('description')}}"></textarea>
                                         </div>
                                     </div>
 
@@ -159,7 +159,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <textarea class="form-control fs-7" rows="3" name="features" placeholder="Use | to separate features"
-                                                value=""></textarea>
+                                                value="{{old('features')}}"></textarea>
                                         </div>
                                     </div>
 
@@ -170,7 +170,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 price" name="price"
-                                                placeholder="0.00" value="" required />
+                                                placeholder="0.00" value="{{old('price')}}" required />
                                             <div class="price-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -181,7 +181,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" class="form-control fs-7 sale-price" name="sale_price"
-                                                placeholder="0.00" value="" />
+                                                placeholder="0.00" value="{{old('sale_price')}}" />
                                             <div class="sale-price-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -210,7 +210,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" class="form-control fs-7" name="stock"
-                                                placeholder="0" value="" min="0" required />
+                                                placeholder="0" value="{{old('stock')}}" min="0" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
