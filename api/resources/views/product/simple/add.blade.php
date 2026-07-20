@@ -241,7 +241,7 @@
                                         </div> --}}
                                         <div class="col-md-3 fs-7">
                                             <input class="form-check-input" type="checkbox" value="1"
-                                                id="checkChecked" name="feature">
+                                                id="checkChecked" name="feature" {{ old('feature') == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label ps-1 text-body" for="checkChecked">
                                                 Add to Featured Product
                                             </label>

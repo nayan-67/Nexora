@@ -195,7 +195,9 @@
                                                 $result = DB::table('category')->where('status', 1)->orderBy('id', 'ASC')->get();
                                                 ?>
                                                 @foreach ($result as $catrow)
-                                                    <option value="{{ $catrow->id }}">{{ $catrow->name }}</option>
+                                                    <option value="{{ $catrow->id }}"
+                                                        {{ $catrow->id == old('cat_id') ? 'selected' : '' }}>
+                                                        {{ $catrow->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -222,7 +224,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
-                                                placeholder="Enter Product Name.." value="" required />
+                                                placeholder="Enter Product Name.." value="{{old('name')}}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -231,7 +233,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-slug" name="slug"
-                                                placeholder="Enter Product Slug.." value="" required />
+                                                placeholder="Enter Product Slug.." value="{{old('slug')}}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -239,7 +241,7 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Description</h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Enter Description..." value=""></textarea>
+                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Enter Description..." value="">{{old('description')}}</textarea>
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -248,7 +250,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <textarea class="form-control fs-7" rows="3" name="features" placeholder="Use | to separate features"
-                                                value=""></textarea>
+                                                value="">{{old('features')}}</textarea>
                                         </div>
                                     </div>
 
@@ -256,7 +258,7 @@
                                         <div class="col-md-3"></div>
                                         <div class="col-md-3 fs-7">
                                             <input class="form-check-input" type="checkbox" value="1" id="checkChecked"
-                                                name="feature">
+                                                name="feature" {{ old('feature') == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label ps-1 text-body" for="checkChecked">
                                                 Add to Featured Product
                                             </label>
@@ -486,12 +488,12 @@
                             const colorName = typeof v === 'object' ? v.name : v;
                             const colorCode = typeof v === 'object' ? v.code : getColorValue(v);
                             return `
-                                            <div>
-                                                <input type="color" class="color-input" value="${colorCode}" 
-                                                    data-attr="${idx}" data-val="${i}" />
-                                                <small>${colorName}</small>
-                                            </div>
-                                        `;
+                                                <div>
+                                                    <input type="color" class="color-input" value="${colorCode}" 
+                                                        data-attr="${idx}" data-val="${i}" />
+                                                    <small>${colorName}</small>
+                                                </div>
+                                            `;
                         }).join('')}
                     </div>`;
                     // Add event listeners to color pickers after rendering

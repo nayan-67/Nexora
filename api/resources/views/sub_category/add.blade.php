@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 sub_cat" name="name"
-                                                placeholder="Enter Name.." value="" required />
+                                                placeholder="Enter Name.." value="{{old('name')}}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -60,7 +60,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 slug" name="slug"
-                                                placeholder="Enter Slug.." value="" required />
+                                                placeholder="Enter Slug.." value="{{old('slug')}}" required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -76,7 +76,9 @@
                                                 $result = DB::table('category')->orderBy('id', 'ASC')->get();
                                                 ?>
                                                 @foreach ($result as $catrow)
-                                                    <option value="{{ $catrow->id }}">{{ $catrow->name }}</option>
+                                                    <option value="{{ $catrow->id }}" {{ old('cat_id') == $catrow->id ? 'selected' : '' }}>
+                                                        {{ $catrow->name }}
+                                                    </option>
                                                 @endforeach
 
                                             </select>
@@ -88,7 +90,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7" name="order_number"
-                                                placeholder="Enter Order Number" value="0" />
+                                                placeholder="Enter Order Number" value="{{ old('order_number', 0) }}" />
                                         </div>
                                     </div>
 
@@ -99,8 +101,8 @@
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
                                                 aria-label="Default select example" name="status">
-                                                <option selected value="1">ACTIVE</option>
-                                                <option value="0">INACTIVE</option>
+                                                <option selected value="1">Active</option>
+                                                <option value="0">Inactive</option>
                                             </select>
                                         </div>
                                     </div>
