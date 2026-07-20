@@ -81,7 +81,7 @@ class Product extends Controller
                         $gfilename = time() . '_' . uniqid() . '.' . $gimageFile->getClientOriginalExtension();
                         $newImages[] = $gfilename;
                         $this->imageResize($gimageFile, 100, 'glr_sm_' . $gfilename);
-                        $this->imageResize($gimageFile, 600, 'glr_md_' . $gfilename);
+                        // $this->imageResize($gimageFile, 600, 'glr_md_' . $gfilename);
                         $this->imageResize($gimageFile, 900, 'glr_lg_' . $gfilename);
                     }
                     $gallery = $newImages;
@@ -175,7 +175,7 @@ class Product extends Controller
 
                         $newImages[] = $gfilename;
                         $this->imageResize($gimageFile, 100, 'glr_sm_' . $gfilename);
-                        $this->imageResize($gimageFile, 600, 'glr_md_' . $gfilename);
+                        // $this->imageResize($gimageFile, 600, 'glr_md_' . $gfilename);
                         $this->imageResize($gimageFile, 900, 'glr_lg_' . $gfilename);
                     }
                     $gallery = array_merge($old_glr, $newImages);
@@ -190,9 +190,9 @@ class Product extends Controller
                 $oldImage = array_diff($prddata->gallery_image, $old_glr);
                 if (count($oldImage) != 0) {
                     foreach ($oldImage as $old) {
-                        if (file_exists(public_path('uploads/glr_lg_' . $old)) && file_exists(public_path('uploads/glr_md_' . $old)) && file_exists(public_path('uploads/glr_sm_' . $old))) {
+                        if (file_exists(public_path('uploads/glr_lg_' . $old)) && file_exists(public_path('uploads/glr_sm_' . $old))) {
                             unlink(public_path('uploads/glr_lg_' . $old));
-                            unlink(public_path('uploads/glr_md_' . $old));
+                            // unlink(public_path('uploads/glr_md_' . $old));
                             unlink(public_path('uploads/glr_sm_' . $old));
                         }
                     }
@@ -419,7 +419,7 @@ class Product extends Controller
                             $galleryImages[] = $galleryFilename;
 
                             $this->imageResize($galleryFile, 100, 'var_glr_sm_' . $galleryFilename);
-                            $this->imageResize($galleryFile, 600, 'var_glr_md_' . $galleryFilename);
+                            // $this->imageResize($galleryFile, 600, 'var_glr_md_' . $galleryFilename);
                             $this->imageResize($galleryFile, 900, 'var_glr_lg_' . $galleryFilename);
                         }
 
@@ -600,7 +600,7 @@ class Product extends Controller
                             $galleryImages[] = $galleryFilename;
 
                             $this->imageResize($galleryFile, 100, 'var_glr_sm_' . $galleryFilename);
-                            $this->imageResize($galleryFile, 600, 'var_glr_md_' . $galleryFilename);
+                            // $this->imageResize($galleryFile, 600, 'var_glr_md_' . $galleryFilename);
                             $this->imageResize($galleryFile, 900, 'var_glr_lg_' . $galleryFilename);
                         }
 
@@ -715,7 +715,7 @@ class Product extends Controller
         if ($type === 'featured') {
             $sizes = ['var_sm_', 'var_md_', 'var_lg_'];
         } else {
-            $sizes = ['var_glr_sm_', 'var_glr_md_', 'var_glr_lg_'];
+            $sizes = ['var_glr_sm_', 'var_glr_lg_'];
         }
 
         foreach ($sizes as $size) {

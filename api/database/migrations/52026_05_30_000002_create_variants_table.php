@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('sale_price', 10, 2)->nullable();
             $table->integer('stock')->default(0);
             $table->json('attributes')->nullable(); // {color: "Red", size: "M"}
-            $table->text('images')->nullable(); // comma-separated variant-specific images
+            // $table->text('images')->nullable(); // comma-separated variant-specific images
             $table->text('featured_image')->nullable();
             $table->json('gallery_image')->nullable()->default(null);
             $table->boolean('is_active')->default(true);
