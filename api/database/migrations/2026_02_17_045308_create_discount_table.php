@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type', ['1', '2'])->comment('1: Percentage, 2: Fixed_Amount');
             $table->decimal('amount', 10, 2);
             $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
+            $table->unsignedInteger('uses_number')->nullable()->default(0);
             $table->timestamps();
         });
     }
