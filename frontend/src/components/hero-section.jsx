@@ -146,7 +146,7 @@ export function HeroSection() {
                 </div>
                 <div>
                   <p className="font-semibold text-foreground">Free Shipping</p>
-                  <p className="text-sm text-muted-foreground">On orders over $50</p>
+                  <p className="text-sm text-muted-foreground">On orders over ₹ 500</p>
                 </div>
               </div>
             </div>

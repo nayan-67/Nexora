@@ -105,7 +105,7 @@ class Category extends Controller
             }
             if ($catdata->update()) {
                 toast('Category Updated Successfully', 'success');
-                return redirect()->route('category.index');
+                return redirect()->route('admin.category');
             }
         } catch (Exception $e) {
             toast($e->getMessage(), 'error');

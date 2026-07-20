@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wishlist', function (Blueprint $table) {
+        Schema::create('used_coupon', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('u_id')->constrained('users');
-            $table->foreignId('prd_id')->constrained('products');
-            $table->tinyInteger('prd_type');
-            $table->string('sku',100);
-            // $table->unsignedInteger('quantity');
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('coupon_name',100);
+            $table->string('amount_type',100);
+            $table->unsignedInteger('amount');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wishlist');
+        Schema::dropIfExists('used_coupon');
     }
 };

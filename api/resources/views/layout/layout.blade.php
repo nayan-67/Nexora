@@ -39,6 +39,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
         crossorigin="anonymous" />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
+    <!-- apexcharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"
+        integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous" />
+    <!-- jsvectormap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
+        integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/toast.css') }}" />
@@ -151,6 +157,10 @@
     <!--end::App Wrapper-->
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <!-- apexcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
+        integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
         crossorigin="anonymous"></script>
     <!--end::Third Party Plugin(OverlayScrollbars)-->
@@ -176,7 +186,15 @@
         };
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-            if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+
+            // Disable OverlayScrollbars on mobile devices to prevent touch interference
+            const isMobile = window.innerWidth <= 992;
+
+            if (
+                sidebarWrapper &&
+                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+                !isMobile
+            ) {
                 OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
                     scrollbars: {
                         theme: Default.scrollbarTheme,
@@ -185,12 +203,74 @@
                     },
                 });
             }
-            // const sBtn = document.querySelectorAll(".s-btn");
-            // if (sBtn.length > 0) {
-            //     sBtn[0].style.background = "#196d54";
-            // }
         });
     </script>
+    <!--end::OverlayScrollbars Configure--><!--begin::Color Mode Toggle (#6010)-->
+    <script>
+        (() => {
+            'use strict';
+
+            const STORAGE_KEY = 'lte-theme';
+
+            const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
+            const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
+
+            const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            const getPreferredTheme = () => {
+                const stored = getStoredTheme();
+                if (stored) return stored;
+                return prefersDark() ? 'dark' : 'light';
+            };
+
+            const setTheme = (theme) => {
+                const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme;
+                document.documentElement.setAttribute('data-bs-theme', resolved);
+            };
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme) => {
+                // Highlight the active dropdown option
+                document.querySelectorAll('[data-bs-theme-value]').forEach((el) => {
+                    el.classList.remove('active');
+                    el.setAttribute('aria-pressed', 'false');
+                    const check = el.querySelector('.bi-check-lg');
+                    if (check) check.classList.add('d-none');
+                });
+                const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+                if (active) {
+                    active.classList.add('active');
+                    active.setAttribute('aria-pressed', 'true');
+                    const check = active.querySelector('.bi-check-lg');
+                    if (check) check.classList.remove('d-none');
+                }
+                // Sync the topbar trigger icon
+                document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => {
+                    icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme);
+                });
+            };
+
+            globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const stored = getStoredTheme();
+                if (!stored || stored === 'auto') setTheme(getPreferredTheme());
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+                document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => {
+                    toggle.addEventListener('click', () => {
+                        const theme = toggle.getAttribute('data-bs-theme-value');
+                        setStoredTheme(theme);
+                        setTheme(theme);
+                        showActiveTheme(theme);
+                    });
+                });
+            });
+        })();
+    </script>
+    <!--end::Color Mode Toggle-->
+
     <script>
         let modal = document.querySelector(".delete-modal");
         let modalBox = document.querySelector(".delete-modal-dialog");

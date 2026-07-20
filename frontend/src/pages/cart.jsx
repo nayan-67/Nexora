@@ -82,7 +82,7 @@ function CartItem({ item, prd, variants, cat, onUpdateQuantity, onRemove }) {
               <Plus className="h-3.5 w-3.5" />
             </button>
           </div>
-          <p className="text-lg font-semibold text-foreground">${(displayData?.sale_price ?? displayData?.price) * item.quantity}</p>
+          <p className="text-lg font-semibold text-foreground">₹ {(displayData?.sale_price ?? displayData?.price) * item.quantity}</p>
         </div>
       </div>
     </div>
@@ -177,7 +177,7 @@ export default function CartPage() {
     return sum + ((displayData?.sale_price || displayData?.price) * item.quantity || 0)
   }, 0)
   const discount = promoApplied ? (couponData.type == 2 ? Number(couponData.amount) : subtotal * (couponData.amount / 100)) : 0
-  const shipping = subtotal > 50 ? 0 : 9.99
+  const shipping = subtotal > 500 ? 0 : 40
   const total = subtotal - discount + shipping
 
   const applyPromoCode = () => {
@@ -208,7 +208,6 @@ export default function CartPage() {
   if (cartData.length === 0) {
     return (
       <div className="flex min-h-screen flex-col bg-background pt-18.75">
-        {/* <Header /> */}
         <main className="flex flex-1 items-center justify-center px-4">
           <div className="text-center">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-muted">
@@ -225,15 +224,12 @@ export default function CartPage() {
             </Button>
           </div>
         </main>
-        {/* <Footer /> */}
       </div>
     )
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-background pt-18.75">
-      {/* <Header /> */}
-
       <main className="flex-1">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl" style={{ fontFamily: 'var(--font-heading)' }}>
@@ -340,28 +336,28 @@ export default function CartPage() {
                 <div className="mt-6 space-y-3 border-t border-border/40 pt-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="text-foreground">${subtotal.toFixed(2)}</span>
+                    <span className="text-foreground">₹ {subtotal.toFixed(2)}</span>
                   </div>
                   {promoApplied && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-600">Discount ({couponData.type == 2 ? `$${couponData.amount}` : `${couponData.amount}%`})</span>
-                      <span className="text-green-600">-${discount.toFixed(2)}</span>
+                      <span className="text-green-600">Discount ({couponData.type == 2 ? `₹ ${couponData.amount}` : `${couponData.amount}%`})</span>
+                      <span className="text-green-600">-₹ {discount.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
                     <span className="text-foreground">
-                      {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                      {shipping === 0 ? "Free" : `₹ ${shipping.toFixed(2)}`}
                     </span>
                   </div>
                   {shipping > 0 && (
                     <p className="text-xs text-muted-foreground">
-                      Free shipping on orders over $50
+                      Free shipping on orders over ₹ 500
                     </p>
                   )}
                   <div className="flex justify-between border-t border-border/40 pt-3 text-lg font-semibold">
                     <span className="text-foreground">Total</span>
-                    <span className="text-foreground">${total.toFixed(2)}</span>
+                    <span className="text-foreground">₹ {total.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -377,7 +373,7 @@ export default function CartPage() {
                 <div className="mt-6 space-y-3 border-t border-border/40 pt-6">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Truck className="h-4 w-4" />
-                    Free shipping on orders over $50
+                    Free shipping on orders over ₹ 500
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Lock className="h-4 w-4" />
@@ -389,8 +385,6 @@ export default function CartPage() {
           </div>
         </div>
       </main>
-
-      {/* <Footer /> */}
     </div>
   )
 }
