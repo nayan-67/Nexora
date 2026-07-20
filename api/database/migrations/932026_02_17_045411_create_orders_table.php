@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->unsignedInteger('eco_tax')->default(0);
             $table->decimal('discount', 10, 2);
+            $table->string('used_coupon',100)->nullable();
             $table->decimal('shipping', 10, 2);
             $table->timestamps();
         });
