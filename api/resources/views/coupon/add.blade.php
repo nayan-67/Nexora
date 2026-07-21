@@ -1,7 +1,7 @@
 @extends('layout.layout')
 
 @section('title', 'Coupon')
-@section('disactive', 'active')
+@section('discactive', 'active')
 @section('disaddactive', 'active')
 @section('dismenuopen', 'menu-open')
 
@@ -36,7 +36,7 @@
             <!--begin::Container-->
 
             <!-- =========== Add Coupon Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     {{-- <h5 class="text-secondary my-2">Add Coupon</h5>
                     <hr class="my-1"> --}}

@@ -81,7 +81,8 @@
             </div>
 
             <!-- =========== Customer Order Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100 border-2 border-top border-primary rounded pb-5">
                     <h6 class="text-secondary my-2 mb-3">Customer Order</h6>
                     <div class="row h-100 border-2 border-top border-primary rounded shadow"

@@ -20,7 +20,7 @@
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.category') }}">Category</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page"> Edit Category</li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">Edit Category</li>
                         </ol>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
             @enderror
 
             <!-- =========== Edit Category Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     <h5 class="text-secondary my-2">Edit Category</h5>
                     <hr class="my-1">

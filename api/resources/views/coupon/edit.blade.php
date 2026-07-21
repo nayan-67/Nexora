@@ -1,7 +1,8 @@
 @extends('layout.layout')
 
 @section('title', 'Discount')
-@section('disactive', 'active')
+@section('discactive', 'active')
+
 
 @section('content')
     <main class="app-main">
@@ -36,7 +37,7 @@
 
             <!-- =========== Edit Discount Section ============== -->
 
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     <h5 class="text-secondary my-2">Edit Discount</h5>
                     <hr class="my-1">

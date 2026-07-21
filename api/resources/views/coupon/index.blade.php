@@ -68,118 +68,141 @@
 
             <!-- ====== Discount Section ======= -->
 
-            <section class="bg-white h-100 page-section" style="margin:0 10px;">
-                <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    {{-- <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
-                        <button type="button" class="btn s-btn fs-8" value="">ALL</button>
-                        <button type="button" class="btn s-btn fs-8" value="A">A</button>
-                        <button type="button" class="btn s-btn fs-8" value="B">B</button>
-                        <button type="button" class="btn s-btn fs-8" value="C">C</button>
-                        <button type="button" class="btn s-btn fs-8" value="D">D</button>
-                        <button type="button" class="btn s-btn fs-8" value="E">E</button>
-                        <button type="button" class="btn s-btn fs-8" value="F">F</button>
-                        <button type="button" class="btn s-btn fs-8" value="G">G</button>
-                        <button type="button" class="btn s-btn fs-8" value="H">H</button>
-                        <button type="button" class="btn s-btn fs-8" value="I">I</button>
-                        <button type="button" class="btn s-btn fs-8" value="J">J</button>
-                        <button type="button" class="btn s-btn fs-8" value="K">K</button>
-                        <button type="button" class="btn s-btn fs-8" value="L">L</button>
-                        <button type="button" class="btn s-btn fs-8" value="M">M</button>
-                        <button type="button" class="btn s-btn fs-8" value="N">N</button>
-                        <button type="button" class="btn s-btn fs-8" value="O">O</button>
-                        <button type="button" class="btn s-btn fs-8" value="P">P</button>
-                        <button type="button" class="btn s-btn fs-8" value="Q">Q</button>
-                        <button type="button" class="btn s-btn fs-8" value="R">R</button>
-                        <button type="button" class="btn s-btn fs-8" value="S">S</button>
-                        <button type="button" class="btn s-btn fs-8" value="T">T</button>
-                        <button type="button" class="btn s-btn fs-8" value="U">U</button>
-                        <button type="button" class="btn s-btn fs-8" value="V">V</button>
-                        <button type="button" class="btn s-btn fs-8" value="W">W</button>
-                        <button type="button" class="btn s-btn fs-8" value="X">X</button>
-                        <button type="button" class="btn s-btn fs-8" value="Y">Y</button>
-                        <button type="button" class="btn s-btn fs-8" value="Z">Z</button>
-                    </div>
-                    <hr class="m-0"> --}}
-                    <div class="row mx-1 py-3">
-                        <div class="col-sm-2 d-flex align-items-center">
-                            <h6 class="page-head fs-7 fw-bold">Coupon Name</h6>
-                        </div>
-                        <div class="col-sm-8">
-                            <form class="d-flex" role="search">
-                                <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
-                                    aria-label="Search" id="search" value="" autocomplete="off" />
-                                {{-- <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
-                            </form>
-                        </div>
-                    </div>
-                    <div class="container w-auto border-2 border-top border-primary mx-2 py-2">
-                        {{-- <div class="btn-section d-flex justify-content-end">
-                            <button type="button" class="btn btn-success add-btn fs-7">
-                                <i class="fa-solid fa-plus fs-8"></i>
-                                Add New
-                            </button>
-                        </div> --}}
-                        <div class="page-deatails pt-2">
-                            {{-- <hr class="m-2 text-secondery opacity-10"> --}}
-                            <div class="header row fs-7">
-                                <div class="col-sm-2 text-center fw-bold">Coupon Name</div>
-                                <div class="col-sm-2 text-center fw-bold">Valid From</div>
-                                <div class="col-sm-2 text-center fw-bold">Valid Till</div>
-                                <div class="col-sm-2 text-center fw-bold">Amount</div>
-                                <div class="col-sm-2 text-center fw-bold">Status</div>
-                                <div class="col-sm-2 text-center fw-bold">Action</div>
-                            </div>
-                            <div class="results">
-                                @if (count($data) > 0)
-                                    @foreach ($data as $row)
-                                        <hr class='m-2 text-body-tertiary opacity-10'>
-                                        <div class='row fs-7'>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->name }}
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->valid_from }}
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->valid_till ?? 'Not Set' }}
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->type == '1' ? $row->amount . ' %' : '$ ' . $row->amount }}
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                <span class='list-badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
-                                            </div>
-                                            <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                                                <a href='{{ route('discount.edit', encrypt($row->id)) }}'
-                                                    class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                                    style='height: 25px;'><i
-                                                        class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                                                <button type='button'
-                                                    class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                                    style='height: 25px;' onclick="openModal('{{ $row->id }}');"><i
-                                                        class='fa-regular fa-trash-can'></i>DELETE</button>
-                                            </div>
+            <div class="container-fluid">
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-12">
+                        <!--begin::Card-->
+                        <div class="card mb-4">
+                            <!--begin::Card Header-->
+                            <div class="card-header">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-12 col-md-6 d-flex gap-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label>Show Data</label>
+                                            <select id="show-data" class="form-select form-select-sm w-auto">
+                                                <option value="10" selected>10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                            </select>
                                         </div>
-                                    @endforeach
-                                @else
-                                    <hr class='m-2 text-body-tertiary opacity-10'>
-                                    <div class='row fs-7'>
-                                        <div class='col-sm-12 text-center'>No Discount Coupon Found</div>
                                     </div>
-                                @endif
+                                    <div class="col-12 col-md-6">
+                                        <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                                            <div class="input-group input-group-sm w-auto">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                                </span>
+                                                <input type="search" id="user-search" class="form-control"
+                                                    placeholder="Search coupon" aria-label="Search coupon"
+                                                    style="width: 180px" />
+                                            </div>
+                                            <a href="{{ route('discount.add') }}" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                                                New Coupon
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
+                            <!--end::Card Header-->
+                            <!--begin::Card Body-->
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle m-0">
+                                        <thead class="fs-7">
+                                            <tr align="center">
+                                                <th>Coupon</th>
+                                                <th>Valid From</th>
+                                                <th>Valid Till</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th>Created</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fs-7">
+                                            @if (count($data) > 0)
+                                                @foreach ($data as $row)
+                                                    @php
+                                                        $date = substr($row->created_at, 0, 10);
+                                                    @endphp
+                                                    <tr align="center">
+                                                        <td>{{ $row->name }}</td>
+                                                        <td>{{ date('M j, Y', strtotime($row->valid_from)) }}</td>
+                                                        <td>{{ $row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set' }}
+                                                        </td>
+                                                        <td>{{ $row->type == '1' ? $row->amount . ' %' : '$ ' . $row->amount }}
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                                        </td>
+                                                        <td>{{ date('M j, Y', strtotime($date)) }}</td>
+                                                        <td>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <a href="{{ route('discount.edit', encrypt($row->id)) }}"
+                                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                                    data-bs-title="Edit">
+                                                                    <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
+                                                                </a>
+                                                                <button type="button" class="btn btn-outline-danger"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Delete"
+                                                                    onclick="openModal('{{ $row->id }}');">
+                                                                    <i class="bi bi-trash d-flex" aria-hidden="true"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr align="center">
+                                                    <td colspan="7">No Coupon Found</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!--end::Card Body-->
+                            <!--begin::Card Footer-->
+                            <div class="card-footer clearfix">
+                                <div class="float-start pt-1 fs-7 text-body-secondary">
+                                    Showing 1 to 9 of 42 Coupon
+                                </div>
+                                <ul class="pagination pagination-sm m-0 float-end">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" aria-label="Previous"> &laquo; </a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">4</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">5</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end::Card Footer-->
                         </div>
+                        <!--end::Card-->
                     </div>
+                    <!-- /.col -->
                 </div>
-            </section>
-
+                <!--end::Row-->
+            </div>
             <!--end::Container-->
         </div>
         <!--end::App Content-->
@@ -189,7 +212,6 @@
 @section('script')
 
     <script>
-
         // let addBtn = document.querySelector(".add-btn");
         // let pageSection = document.querySelector(".page-section");
         // let addSection = document.querySelector(".add-section");

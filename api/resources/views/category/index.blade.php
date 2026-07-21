@@ -67,97 +67,144 @@
 
             <!-- ====== Category Section ======= -->
 
-            <section class="bg-white h-100 page-section" style="margin:0 10px;">
-                <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    <div class="row mx-1 py-3">
-                        <div class="col-sm-2 d-flex align-items-center">
-                            <h6 class="page-head fs-7 fw-bold">Category Name</h6>
-                        </div>
-                        <div class="col-sm-8">
-                            <form class="d-flex" role="search" action="javascript:void(0)">
-                                <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
-                                    aria-label="Search" id="search" value="" autocomplete="off" />
-                                {{-- <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
-                            </form>
-                        </div>
-                    </div>
-                    <div class="container w-auto border-2 border-top border-primary mx-2 py-2">
-                        {{-- <div class="">
-                            <button type="button" class="btn btn-success add-btn fs-7">
-                                <i class="fa-solid fa-plus fs-8"></i>
-                                Add New
-                            </button>
-                        </div> --}}
-                        <div class="page-deatails">
-                            {{-- <hr class="m-2 text-secondery opacity-10"> --}}
-                            <div class="header row fs-7">
-                                <div class="col-sm-2 text-center fw-bold">Category Name</div>
-                                <div class="col-sm-2 text-center fw-bold">Slug</div>
-                                <div class="col-sm-1 text-center fw-bold">Order</div>
-                                <div class="col-sm-1 text-center fw-bold">Status</div>
-                                <div class="col-sm-2 text-center fw-bold">Total Product</div>
-                                <div class="col-sm-2 text-center fw-bold">Number of Sub-Category</div>
-                                <div class="col-sm-2 text-center fw-bold">Action</div>
-                            </div>
-                            <div class="results">
-                                @if (count($catdata) > 0)
-                                    @foreach ($catdata as $row)
-                                        <?php
-                                        $sub_cat = DB::table('sub_category')->where('category_id', $row->id)->get();
-                                        ?>
-                                        <hr class='m-2 text-body-tertiary opacity-10'>
-                                        <div class='row fs-7'>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->name }}
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->slug }}
-                                            </div>
-                                            <div
-                                                class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->order_number }}
-                                            </div>
-                                            <div
-                                                class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
-                                                <span
-                                                    class='list-badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->total_products }}
-                                            </div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ count($sub_cat) }}
-                                            </div>
-                                            <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                                                <a href="{{ route('category.edit', encrypt($row->id)) }}"
-                                                    class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                                    style='height: 25px;'><i
-                                                        class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                                                <button type='button'
-                                                    class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                                    style='height: 25px;' onclick="openModal('{{ $row->id }}');"><i
-                                                        class='fa-regular fa-trash-can'></i>DELETE</button>
-                                            </div>
+            <div class="container-fluid">
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-12">
+                        <!--begin::Card-->
+                        <div class="card mb-4">
+                            <!--begin::Card Header-->
+                            <div class="card-header">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-12 col-md-6 d-flex gap-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label>Show Data</label>
+                                            <select id="show-data" class="form-select form-select-sm w-auto">
+                                                <option value="10" selected>10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
                                         </div>
-                                    @endforeach
-                                @else
-                                    <hr class='m-2 text-body-tertiary opacity-10'>
-                                    <div class='row fs-7'>
-                                        <div class='col-sm-12 text-center'>No Category Found</div>
                                     </div>
-                                @endif
+                                    <div class="col-12 col-md-6">
+                                        <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                                            <div class="input-group input-group-sm w-auto">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                                </span>
+                                                <input type="search" id="user-search" class="form-control"
+                                                    placeholder="Search category" aria-label="Search category"
+                                                    style="width: 180px" />
+                                            </div>
+                                            <a href="{{ route('category.add') }}" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-plus-circle me-1" aria-hidden="true"> </i>
+                                                New category
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
+                            <!--end::Card Header-->
+                            <!--begin::Card Body-->
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle m-0">
+                                        <thead class="fs-7">
+                                            <tr align="center">
+                                                <th>Category</th>
+                                                <th>Slug</th>
+                                                <th>Status</th>
+                                                <th>Total Product</th>
+                                                <th>No. of Sub-Category</th>
+                                                <th>Created</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fs-7">
+                                            @if (count($catdata) > 0)
+                                                @foreach ($catdata as $row)
+                                                    @php
+                                                        $sub_cat = DB::table('sub_category')
+                                                            ->where('category_id', $row->id)
+                                                            ->get();
+                                                        $create = $row->created_at;
+                                                        $date = substr($create, 0, 10);
+                                                    @endphp
+                                                    <tr align="center">
+                                                        <td>{{ $row->name }}</td>
+                                                        <td>{{ $row->slug }}</td>
+                                                        <td>
+                                                            <span
+                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                                        </td>
+                                                        <td>{{ $row->total_products }}</td>
+                                                        <td>{{ count($sub_cat) }}</td>
+                                                        <td>{{ date('M j, Y', strtotime($date)) }}</td>
+                                                        <td>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <a href="{{ route('category.edit', encrypt($row->id)) }}"
+                                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                                    data-bs-title="Edit">
+                                                                    <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
+                                                                </a>
+                                                                <button type="button" class="btn btn-outline-danger"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Delete"
+                                                                    onclick="openModal('{{ $row->id }}');">
+                                                                    <i class="bi bi-trash d-flex" aria-hidden="true"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr align="center">
+                                                    <td colspan="7">No Category Found</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!--end::Card Body-->
+                            <!--begin::Card Footer-->
+                            <div class="card-footer clearfix">
+                                <div class="float-start pt-1 fs-7 text-body-secondary">
+                                    Showing 1 to 9 of 42 users
+                                </div>
+                                <ul class="pagination pagination-sm m-0 float-end">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" aria-label="Previous"> &laquo; </a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">4</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">5</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end::Card Footer-->
                         </div>
+                        <!--end::Card-->
                     </div>
+                    <!-- /.col -->
                 </div>
-            </section>
-
+                <!--end::Row-->
+            </div>
             <!--end::Container-->
         </div>
         <!--end::App Content-->
@@ -168,20 +215,19 @@
     <script>
         let appUrl = <?= json_encode(url('/')) ?>;
 
-        const searchInput = document.getElementById('search');
-        const resultsDiv = document.querySelector('.results');
+        // const searchInput = document.getElementById('search');
+        // const resultsDiv = document.querySelector('.results');
 
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.trim() == "" ? '0' : searchInput.value.trim();
-            setTimeout(() => {
-                fetch(`${appUrl}/category/search/${query}`)
-                    .then(response => response.text())
-                    .then(data => {
-                        resultsDiv.innerHTML = data;
-                    })
-                    .catch(error => console.error('Error:', error));
-            }, 500);
-        });
-
+        // searchInput.addEventListener('input', () => {
+        //     const query = searchInput.value.trim() == "" ? '0' : searchInput.value.trim();
+        //     setTimeout(() => {
+        //         fetch(`${appUrl}/category/search/${query}`)
+        //             .then(response => response.text())
+        //             .then(data => {
+        //                 resultsDiv.innerHTML = data;
+        //             })
+        //             .catch(error => console.error('Error:', error));
+        //     }, 500);
+        // });
     </script>
 @endsection

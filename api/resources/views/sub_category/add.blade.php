@@ -36,7 +36,7 @@
             <!--begin::Container-->
 
             <!-- =========== Add Sub Category Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100 pt-2 border-2 border-top border-primary rounded">
                     {{-- <h5 class="text-secondary my-2">Add Sub Category</h5>
                     <hr class="my-1"> --}}
@@ -65,13 +65,13 @@
                                     </div>
                                     <div class="row py-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Parent Category<span
+                                            <h6 class="mb-0 fs-7 fw-bold">Category<span
                                                     class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
                                                 aria-label="Default select example" name="cat_id" required>
-                                                <option selected disabled value="">Select Parent Category</option>
+                                                <option selected disabled value="">Select Category</option>
                                                 <?php
                                                 $result = DB::table('category')->orderBy('id', 'ASC')->get();
                                                 ?>

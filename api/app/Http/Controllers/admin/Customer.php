@@ -123,6 +123,6 @@ class Customer extends Controller
     {
         $uid = decrypt($id);
         $data = Order::where('user_id', $uid)->get();
-        return view('admin.user-order', compact('data'));
+        return view('user.order', compact('data'));
     }
 }

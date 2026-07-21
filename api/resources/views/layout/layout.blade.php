@@ -301,6 +301,14 @@
     <!-- sortablejs -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" crossorigin="anonymous"></script>
     <!-- sortablejs -->
+    <!--begin::Bootstrap Tooltips-->
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach((tooltipTriggerEl) => {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+    <!--end::Bootstrap Tooltips-->
     <!-- <script>
         new Sortable(document.querySelector('.connectedSortable'), {
             group: 'shared',
