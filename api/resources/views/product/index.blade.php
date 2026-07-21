@@ -152,7 +152,7 @@
                                                     <i class="bi bi-search" aria-hidden="true"></i>
                                                 </span>
                                                 <input type="search" id="user-search" class="form-control"
-                                                    placeholder="Search users" aria-label="Search users"
+                                                    placeholder="Search products" aria-label="Search products"
                                                     style="width: 180px" />
                                             </div>
                                             {{-- <select id="user-role-filter" class="form-select form-select-sm w-auto"
@@ -217,7 +217,7 @@
                                                         <td>
                                                             <div class="d-flex align-items-center justify-content-start">
                                                                 <img src="{{ asset($img) }}" alt=""
-                                                                    class="img-size-32 rounded-circle me-2" />
+                                                                    class="rounded me-2" style="height: 80px;"/>
                                                                 <span class="fw-medium">{{ $row->name }}</span>
                                                             </div>
                                                         </td>
