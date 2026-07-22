@@ -121,15 +121,14 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="fs-7">
+                                        <tbody class="fs-7 results">
                                             @if (count($catdata) > 0)
                                                 @foreach ($catdata as $row)
                                                     @php
                                                         $sub_cat = DB::table('sub_category')
                                                             ->where('category_id', $row->id)
                                                             ->get();
-                                                        $create = $row->created_at;
-                                                        $date = substr($create, 0, 10);
+                                                        $date = substr($row->created_at, 0, 10);
                                                     @endphp
                                                     <tr align="center">
                                                         <td>{{ $row->name }}</td>
@@ -138,7 +137,7 @@
                                                         <td>{{ count($sub_cat) }}</td>
                                                         <td>
                                                             <span
-                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-danger' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
                                                         </td>
                                                         <td>{{ date('M j, Y', strtotime($date)) }}</td>
                                                         <td>
@@ -171,7 +170,7 @@
                             <!--begin::Card Footer-->
                             <div class="card-footer clearfix">
                                 <div class="float-start pt-1 fs-7 text-body-secondary">
-                                    Showing 1 to 9 of 42 users
+                                    Showing 1 to 9 of 42 categories
                                 </div>
                                 <ul class="pagination pagination-sm m-0 float-end">
                                     <li class="page-item disabled">
@@ -180,7 +179,7 @@
                                     <li class="page-item active">
                                         <a class="page-link" href="#">1</a>
                                     </li>
-                                    <li class="page-item">
+                                    {{-- <li class="page-item">
                                         <a class="page-link" href="#">2</a>
                                     </li>
                                     <li class="page-item">
@@ -191,8 +190,8 @@
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link" href="#">5</a>
-                                    </li>
-                                    <li class="page-item">
+                                    </li> --}}
+                                    <li class="page-item disabled">
                                         <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
                                     </li>
                                 </ul>
@@ -215,19 +214,19 @@
     <script>
         let appUrl = <?= json_encode(url('/')) ?>;
 
-        // const searchInput = document.getElementById('user-search');
-        // const resultsDiv = document.querySelector('.results');
+        const searchInput = document.getElementById('user-search');
+        const resultsDiv = document.querySelector('.results');
 
-        // searchInput.addEventListener('input', () => {
-        //     const query = searchInput.value.trim() == "" ? '0' : searchInput.value.trim();
-        //     setTimeout(() => {
-        //         fetch(`${appUrl}/category/search/${query}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
-        //     }, 500);
-        // });
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim() == "" ? '0' : searchInput.value.trim();
+            setTimeout(() => {
+                fetch(`${appUrl}/category/search/${query}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        resultsDiv.innerHTML = data;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }, 500);
+        });
     </script>
 @endsection

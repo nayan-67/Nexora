@@ -93,7 +93,7 @@
                                                 <span class="input-group-text">
                                                     <i class="bi bi-search" aria-hidden="true"></i>
                                                 </span>
-                                                <input type="search" id="user-search" class="form-control"
+                                                <input type="search" id="search" class="form-control"
                                                     placeholder="Search coupon" aria-label="Search coupon"
                                                     style="width: 180px" />
                                             </div>
@@ -122,7 +122,7 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="fs-7">
+                                        <tbody class="fs-7 results">
                                             @if (count($data) > 0)
                                                 @foreach ($data as $row)
                                                     @php
@@ -133,7 +133,7 @@
                                                         <td>{{ date('M j, Y', strtotime($row->valid_from)) }}</td>
                                                         <td>{{ $row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set' }}
                                                         </td>
-                                                        <td>{{ $row->type == '1' ? $row->amount . ' %' : '$ ' . $row->amount }}
+                                                        <td>{{ $row->type == '1' ? $row->amount . ' %' : '₹ ' . $row->amount }}
                                                         </td>
                                                         <td>{{$row->uses_number}}</td>
                                                         <td>
@@ -159,7 +159,7 @@
                                                 @endforeach
                                             @else
                                                 <tr align="center">
-                                                    <td colspan="7">No Coupon Found</td>
+                                                    <td colspan="8">No Coupon Found</td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -180,7 +180,7 @@
                                     <li class="page-item active">
                                         <a class="page-link" href="#">1</a>
                                     </li>
-                                    <li class="page-item">
+                                    {{-- <li class="page-item">
                                         <a class="page-link" href="#">2</a>
                                     </li>
                                     <li class="page-item">
@@ -191,8 +191,8 @@
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link" href="#">5</a>
-                                    </li>
-                                    <li class="page-item">
+                                    </li> --}}
+                                    <li class="page-item disabled">
                                         <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
                                     </li>
                                 </ul>
@@ -214,15 +214,6 @@
 @section('script')
 
     <script>
-        // let addBtn = document.querySelector(".add-btn");
-        // let pageSection = document.querySelector(".page-section");
-        // let addSection = document.querySelector(".add-section");
-
-        // addBtn.addEventListener("click", () => {
-        //     pageSection.style.display = "none";
-        //     addSection.style.display = "block";
-        // });
-
         const searchInput = document.getElementById('search');
         const resultsDiv = document.querySelector('.results');
 
@@ -236,26 +227,5 @@
                 .catch(error => console.error('Error:', error));
         });
 
-        // const sBtn = document.querySelectorAll(".s-btn");
-
-        // sBtn.forEach(btn => {
-        //     btn.style.background = "#198754";
-        //     btn.style.color = "#fff";
-        //     btn.addEventListener("click", () => {
-        //         searchInput.value = "";
-        //         sBtn.forEach(button => {
-        //             button.style.background = "#198754";
-        //         });
-        //         const btnVal = btn.value != "" ? btn.value : '0';
-        //         fetch(`discount/search/${btnVal}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
-
-        //         btn.style.background = "#196d54";
-        //     });
-        // });
     </script>
 @endsection

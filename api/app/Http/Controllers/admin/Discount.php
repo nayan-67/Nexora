@@ -97,25 +97,37 @@ class Discount extends Controller
 
         if (count($data) > 0) {
             foreach ($data as $row) {
-                echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                    <div class='row fs-7'>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->name . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->valid_from . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . ($row->valid_till ?? '---- -- --') . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . ($row->type == '1' ? $row->amount . ' %' : '$ ' . $row->amount) . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'><span class='list-badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
-                        </div>
-                        <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                            <a href='" . route('discount.edit', encrypt($row->id)) . "'  class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                            <button type='button' class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;' onclick=\"openModal('" . $row->id . "');\"><i class='fa-regular fa-trash-can'></i>DELETE</button>
-                        </div>
-                    </div>";
+                $amount = $row->type == '1' ? $row->amount . ' %' : '₹ ' . $row->amount;
+                $date = substr($row->created_at, 0, 10);
+                echo "<tr align='center'>
+                        <td>" . $row->name . "</td>
+                        <td>" . date('M j, Y', strtotime($row->valid_from)) . "</td>
+                        <td>" . ($row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set') . "</td>
+                        <td>" . $amount . "</td>
+                        <td>" . $row->uses_number . "</td>
+                        <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-warning') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
+                        </td>
+                        <td>" . date('M j, Y', strtotime($date)) . "</td>
+                        <td>
+                            <div class='btn-group btn-group-sm'>
+                                <a href='" . route('discount.edit', encrypt($row->id)) . "'
+                                    class='btn btn-outline-info' data-bs-toggle='tooltip'
+                                    data-bs-title='Edit'>
+                                    <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
+                                </a>
+                                <button type='button' class='btn btn-outline-danger'
+                                    data-bs-toggle='tooltip' data-bs-title='Delete'
+                                    onclick=\"openModal('" . $row->id . "');\">
+                                    <i class='bi bi-trash d-flex' aria-hidden='true'></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>";
             }
         } else {
-            echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                <div class='row fs-7'>
-                    <div class='col-sm-12 text-center'>No discount Found</div>
-                </div>";
+            echo "<tr align='center'>
+                    <td colspan='8'>No Coupon Found</td>
+                </tr>";
         }
     }
 }

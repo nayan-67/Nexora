@@ -95,7 +95,7 @@
                                                 <span class="input-group-text">
                                                     <i class="bi bi-search" aria-hidden="true"></i>
                                                 </span>
-                                                <input type="search" id="user-search" class="form-control"
+                                                <input type="search" id="search" class="form-control"
                                                     placeholder="Search sub category" aria-label="Search sub category"
                                                     style="width: 180px" />
                                             </div>
@@ -122,7 +122,7 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="fs-7">
+                                        <tbody class="fs-7 results">
                                             @if (count($data) > 0)
                                                 @foreach ($data as $row)
                                                     @php
@@ -137,7 +137,7 @@
                                                         <td>{{ $cat->name }}</td>
                                                         <td>
                                                             <span
-                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-danger' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
                                                         </td>
                                                         <td>{{ date('M j, Y', strtotime($date)) }}</td>
                                                         <td>
@@ -170,7 +170,7 @@
                             <!--begin::Card Footer-->
                             <div class="card-footer clearfix">
                                 <div class="float-start pt-1 fs-7 text-body-secondary">
-                                    Showing 1 to 9 of 42 users
+                                    Showing 1 to 9 of 42 Sub Categories
                                 </div>
                                 <ul class="pagination pagination-sm m-0 float-end">
                                     <li class="page-item disabled">
@@ -179,7 +179,7 @@
                                     <li class="page-item active">
                                         <a class="page-link" href="#">1</a>
                                     </li>
-                                    <li class="page-item">
+                                    {{-- <li class="page-item">
                                         <a class="page-link" href="#">2</a>
                                     </li>
                                     <li class="page-item">
@@ -190,8 +190,8 @@
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link" href="#">5</a>
-                                    </li>
-                                    <li class="page-item">
+                                    </li> --}}
+                                    <li class="page-item disabled">
                                         <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
                                     </li>
                                 </ul>
@@ -217,15 +217,6 @@
     <script>
         let appURL = <?= json_encode(url('/')) ?>;
 
-        // let addBtn = document.querySelector(".add-btn");
-        // let pageSection = document.querySelector(".page-section");
-        // let addSection = document.querySelector(".add-section");
-
-        // addBtn.addEventListener("click", () => {
-        //     pageSection.style.display = "none";
-        //     addSection.style.display = "block";
-        // });
-
         const searchInput = document.getElementById('search');
         const resultsDiv = document.querySelector('.results');
 
@@ -239,26 +230,5 @@
                 .catch(error => console.error('Error:', error));
         });
 
-        // const sBtn = document.querySelectorAll(".s-btn");
-
-        // sBtn.forEach(btn => {
-        //     btn.style.background = "#198754";
-        //     btn.style.color = "#fff";
-        //     btn.addEventListener("click", () => {
-        //         searchInput.value = "";
-        //         sBtn.forEach(button => {
-        //             button.style.background = "#198754";
-        //         });
-        //         const btnVal = btn.value != "" ? btn.value : '0';
-        //         fetch(`${appURL}/subcategory/search/${btnVal}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
-
-        //         btn.style.background = "#196d54";
-        //     });
-        // });
     </script>
 @endsection

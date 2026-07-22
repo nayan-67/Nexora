@@ -106,7 +106,7 @@
                                                 <span class="input-group-text">
                                                     <i class="bi bi-search" aria-hidden="true"></i>
                                                 </span>
-                                                <input type="search" id="user-search" class="form-control"
+                                                <input type="search" id="search" class="form-control"
                                                     placeholder="Search users" aria-label="Search users"
                                                     style="width: 180px" />
                                             </div>
@@ -143,7 +143,7 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="fs-7">
+                                        <tbody class="fs-7 results">
                                             @if (count($data) > 0)
                                                 @foreach ($data as $row)
                                                     @php
@@ -154,8 +154,7 @@
                                                         $profile = $row->profile_image
                                                             ? 'uploads/' . $row->profile_image
                                                             : 'avatar.jpg';
-                                                        $create = $row->created_at;
-                                                        $date = substr($create, 0, 10);
+                                                        $date = substr($row->created_at, 0, 10);
                                                     @endphp
                                                     <tr align="center">
                                                         <td>
@@ -252,18 +251,18 @@
 @section('script')
 
     <script>
-        // const searchInput = document.getElementById('search');
-        // const resultsDiv = document.querySelector('.results');
+        const searchInput = document.getElementById('search');
+        const resultsDiv = document.querySelector('.results');
 
-        // searchInput.addEventListener('input', () => {
-        //     const query = searchInput.value != "" ? searchInput.value : "0";
-        //     fetch(`customer/search/${query}`)
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             resultsDiv.innerHTML = data;
-        //         })
-        //         .catch(error => console.error('Error:', error));
-        // });
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value != "" ? searchInput.value : "0";
+            fetch(`customer/search/${query}`)
+                .then(response => response.text())
+                .then(data => {
+                    resultsDiv.innerHTML = data;
+                })
+                .catch(error => console.error('Error:', error));
+        });
         // document
         //   .getElementById('export-csv')
         //   .addEventListener('click', () => table.download('csv', 'users.csv'));

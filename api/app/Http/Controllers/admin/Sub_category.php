@@ -15,7 +15,7 @@ class Sub_category extends Controller
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = Subcategory::orderBy('order_number', 'ASC')->get();
+        $data = Subcategory::orderBy('id', 'DESC')->get();
         return view('sub_category.index', compact('data'));
     }
 
@@ -23,7 +23,7 @@ class Sub_category extends Controller
     {
         return view('sub_category.add');
     }
-    
+
     public function store(Request $request)
     {
         try {
@@ -97,29 +97,38 @@ class Sub_category extends Controller
 
     public function search(string $value)
     {
-        $data = $value ? Subcategory::where('name', 'LIKE', '%' . $value . '%')->orderBy('order_number', 'ASC')->get() : Subcategory::orderBy('order_number', 'ASC')->get();
+        $data = $value ? Subcategory::where('name', 'LIKE', '%' . $value . '%')->orderBy('id', 'DESC')->get() : Subcategory::orderBy('id', 'DESC')->get();
 
         if (count($data) > 0) {
             foreach ($data as $row) {
-                $cat = Category::where('id', $row->category_id)->get();
-                echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                    <div class='row fs-7'>
-                        <div class='col-sm-3 text-center d-flex align-items-center justify-content-center'>" . $row->name . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $row->slug . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->order_number . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $cat[0]->name . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'><span class='badge " . ($row->status == '1' ? 'active' : 'inactive') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span></div>
-                        <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                            <a href='" . route('subcategory.edit', encrypt($row->id)) . "' class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                            <button type='button' class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;' onclick=\"openModal('" . $row->id . "');\"><i class='fa-regular fa-trash-can'></i>DELETE</button>
-                        </div>
-                    </div>";
+                $cat = Category::where('id', $row->category_id)->first();
+                $date = substr($row->created_at, 0, 10);
+                echo "<tr align='center'>
+                        <td>" . $row->name . "</td>
+                        <td>" . $row->slug . "</td>
+                        <td>" . $cat->name . "</td>
+                        <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-danger') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span></td>
+                        <td>" . date('M j, Y', strtotime($date)) . "</td>
+                        <td>
+                            <div class='btn-group btn-group-sm'>
+                                <a href='" . route('subcategory.edit', encrypt($row->id)) . "'
+                                    class='btn btn-outline-info' data-bs-toggle='tooltip'
+                                    data-bs-title='Edit'>
+                                    <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
+                                </a>
+                                <button type='button' class='btn btn-outline-danger'
+                                    data-bs-toggle='tooltip' data-bs-title='Delete'
+                                    onclick=\"openModal('" . $row->id . "');\">
+                                    <i class='bi bi-trash d-flex' aria-hidden='true'></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>";
             }
         } else {
-            echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                <div class='row fs-7'>
-                    <div class='col-sm-12 text-center'>No Sub Category Found</div>
-                </div>";
+            echo "<tr align='center'>
+                    <td colspan='7'>No Sub Category Found</td>
+                </tr>";
         }
     }
 }
