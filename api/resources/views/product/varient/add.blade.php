@@ -9,7 +9,7 @@
 
 @section('css')
     <style>
-        .imginput::-webkit-file-upload-button {
+        /* .imginput::-webkit-file-upload-button {
             visibility: hidden;
         }
 
@@ -19,7 +19,7 @@
             background: #eeeeeee0;
             padding: 0.45rem;
             margin-right: -4rem;
-        }
+        } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -52,21 +52,27 @@
 
         .img-remove-icon {
             position: absolute;
-            right: 1px;
-            top: 1px;
-            background: #fff;
+            right: 0;
+            top: 0;
+            border-left: 1px solid;
+            border-bottom: 1px solid;
             border-top-right-radius: 5px;
-            opacity: 0;
             transition: all 0.3s ease;
             cursor: pointer;
+            padding: 2px;
         }
 
-        .glr-image:hover .img-remove-icon {
-            opacity: 1;
+        /* .glr-image:hover .img-remove-icon {
+                            opacity: 1;
+                        } */
+
+        .glr-image {
+            border: 1px solid;
+            padding: 3px;
+            border-radius: 6px;
         }
 
         .attribute-section {
-            background: #f8f9fa;
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
@@ -77,16 +83,15 @@
         }
 
         .variant-row {
-            background: #f8f9fa;
             padding: 15px;
             border-radius: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             border-left: 4px solid #0d6efd;
         }
 
         .btn-remove-variant {
             appearance: none;
-            background: #ffffff;
+            /* background: #ffffff; */
             color: #dc3545;
             cursor: pointer;
             padding: 0;
@@ -108,10 +113,10 @@
         }
 
         .color-input {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 43px;
             border-radius: 100%;
-            border: 2px solid #ddd;
+            border: 1px solid transparent;
             cursor: pointer;
             background-color: transparent;
             -webkit-appearance: none;
@@ -133,7 +138,7 @@
             height: 80px;
             width: 80px;
             object-fit: cover;
-            filter: drop-shadow(0 0 2px #000000d3);
+            filter: drop-shadow(0 0 1px #000000d3);
         }
     </style>
 @endsection
@@ -147,7 +152,7 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Add Product</h3>
+                        <h3 class="mb-0 page-head fs-4">Add Variant Product</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
@@ -168,16 +173,16 @@
         <!--begin::App Content-->
         <div class="app-content" style="min-height:88%;">
             <!--begin::Container-->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100 border-2 border-top border-primary rounded">
-                    <h5 class="text-secondary my-2">Add Variable Product</h5>
-                    <hr class="my-1">
+                    {{-- <h5 class="text-secondary my-2">Add Variant Product</h5>
+                    <hr class="my-1"> --}}
                     <form action="{{ route('variant-product.store') }}" method="post"
                         onsubmit="return handleFormSubmit(event)" enctype="multipart/form-data" id="variant-product-form">
                         @csrf
                         @method('POST')
 
-                        <div class="row h-100">
+                        <div class="row h-100 py-3">
                             <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <!-- Basic Product Info -->
@@ -224,7 +229,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
-                                                placeholder="Enter Product Name.." value="{{old('name')}}" required />
+                                                placeholder="Enter Product Name.." value="{{ old('name') }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -233,7 +238,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-slug" name="slug"
-                                                placeholder="Enter Product Slug.." value="{{old('slug')}}" required />
+                                                placeholder="Enter Product Slug.." value="{{ old('slug') }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -241,7 +246,7 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Description</h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Enter Description..." value="">{{old('description')}}</textarea>
+                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Enter Description..." value="">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -250,7 +255,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <textarea class="form-control fs-7" rows="3" name="features" placeholder="Use | to separate features"
-                                                value="">{{old('features')}}</textarea>
+                                                value="">{{ old('features') }}</textarea>
                                         </div>
                                     </div>
 
@@ -269,7 +274,7 @@
                                     <hr class="my-3">
                                     <h6 class="text-info mb-3 mt-3">Product Variants Setup</h6>
 
-                                    <div class="attribute-section">
+                                    <div class="attribute-section bg-body-tertiary">
                                         <h6 class="mb-3">Add Attributes<span class="text-danger ps-1">*</span></h6>
                                         <div class="row attribute-item mb-3">
                                             <div class="col-md-3">
@@ -326,7 +331,8 @@
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
                                                 class="btn btn-primary btn-md" name="add-product">Add Product</button>
-                                            <a href="{{ route('admin.product') }}" class="btn btn-warning btn-md">Back</a>
+                                            <a href="{{ route('admin.product') }}"
+                                                class="btn btn-warning btn-md">Back</a>
                                         </div>
                                     </div>
                                 </div>
@@ -479,7 +485,7 @@
 
             attributes.forEach((attr, idx) => {
                 const attrDiv = document.createElement('div');
-                attrDiv.className = 'attribute-section';
+                attrDiv.className = 'attribute-section bg-body-tertiary';
                 let valuesHTML = '';
 
                 if (attr.type === 'color_picker') {
@@ -488,12 +494,12 @@
                             const colorName = typeof v === 'object' ? v.name : v;
                             const colorCode = typeof v === 'object' ? v.code : getColorValue(v);
                             return `
-                                                <div>
-                                                    <input type="color" class="color-input" value="${colorCode}" 
-                                                        data-attr="${idx}" data-val="${i}" />
-                                                    <small>${colorName}</small>
-                                                </div>
-                                            `;
+                                        <div>
+                                            <input type="color" class="color-input" value="${colorCode}" 
+                                                data-attr="${idx}" data-val="${i}" />
+                                            <small>${colorName}</small>
+                                        </div>
+                                        `;
                         }).join('')}
                     </div>`;
                     // Add event listeners to color pickers after rendering
@@ -676,9 +682,9 @@
                 const sku = variant.sku || generateSku(productName || 'PROD');
 
                 const variantDiv = document.createElement('div');
-                variantDiv.className = 'variant-row position-relative';
+                variantDiv.className = 'variant-row position-relative bg-body-tertiary';
                 variantDiv.innerHTML = `
-                    <button type="button" class="btn-remove-variant" data-remove-variant="${idx}">✕</button>
+                    <button type="button" class="btn-remove-variant bg-body" data-remove-variant="${idx}">✕</button>
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
                             <h6 class="mb-2"><strong>${attrString}</strong></h6>
@@ -842,11 +848,11 @@
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const item = document.createElement('div');
-                    item.className = 'text-center';
+                    item.className = 'glr-image';
                     item.innerHTML = `
-                        <div class="glr-image position-relative">
+                        <div class="position-relative">
                             <img src="${event.target.result}" class="img-fluid rounded variant-preview-img" alt="Variant gallery preview" />
-                            <i class="fa-solid fa-xmark img-remove-icon" onclick="removeVariantGalleryImage(${idx}, ${fileIndex})"></i>
+                            <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeVariantGalleryImage(${idx}, ${fileIndex})"></i>
                         </div>
                     `;
                     preview.appendChild(item);

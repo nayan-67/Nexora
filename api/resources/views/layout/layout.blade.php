@@ -53,8 +53,42 @@
 
     @yield('css')
     <style>
-        .s-btn:hover {
-            background: #196d54 !important;
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .app-main {
+            min-height: calc(100vh - 57px - 57px);
+        }
+
+        .app-wrapper {
+            height: 100vh;
+        }
+
+        .right-section {
+            overscroll-behavior: contain;
+            overflow: auto;
+            scrollbar-color: var(--bs-secondary-bg) transparent;
+            scrollbar-width: thin;
+        }
+
+        .right-section::-webkit-scrollbar {
+            width: 0.5rem;
+            height: 0.5rem;
+        }
+
+        .right-section::-webkit-scrollbar-thumb {
+            background-color: var(--bs-secondary-bg);
+        }
+
+        .right-section::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .right-section::-webkit-scrollbar-corner {
+            background-color: transparent;
         }
 
         .delete-modal {
@@ -145,14 +179,16 @@
         <!--begin::Sidebar-->
         @include('layout.sidebar')
         <!--end::Sidebar-->
-        <!--begin::App Main-->
+        <div class="right-section">
+            <!--begin::App Main-->
 
-        @yield('content')
+            @yield('content')
 
-        <!--end::App Main-->
-        <!--begin::Footer-->
-        @include('layout.footer')
-        <!--end::Footer-->
+            <!--end::App Main-->
+            <!--begin::Footer-->
+            @include('layout.footer')
+            <!--end::Footer-->
+        </div>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -173,10 +209,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.js"></script>
     <script src="{{ asset('toast/toast.js') }}"></script>
     <!--end::Required Plugin(Bootstrap 5)-->
+
     <!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
     <!--end::Required Plugin(AdminLTE)-->
     <!--begin::OverlayScrollbars Configure-->
+
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {
@@ -184,8 +222,11 @@
             scrollbarAutoHide: 'leave',
             scrollbarClickScroll: true,
         };
+
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+
+            const appMain = document.querySelector('.right-section');
 
             // Disable OverlayScrollbars on mobile devices to prevent touch interference
             const isMobile = window.innerWidth <= 992;
@@ -196,6 +237,20 @@
                 !isMobile
             ) {
                 OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                    scrollbars: {
+                        theme: Default.scrollbarTheme,
+                        autoHide: Default.scrollbarAutoHide,
+                        clickScroll: Default.scrollbarClickScroll,
+                    },
+                });
+            }
+
+            if (
+                appMain &&
+                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+                !isMobile
+            ) {
+                OverlayScrollbarsGlobal.OverlayScrollbars(appMain, {
                     scrollbars: {
                         theme: Default.scrollbarTheme,
                         autoHide: Default.scrollbarAutoHide,

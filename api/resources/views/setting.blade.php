@@ -103,19 +103,6 @@
                                 role="tab">
                                 <i class="bi bi-bell me-2" aria-hidden="true"></i>Notifications
                             </a>
-                            <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="pill"
-                                role="tab">
-                                <i class="bi bi-shield-lock me-2" aria-hidden="true"></i>Security
-                            </a>
-                            <a href="#billing" class="list-group-item list-group-item-action" data-bs-toggle="pill"
-                                role="tab">
-                                <i class="bi bi-credit-card me-2" aria-hidden="true"></i>Billing
-                            </a>
-                            <a href="#danger" class="list-group-item list-group-item-action text-danger"
-                                data-bs-toggle="pill" role="tab">
-                                <i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>
-                                Danger zone
-                            </a>
                         </div>
                     </div>
 
@@ -135,39 +122,19 @@
                                             @method('PUT')
                                             <div class="col-md-6">
                                                 <label class="form-label" for="settings-email"> Email (Admin) </label>
-                                                <input type="text" class="form-control" id="settings-email"
+                                                <input type="email" class="form-control" id="settings-email" name="email"
                                                     value="{{ $data->email }}" />
                                             </div>
                                             <div class="col-md-6">
-                                                {{-- <label class="form-label" for="settings-password"> Password </label>
-                                                <input type="password" class="form-control" id="settings-password"
-                                                    value="{{ $data->password }}" /> --}}
+                                                <label class="form-label" for="pass"> Password </label>
                                                 <div class="pass-box form-control">
                                                     <input class="me-2 fs-7 bg-body" type="password" id="pass"
                                                         name="password" value="{{ $data->password }}" autocomplete="off"
-                                                        style="outline: none;color:#212529;" />
+                                                        style="outline: none;" />
                                                     <i class="fa-regular fa-eye-slash show-btn"></i>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="settings-tz"> Time zone </label>
-                                                <select class="form-select" id="settings-tz">
-                                                    <option>UTC</option>
-                                                    <option selected>America/Los_Angeles</option>
-                                                    <option>Europe/London</option>
-                                                    <option>Asia/Tokyo</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="settings-lang"> Language </label>
-                                                <select class="form-select" id="settings-lang">
-                                                    <option selected>English</option>
-                                                    <option>Español</option>
-                                                    <option>Français</option>
-                                                    <option>Deutsch</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12">
+                                            <div class="col-12 text-end">
                                                 <button type="submit" class="btn btn-primary">Save changes</button>
                                             </div>
                                         </form>
@@ -235,110 +202,6 @@
                                             </div>
                                         </div>
                                         <button class="btn btn-primary mt-3">Save preferences</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Security -->
-                            <div class="tab-pane fade" id="security" role="tabpanel">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Password</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <form class="row g-3">
-                                            <div class="col-md-12">
-                                                <label class="form-label" for="pwd-current"> Current password </label>
-                                                <input type="password" class="form-control" id="pwd-current" />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="pwd-new"> New password </label>
-                                                <input type="password" class="form-control" id="pwd-new" />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="pwd-confirm">
-                                                    Confirm new password
-                                                </label>
-                                                <input type="password" class="form-control" id="pwd-confirm" />
-                                            </div>
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-primary">Update password</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="card mt-3">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Two-factor authentication</h3>
-                                    </div>
-                                    <div class="card-body d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="mb-0 fw-semibold">Authenticator app</p>
-                                            <small class="text-secondary">
-                                                Use an authenticator app such as 1Password or Authy.
-                                            </small>
-                                        </div>
-                                        <button class="btn btn-outline-primary">Enable</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Billing -->
-                            <div class="tab-pane fade" id="billing" role="tabpanel">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Current plan</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <p class="mb-0 fw-semibold">Pro plan</p>
-                                                <small class="text-secondary">
-                                                    $29 / month &middot; Renews June 18, 2026
-                                                </small>
-                                            </div>
-                                            <a href="#" class="btn btn-outline-primary btn-sm"> Change plan </a>
-                                        </div>
-                                        <hr />
-                                        <p class="fw-semibold mb-2">Payment method</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <i class="bi bi-credit-card-2-front me-2" aria-hidden="true"></i>
-                                                Visa ending in 4242
-                                            </div>
-                                            <a href="#" class="btn btn-link btn-sm">Update</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Danger zone -->
-                            <div class="tab-pane fade" id="danger" role="tabpanel">
-                                <div class="card border-danger">
-                                    <div class="card-header bg-danger-subtle">
-                                        <h3 class="card-title text-danger">Danger zone</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <p class="mb-0 fw-semibold">Export account data</p>
-                                                <small class="text-secondary">
-                                                    Download a copy of all your data as a ZIP archive.
-                                                </small>
-                                            </div>
-                                            <button class="btn btn-outline-secondary">Export</button>
-                                        </div>
-                                        <hr />
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <p class="mb-0 fw-semibold text-danger">Delete account</p>
-                                                <small class="text-secondary">
-                                                    This will permanently delete your account and all associated data.
-                                                    This cannot be undone.
-                                                </small>
-                                            </div>
-                                            <button class="btn btn-danger">Delete account</button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

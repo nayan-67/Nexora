@@ -46,8 +46,8 @@
                     <hr class="my-1"> --}}
                     <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row h-100 py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
@@ -98,6 +98,7 @@
                                                 <input class="form-control fs-7 imginput" type="file" id="formFile"
                                                     accept="image/*" name="cat-img" required>
                                             </div>
+                                            <div class="text-info fs-8 mt-n3">*** Please choose image above (800px * 800px) dimension  ***</div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>

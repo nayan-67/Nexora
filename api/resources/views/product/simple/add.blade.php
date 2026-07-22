@@ -9,7 +9,7 @@
 
 @section('css')
     <style>
-        .imginput::-webkit-file-upload-button {
+        /* .imginput::-webkit-file-upload-button {
             visibility: hidden;
         }
 
@@ -19,7 +19,7 @@
             background: #eeeeeee0;
             padding: 0.45rem;
             margin-right: -4rem;
-        }
+        } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -31,7 +31,10 @@
         }
 
         .gimage {
-            position: relative;
+            /* position: relative; */
+            border: 1px solid;
+            border-radius: 6px;
+            padding: 3px;
 
             & img {
                 height: 80px;
@@ -39,13 +42,24 @@
             }
         }
 
-        .fa-xmark {
+        /* .fa-xmark {
             color: #862828;
             position: absolute;
             top: 0;
             right: 0;
             cursor: pointer;
             backdrop-filter: blur(10px);
+        } */
+         .img-remove-icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-left: 1px solid;
+            border-bottom: 1px solid;
+            border-top-right-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 2px;
         }
     </style>
 @endsection
@@ -59,14 +73,15 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Product</h3>
+                        <h3 class="mb-0 page-head fs-4">Add Simple Product</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page">Product</li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.product') }}">Home</a></li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">Add Simple Product</li>
                         </ol>
                     </div>
                 </div>
@@ -80,16 +95,16 @@
             <!--begin::Container-->
 
             <!-- =========== Add Product Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
-                    <h5 class="text-secondary my-2">Add Product</h5>
-                    <hr class="my-1">
+                    {{-- <h5 class="text-secondary my-2">Add Simple Product</h5>
+                    <hr class="my-1"> --}}
                     <form action="{{ route('product.store') }}" method="post" onsubmit="return validate()"
                         enctype="multipart/form-data">
                         @csrf
                         @method('POST')
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row h-100 py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row py-2">
                                         <div class="col-md-3">
@@ -196,9 +211,10 @@
                                                 id="p-image"
                                                 style="height: 90px;filter:drop-shadow(0 0 2px #000000d3);" />
                                             <div class="input-group mb-3">
-                                                <input class="form-control fs-7 p-0 p-imginput imginput" type="file"
+                                                <input class="form-control fs-7 p-imginput imginput" type="file"
                                                     id="formFile" name="p-img" accept="image/*" required>
                                             </div>
+                                            <div class="text-info fs-8 mt-n3">*** Please choose image above (800px * 800px) dimension  ***</div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -218,9 +234,9 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Gallery Image</h6>
                                         </div>
                                         <div class="col-md-9 position-relative">
-                                            <div class="gimg-box d-flex gap-2 flex-wrap"></div>
+                                            <div class="gimg-box d-flex gap-2 flex-wrap mb-2"></div>
                                             <div class="input-group mb-3">
-                                                <input class="form-control fs-7 p-0 g-imginput imginput" type="file"
+                                                <input class="form-control fs-7 g-imginput imginput" type="file"
                                                     id="formFile" name="g-img[]" accept="image/*" multiple>
                                             </div>
                                             <div class="text-info fs-8 mt-n3">*** You can select multiple images from here
@@ -351,8 +367,8 @@
                     let gimg = document.createElement("div");
                     gimg.classList.add("gimage");
                     gimg.innerHTML = `<div class="position-relative">
-                                        <img src="${e.target.result}" class="img-fluid rounded mb-2 g-img" alt="" />
-                                        <i class="fa-solid fa-xmark" onclick="removeImage(${i})"></i>
+                                        <img src="${e.target.result}" class="img-fluid rounded g-img" alt="" />
+                                        <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeImage(${i})"></i>
                                     </div>`;
                     imgBox.appendChild(gimg);
                 };
@@ -370,9 +386,9 @@
                 reader.onload = (e) => {
                     let gimg = document.createElement("div");
                     gimg.classList.add("gimage");
-                    gimg.innerHTML = `<div class="gimage position-relative">
-                                        <img src="${e.target.result}" class="img-fluid rounded mb-2 g-image" alt="" id="g-image" />
-                                        <i class="fa-solid fa-xmark" onclick="removeImage(${i})"></i>
+                    gimg.innerHTML = `<div class="position-relative">
+                                        <img src="${e.target.result}" class="img-fluid rounded g-image" alt="" />
+                                        <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeImage(${i})"></i>
                                     </div>`;
                     imgBox.appendChild(gimg);
                 };
@@ -395,8 +411,8 @@
 
 
         function validate() {
-            if (ProductImage.naturalWidth < 600) {
-                imageError.innerHTML = "Please Select Image Above 600 x 600 px";
+            if (ProductImage.naturalWidth < 800) {
+                imageError.innerHTML = "Please Select Image Above 800 x 800 px";
                 return false;
             }
             price.value = Number(price.value).toFixed(2);

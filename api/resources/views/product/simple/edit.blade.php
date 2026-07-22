@@ -9,17 +9,17 @@
 
 @section('css')
     <style>
-        .imginput::-webkit-file-upload-button {
-            visibility: hidden;
-        }
+        /* .imginput::-webkit-file-upload-button {
+                        visibility: hidden;
+                    }
 
-        .imginput::before {
-            content: 'Choose Image Above 600 x 600 px';
-            display: inline-block;
-            background: #eeeeeee0;
-            padding: 0.45rem;
-            margin-right: -4rem;
-        }
+                    .imginput::before {
+                        content: 'Choose Image Above 800 x 800 px';
+                        display: inline-block;
+                        background: #eeeeeee0;
+                        padding: 0.45rem;
+                        margin-right: -4rem;
+                    } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -31,27 +31,35 @@
         }
 
         .gimage {
-            position: relative;
+            /* position: relative; */
+            border: 1px solid;
+            border-radius: 6px;
+            padding: 3px;
 
             & img {
                 height: 80px;
-                filter: drop-shadow(0 0 2px #000000d3);
+                filter: drop-shadow(0 0 1px #000000d3);
             }
         }
 
+        /* .fa-xmark {
+                        color: #862828;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        cursor: pointer;
+                        backdrop-filter: blur(10px);
+                    } */
         .img-remove-icon {
             position: absolute;
-            right: 1px;
-            top: 1px;
-            background: #fff;
+            right: 0;
+            top: 0;
+            border-left: 1px solid;
+            border-bottom: 1px solid;
             border-top-right-radius: 5px;
-            opacity: 0;
             transition: all 0.3s ease;
             cursor: pointer;
-        }
-
-        .gimage:hover .img-remove-icon {
-            opacity: 1;
+            padding: 2px;
         }
     </style>
 @endsection
@@ -70,7 +78,7 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Product</h3>
+                        <h3 class="mb-0 page-head fs-4">Edit Simple Product</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
@@ -78,7 +86,7 @@
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.product') }}">Product</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page">Edit Product</li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">Edit Simple Product</li>
                         </ol>
                     </div>
                 </div>
@@ -93,16 +101,16 @@
 
             <!-- =========== Edit Product Section ============== -->
 
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
-                    <h5 class="text-secondary my-2">Edit Product</h5>
-                    <hr class="my-1">
+                    {{-- <h5 class="text-secondary my-2">Edit Product</h5>
+                    <hr class="my-1"> --}}
                     <form action="{{ route('product.simpleupdate', $item->id) }}" method="post"
                         onsubmit="return validate()" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row h-100 py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
@@ -110,7 +118,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7" name="sku"
-                                                placeholder="Enter SKU.." value="{{ $item->sku }}" required />
+                                                placeholder="Enter SKU ..." value="{{ $item->sku }}" required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -157,7 +165,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
-                                                placeholder="Enter Name.." value="{{ $item->name }}" required />
+                                                placeholder="Enter Name ..." value="{{ $item->name }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -218,9 +226,11 @@
                                                 class="img-fluid rounded mb-2" alt="" id="p-image"
                                                 style="height: 90px;filter:drop-shadow(0 0 2px #000000d3);" />
                                             <div class="input-group mb-3">
-                                                <input class="form-control fs-7 p-0 p-imginput imginput" type="file"
+                                                <input class="form-control fs-7 p-imginput imginput" type="file"
                                                     id="formFile" name="p-img" accept="image/*">
                                             </div>
+                                            <div class="text-info fs-8 mt-n3">*** Choose new image above (800 x 800 px) if
+                                                want to change ***</div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -240,10 +250,10 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Gallery Image</h6>
                                         </div>
                                         <div class="col-md-9 position-relative">
-                                            <div class="gimg-box-old d-flex gap-2 flex-wrap"></div>
-                                            <div class="gimg-box d-flex gap-2 flex-wrap"></div>
+                                            <div class="gimg-box-old d-flex gap-2 flex-wrap mb-2"></div>
+                                            <div class="gimg-box d-flex gap-2 flex-wrap mb-2"></div>
                                             <div class="input-group mb-3">
-                                                <input class="form-control fs-7 p-0 g-imginput imginput" type="file"
+                                                <input class="form-control fs-7 g-imginput imginput" type="file"
                                                     id="formFile" name="g-img[]" accept="image/*" multiple>
                                             </div>
                                             <input type="text" hidden name="old_glr" id="oldInput" value="">
@@ -357,9 +367,9 @@
                 reader.onload = (e) => {
                     let gimg = document.createElement("div");
                     gimg.classList.add("gimage");
-                    gimg.innerHTML = `<div class="gimage position-relative">
-                                        <img src="${e.target.result}" class="img-fluid rounded mb-2" alt="" id="g-image" />
-                                        <i class="fa-solid fa-xmark img-remove-icon" onclick="removeImage(${i})"></i>
+                    gimg.innerHTML = `<div class="position-relative">
+                                        <img src="${e.target.result}" class="img-fluid rounded" alt="" />
+                                        <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeImage(${i})"></i>
                                     </div>`;
                     imgBox.appendChild(gimg);
                 };
@@ -378,9 +388,9 @@
                 reader.onload = (e) => {
                     let gimg = document.createElement("div");
                     gimg.classList.add("gimage");
-                    gimg.innerHTML = `<div class="gimage position-relative">
-                                        <img src="${e.target.result}" class="img-fluid rounded mb-2 g-image" alt="" id="g-image" />
-                                        <i class="fa-solid fa-xmark img-remove-icon" onclick="removeImage(${i})"></i>
+                    gimg.innerHTML = `<div class="position-relative">
+                                        <img src="${e.target.result}" class="img-fluid rounded" alt="" />
+                                        <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeImage(${i})"></i>
                                     </div>`;
                     imgBox.appendChild(gimg);
                 };
@@ -394,9 +404,9 @@
             for (let i = 0; i < oldImg.length; i++) {
                 let gimg = document.createElement("div");
                 gimg.classList.add("gimage");
-                gimg.innerHTML = `<div class="gimage position-relative">
-                                    <img src="{{ asset('uploads/glr_lg_') }}${oldImg[i]}" class="img-fluid rounded mb-2" alt="" id="g-image" />
-                                    <i class="fa-solid fa-xmark img-remove-icon" onclick="removeoldImage(${i})"></i>
+                gimg.innerHTML = `<div class="position-relative">
+                                    <img src="{{ asset('uploads/glr_lg_') }}${oldImg[i]}" class="img-fluid rounded" alt="" />
+                                    <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeoldImage(${i})"></i>
                             </div>`;
                 imgBoxOld.appendChild(gimg);
             }
@@ -409,9 +419,9 @@
             for (let i = 0; i < oldImg.length; i++) {
                 let gimg = document.createElement("div");
                 gimg.classList.add("gimage");
-                gimg.innerHTML = `<div class="gimage position-relative">
-                                    <img src="{{ asset('uploads/glr_lg_') }}${oldImg[i]}" class="img-fluid rounded mb-2" alt="" id="g-image" />
-                                    <i class="fa-solid fa-xmark img-remove-icon" onclick="removeoldImage(${i})"></i>
+                gimg.innerHTML = `<div class="position-relative">
+                                    <img src="{{ asset('uploads/glr_lg_') }}${oldImg[i]}" class="img-fluid rounded" alt="" />
+                                    <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeoldImage(${i})"></i>
                             </div>`;
                 imgBoxOld.appendChild(gimg);
             }

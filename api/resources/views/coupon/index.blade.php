@@ -116,6 +116,7 @@
                                                 <th>Valid From</th>
                                                 <th>Valid Till</th>
                                                 <th>Amount</th>
+                                                <th>Coupon Used</th>
                                                 <th>Status</th>
                                                 <th>Created</th>
                                                 <th>Actions</th>
@@ -134,6 +135,7 @@
                                                         </td>
                                                         <td>{{ $row->type == '1' ? $row->amount . ' %' : '$ ' . $row->amount }}
                                                         </td>
+                                                        <td>{{$row->uses_number}}</td>
                                                         <td>
                                                             <span
                                                                 class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>

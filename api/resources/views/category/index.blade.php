@@ -31,7 +31,7 @@
         </div>
         <!--end::App Content Header-->
         <!--begin::App Content-->
-        <div class="app-content" style="min-height:88%;">
+        <div class="app-content">
             <!--begin::Container-->
 
             <!-- ========= Modal ============ -->
@@ -114,9 +114,9 @@
                                             <tr align="center">
                                                 <th>Category</th>
                                                 <th>Slug</th>
-                                                <th>Status</th>
                                                 <th>Total Product</th>
                                                 <th>No. of Sub-Category</th>
+                                                <th>Status</th>
                                                 <th>Created</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -134,12 +134,12 @@
                                                     <tr align="center">
                                                         <td>{{ $row->name }}</td>
                                                         <td>{{ $row->slug }}</td>
+                                                        <td>{{ $row->total_products }}</td>
+                                                        <td>{{ count($sub_cat) }}</td>
                                                         <td>
                                                             <span
                                                                 class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
                                                         </td>
-                                                        <td>{{ $row->total_products }}</td>
-                                                        <td>{{ count($sub_cat) }}</td>
                                                         <td>{{ date('M j, Y', strtotime($date)) }}</td>
                                                         <td>
                                                             <div class="btn-group btn-group-sm">
@@ -215,7 +215,7 @@
     <script>
         let appUrl = <?= json_encode(url('/')) ?>;
 
-        // const searchInput = document.getElementById('search');
+        // const searchInput = document.getElementById('user-search');
         // const resultsDiv = document.querySelector('.results');
 
         // searchInput.addEventListener('input', () => {
