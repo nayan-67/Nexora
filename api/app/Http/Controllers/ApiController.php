@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Category;
-use App\Models\Discount;
-use App\Models\Order;
-use App\Models\Order_address;
-use App\Models\Order_product;
+use App\Models\Coupon;
+use App\Models\Orders;
+use App\Models\OrderAddress;
+use App\Models\OrderItems;
 use App\Models\Products;
 use App\Models\User;
 use App\Models\Variant;
@@ -39,7 +39,7 @@ class ApiController extends Controller
             'user' => $user,
             'defaultaddress' => $address,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -299,7 +299,7 @@ class ApiController extends Controller
             'defaultaddress' => $addr,
             'addresses' => $updateAddr,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -335,7 +335,7 @@ class ApiController extends Controller
             'defaultaddress' => $defaultAddr,
             'addresses' => $updateAddr,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -388,7 +388,7 @@ class ApiController extends Controller
                     'state' => $state,
                     'is_default' => true,
                 ]);
-                $shippingAddress = Order_address::create([
+                $shippingAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => $request->sameAsShipping ? 3 : 1,
                     'f_name' => $firstName,
@@ -416,7 +416,7 @@ class ApiController extends Controller
                     'state' => $billingState,
                     'is_default' => true,
                 ]);
-                $billAddress = Order_address::create([
+                $billAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => '2',
                     'f_name' => $billingFirstName,
@@ -434,7 +434,7 @@ class ApiController extends Controller
             if ($shipId) {
                 $userAddr = Address::where(['id' => $shipId, 'user_id' => $user->id])->first();
 
-                $shippingAddress = Order_address::create([
+                $shippingAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => ($request->sameAsShipping || $billId == $shipId) ? '3' : '1',
                     'f_name' => $userAddr->f_name,
@@ -453,7 +453,7 @@ class ApiController extends Controller
                 if (!$request->sameAsShipping && $billId != $shipId) {
                     $billAddr = Address::where(['id' => $billId, 'user_id' => $user->id])->first();
 
-                    $billAddress = Order_address::create([
+                    $billAddress = OrderAddress::create([
                         'user_id' => $user->id,
                         'type' => '2',
                         'f_name' => $billAddr->f_name,
@@ -471,7 +471,7 @@ class ApiController extends Controller
                 }
             }
 
-            $order = Order::create([
+            $order = Orders::create([
                 'user_id' => $user->id,
                 'order_status' => '1',
                 'payment_status' => '1',
@@ -495,7 +495,7 @@ class ApiController extends Controller
                 }
                 $prd->stock -= $value['quantity'];
                 $prd->save();
-                Order_product::create([
+                OrderItems::create([
                     'user_id' => $user->id,
                     'order_id' => $order->id,
                     'product_id' => $value['prd_id'],
@@ -524,7 +524,7 @@ class ApiController extends Controller
 
     public function orderData(int $id)
     {
-        $data = Order::find($id);
+        $data = Orders::find($id);
         return response($data->order_number, 200);
     }
 
@@ -578,7 +578,7 @@ class ApiController extends Controller
             'user' => $userData,
             'address' => $address,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => Wishlist::where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -594,7 +594,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $data = Discount::where('name', $coupon)->first();
+        $data = Coupon::where('name', $coupon)->first();
 
         if ($data) {
             if ($data->status == '0') {
@@ -622,7 +622,7 @@ class ApiController extends Controller
         }
 
         $uid = $user->id;
-        $data = Order::where('user_id', $uid)->orderBy('id', 'DESC')->get();
+        $data = Orders::where('user_id', $uid)->orderBy('id', 'DESC')->get();
         return response()->json($data, 200);
     }
 
@@ -636,7 +636,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $items = Order_product::where("order_id", $id)->get();
+        $items = OrderItems::where("order_id", $id)->get();
         return response()->json($items, 200);
     }
 
@@ -650,7 +650,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $items = Order_product::where("user_id", $user->id)->orderBy('id', 'DESC')->get();
+        $items = OrderItems::where("user_id", $user->id)->orderBy('id', 'DESC')->get();
         return response()->json($items, 200);
     }
 }
