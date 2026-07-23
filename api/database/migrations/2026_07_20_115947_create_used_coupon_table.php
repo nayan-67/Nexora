@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('used_coupon', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->string('order_no',100);
             $table->string('coupon_name',100);
             $table->string('amount_type',100);
             $table->unsignedInteger('amount');
