@@ -47,7 +47,7 @@ function PrdCard({ item, prd, variants, order }) {
           <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
         </div>
         <p className="text-sm font-medium text-foreground">
-          ${(displayData?.sale_price ?? displayData?.price) * item.quantity.toFixed(2)}
+          ₹ {(displayData?.sale_price ?? displayData?.price) * item.quantity.toFixed(2)}
         </p>
       </div>
     )
@@ -63,7 +63,7 @@ function PrdCard({ item, prd, variants, order }) {
       </div>
       <div className="flex-1">
         <p className="text-sm font-medium text-foreground line-clamp-1">{prdDetails?.name} {name.length != 0 ? `(${name.join(',')})` : ''}</p>
-        <p className="text-sm text-muted-foreground">${(displayData?.sale_price ?? displayData?.price)}</p>
+        <p className="text-sm text-muted-foreground">₹ {(displayData?.sale_price ?? displayData?.price)}</p>
       </div>
     </div>
   )
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
   }, 0)
   const coupon = JSON.parse(sessionStorage.getItem("coupon"))
   const discount = coupon ? (coupon.type == 2 ? Number(coupon.amount) : subtotal * (coupon.amount / 100)) : 0
-  const shipping = subtotal > 50 ? 0 : 9.99
+  const shipping = subtotal > 500 ? 0 : 40
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax - discount
 
@@ -233,10 +233,10 @@ export default function CheckoutPage() {
           .then((res) => {
             resolve
             if (res.data) {
-              // sessionStorage.removeItem("coupon")
-              // setCartData([])
-              // navigate(`/checkout/success/${res.data}`)
-              console.log(res.data)
+              sessionStorage.removeItem("coupon")
+              setCartData([])
+              navigate(`/checkout/success/${res.data}`)
+              console.log("Order created successfully:", res.data)
             }
           })
           .catch((err) => {
@@ -292,7 +292,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background pt-18.75">
-      {/* <Header /> */}
 
       <main className="flex-1">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -655,12 +654,19 @@ export default function CheckoutPage() {
                           <button onClick={() => { setShowBillAddrMenu(!showBillAddrMenu) }} className="text-primary text-sm hover:underline cursor-pointer outline-none-important mt-3">Change Address</button>
                         )}
                         <div className="flex items-center gap-2 mt-1">
-                          <input type="checkbox" className="text-md" name="sameasshipping" id="sameasshipping" onClick={() => {
-                            setSameAsShipping(!sameAsShipping)
-                            setFormData(prev => ({ ...prev, sameAsShipping: !sameAsShipping }))
-                          }}
-                          // {sameAsShipping ? checked : ''}
-                          />
+                          {sameAsShipping ? (
+                            <input type="checkbox" className="text-md" name="sameasshipping" id="sameasshipping" checked onClick={() => {
+                              setSameAsShipping(!sameAsShipping)
+                              setFormData(prev => ({ ...prev, sameAsShipping: !sameAsShipping }))
+                            }}
+                            />
+                          ) : (
+                            <input type="checkbox" className="text-md" name="sameasshipping" id="sameasshipping" onClick={() => {
+                              setSameAsShipping(!sameAsShipping)
+                              setFormData(prev => ({ ...prev, sameAsShipping: !sameAsShipping }))
+                            }}
+                            />
+                          )}
                           <label htmlFor="sameasshipping" className="text-md font-medium text-foreground">Same as Shipping</label>
                         </div>
                       </div>
@@ -996,11 +1002,11 @@ export default function CheckoutPage() {
                               </>
                             ) : (
                               <>
-                                <p className="font-bold mb-2">{formData.firstName} {formData.lastName}</p>
-                                {formData.locality}<br />
-                                {formData.address}<br />
-                                {formData.city}, {formData.state} {formData.zipCode}<br />
-                                <p className="mt-2">{formData.phone}</p><br />
+                                <p className="font-bold mb-2">{formData.billingFirstName} {formData.billingLastName}</p>
+                                {formData.billingLocality}<br />
+                                {formData.billingAddress}<br />
+                                {formData.billingCity}, {formData.billingState} {formData.billingZipCode}<br />
+                                <p className="mt-2">{formData.billingPhone}</p><br />
                               </>
                             )}
                           </>
@@ -1080,12 +1086,12 @@ export default function CheckoutPage() {
                 <div className="mt-6 space-y-3 border-t border-border/40 pt-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="text-foreground">${subtotal.toFixed(2)}</span>
+                    <span className="text-foreground">₹ {subtotal.toFixed(2)}</span>
                   </div>
                   {discount != 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-600">Discount ({coupon.type == 2 ? `$${coupon.amount}` : `${coupon.amount}%`})</span>
-                      <span className="text-green-600">-${discount.toFixed(2)}</span>
+                      <span className="text-green-600">Discount ({coupon.type == 2 ? `₹ ${coupon.amount}` : `${coupon.amount}%`})</span>
+                      <span className="text-green-600">-₹ {discount.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
@@ -1093,16 +1099,16 @@ export default function CheckoutPage() {
                     {shipping === 0 ? (
                       <span className="text-green-600">Free</span>
                     ) : (
-                      <>${shipping}</>
+                      <span className="text-foreground">₹ {shipping.toFixed(2)}</span>
                     )}
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Tax</span>
-                    <span className="text-foreground">${tax.toFixed(2)}</span>
+                    <span className="text-foreground">₹ {tax.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between border-t border-border/40 pt-3 text-lg font-semibold">
                     <span className="text-foreground">Total</span>
-                    <span className="text-foreground">${total.toFixed(2)}</span>
+                    <span className="text-foreground">₹ {total.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -1116,7 +1122,6 @@ export default function CheckoutPage() {
         </div>
       </main>
 
-      {/* <Footer /> */}
     </div>
   )
 }
