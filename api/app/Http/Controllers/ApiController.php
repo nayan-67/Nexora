@@ -10,11 +10,13 @@ use App\Models\Orders;
 use App\Models\OrderAddress;
 use App\Models\OrderItems;
 use App\Models\Products;
+use App\Models\UsedCoupon;
 use App\Models\User;
 use App\Models\Variant;
 use App\Models\VariantAttribute;
 use App\Models\Wishlist;
 use App\Traits\ResizeImage;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -482,6 +484,7 @@ class ApiController extends Controller
                 'total_price' => $orderData['total'],
                 'eco_tax' => $orderData['tax'],
                 'discount' => $orderData['discount'],
+                'used_coupon' => $orderData['coupon']['name'],
                 'shipping' => $orderData['shipping'],
             ]);
 
@@ -503,10 +506,21 @@ class ApiController extends Controller
                     'sku' => $value['sku'],
                     'quantity' => $value['quantity'],
                     'price' => $prd->sale_price ?? $prd->price,
+                    'status' => '1',
                 ]);
             }
             $order->order_number = "ORD-NX" . rand(100, 999) . $order_id;
             $order->save();
+
+            if ($orderData['coupon']) {
+                UsedCoupon::create([
+                    'user_id' => $user->id,
+                    'order_number' => $order->order_number,
+                    'coupon_name' => $orderData['coupon']['name'],
+                    'amount_type' => $orderData['coupon']['type'],
+                    'amount' => $orderData['coupon']['amount'],
+                ]);
+            }
 
             $shippingAddress->order_number = $order->order_number;
             $shippingAddress->save();

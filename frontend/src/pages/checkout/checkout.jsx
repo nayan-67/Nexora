@@ -10,30 +10,6 @@ import { toast } from "react-hot-toast";
 import { CartContext } from "@/context/CartContext"
 const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "")
 
-// const orderItems = [
-//   {
-//     id: 1,
-//     name: "Premium Wireless Headphones",
-//     price: 299,
-//     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop&q=80",
-//     quantity: 1,
-//   },
-//   {
-//     id: 2,
-//     name: "Minimalist Watch Collection",
-//     price: 189,
-//     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&q=80",
-//     quantity: 2,
-//   },
-//   {
-//     id: 5,
-//     name: "Leather Crossbody Bag",
-//     price: 245,
-//     image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop&q=80",
-//     quantity: 1,
-//   },
-// ]
-
 function PrdCard({ item, prd, variants, order }) {
   const isVariant = item.prd_type == 2
   const prdDetails = prd?.find((p) => Number(p.id) === Number(item.prd_id))
@@ -248,7 +224,8 @@ export default function CheckoutPage() {
         shipping: shipping,
         discount: discount,
         subtotal: subtotal,
-        total: total
+        total: total,
+        coupon: coupon ? coupon : null
       }
       const updatedFormData = { ...formData, orderData: orderData }
       await new Promise(resolve => {
@@ -256,9 +233,10 @@ export default function CheckoutPage() {
           .then((res) => {
             resolve
             if (res.data) {
-              sessionStorage.removeItem("coupon")
-              setCartData([])
-              navigate(`/checkout/success/${res.data}`)
+              // sessionStorage.removeItem("coupon")
+              // setCartData([])
+              // navigate(`/checkout/success/${res.data}`)
+              console.log(res.data)
             }
           })
           .catch((err) => {
@@ -953,11 +931,23 @@ export default function CheckoutPage() {
                         </button>
                       </div>
                       <div className="mt-2 text-sm text-muted-foreground">
-                        <p className="font-bold mb-2">{shippingAddress.f_name} {shippingAddress.l_name}</p>
-                        {shippingAddress.address2}<br />
-                        {shippingAddress.address1}<br />
-                        {shippingAddress.city}, {shippingAddress.state} {shippingAddress.postcode}<br />
-                        <p className="mt-2">{shippingAddress.phone}</p><br />
+                        {addresses.length > 0 ? (
+                          <>
+                            <p className="font-bold mb-2">{shippingAddress.f_name} {shippingAddress.l_name}</p>
+                            {shippingAddress.address2}<br />
+                            {shippingAddress.address1}<br />
+                            {shippingAddress.city}, {shippingAddress.state} {shippingAddress.postcode}<br />
+                            <p className="mt-2">{shippingAddress.phone}</p><br />
+                          </>
+                        ) : (
+                          <>
+                            <p className="font-bold mb-2">{formData.firstName} {formData.lastName}</p>
+                            {formData.locality}<br />
+                            {formData.address}<br />
+                            {formData.city}, {formData.state} {formData.zipCode}<br />
+                            <p className="mt-2">{formData.phone}</p><br />
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -975,19 +965,44 @@ export default function CheckoutPage() {
                       <div className="mt-2 text-sm text-muted-foreground">
                         {sameAsShipping ? (
                           <>
-                            <p className="font-bold mb-2">{shippingAddress.f_name} {shippingAddress.l_name}</p>
-                            {shippingAddress.address2}<br />
-                            {shippingAddress.address1}<br />
-                            {shippingAddress.city}, {shippingAddress.state} {shippingAddress.postcode}<br />
-                            <p className="mt-2">{shippingAddress.phone}</p><br />
+                            {addresses.length > 0 ? (
+                              <>
+                                <p className="font-bold mb-2">{shippingAddress.f_name} {shippingAddress.l_name}</p>
+                                {shippingAddress.address2}<br />
+                                {shippingAddress.address1}<br />
+                                {shippingAddress.city}, {shippingAddress.state} {shippingAddress.postcode}<br />
+                                <p className="mt-2">{shippingAddress.phone}</p><br />
+                              </>
+                            ) : (
+                              <>
+                                <p className="font-bold mb-2">{formData.firstName} {formData.lastName}</p>
+                                {formData.locality}<br />
+                                {formData.address}<br />
+                                {formData.city}, {formData.state} {formData.zipCode}<br />
+                                <p className="mt-2">{formData.phone}</p><br />
+                              </>
+                            )}
                           </>
                         ) : (
                           <>
-                            <p className="font-bold mb-2">{billingAddress.f_name} {billingAddress.l_name}</p>
-                            {billingAddress.address2}<br />
-                            {billingAddress.address1}<br />
-                            {billingAddress.city}, {billingAddress.state} {billingAddress.postcode}<br />
-                            <p className="mt-2">{billingAddress.phone}</p><br />
+                            {addresses.length > 0 ? (
+                              <>
+                                <p className="font-bold mb-2">{billingAddress.f_name} {billingAddress.l_name}</p>
+                                {billingAddress.address2}<br />
+                                {billingAddress.address1}<br />
+                                {billingAddress.city}, {billingAddress.state} {billingAddress.postcode}<br />
+                                <p className="mt-2">{billingAddress.phone}</p><br />
+
+                              </>
+                            ) : (
+                              <>
+                                <p className="font-bold mb-2">{formData.firstName} {formData.lastName}</p>
+                                {formData.locality}<br />
+                                {formData.address}<br />
+                                {formData.city}, {formData.state} {formData.zipCode}<br />
+                                <p className="mt-2">{formData.phone}</p><br />
+                              </>
+                            )}
                           </>
                         )}
                       </div>
