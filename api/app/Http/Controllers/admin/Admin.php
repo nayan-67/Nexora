@@ -4,8 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Discount;
-use App\Models\Order;
+use App\Models\Coupon;
+use App\Models\Orders;
 use App\Models\Products;
 use App\Models\Subcategory;
 use App\Models\User;
@@ -23,8 +23,8 @@ class Admin extends Controller
         $catdata = count(Category::get());
         $subcatdata = count(Subcategory::get());
         $productdata = count(Products::get());
-        $discountdata = count(Discount::get());
-        $orderdata = count(Order::get());
+        $discountdata = count(Coupon::get());
+        $orderdata = count(Orders::get());
         $userdata = count(User::get());
         return view('index', compact('catdata', 'subcatdata', 'productdata', 'discountdata', 'orderdata', 'userdata'));
     }

@@ -12,8 +12,8 @@ class Category extends Model
         'slug',
         'description',
         'order_number',
-        'total_products',
         'image',
+        'total_products',
         'status',
     ];
 }

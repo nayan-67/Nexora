@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category as ModelsCategory;
-use App\Models\Subcategory;
+use App\Models\SubCategory;
 use App\Traits\ResizeImage;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,6 +25,7 @@ class Category extends Controller
     {
         return view('category.add');
     }
+    
     public function store(Request $request)
     {
         try {
@@ -139,7 +140,7 @@ class Category extends Controller
 
         if (count($data) > 0) {
             foreach ($data as $row) {
-                $sub_cat = Subcategory::where('category_id', $row->id)->get();
+                $sub_cat = SubCategory::where('category_id', $row->id)->get();
                 $date = substr($row->created_at, 0, 10);
                 echo " 
                     <tr align='center'>
@@ -152,14 +153,14 @@ class Category extends Controller
                         <td>" . date('M j, Y', strtotime($date)) . "</td>
                         <td>
                             <div class='btn-group btn-group-sm'>
-                                <a href='". route('category.edit', encrypt($row->id)) ."'
+                                <a href='" . route('category.edit', encrypt($row->id)) . "'
                                     class='btn btn-outline-info' data-bs-toggle='tooltip'
                                     data-bs-title='Edit'>
                                     <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
                                 </a>
                                 <button type='button' class='btn btn-outline-danger'
                                     data-bs-toggle='tooltip' data-bs-title='Delete'
-                                    onclick=\"openModal('". $row->id ."');\">
+                                    onclick=\"openModal('" . $row->id . "');\">
                                     <i class='bi bi-trash d-flex' aria-hidden='true'></i>
                                 </button>
                             </div>

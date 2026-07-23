@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\Category;
-use App\Http\Controllers\admin\Discount;
+use App\Http\Controllers\admin\Coupon;
 use App\Http\Controllers\admin\Admin;
 use App\Http\Controllers\admin\Customer;
 use App\Http\Controllers\admin\Order;
@@ -61,16 +61,16 @@ Route::controller(Product::class)->group(function () {
 });
 
 
-// ==================== Discount ====================
+// ==================== Coupon ====================
 
-Route::controller(Discount::class)->group(function () {
-    Route::get('/discount', 'index')->name('admin.discount');
-    Route::get('/discount/add', 'add')->name('discount.add');
-    Route::get('/discount/edit/{id}', 'edit')->name('discount.edit');
-    Route::post('/discount/store', 'store')->name('discount.store');
-    Route::put('/discount/update/{id}', 'update')->name('discount.update');
-    Route::delete('/discount/destroy', 'destroy')->name('discount.destroy');
-    Route::get('/discount/search/{name}', 'search')->name('discount.search');
+Route::controller(Coupon::class)->group(function () {
+    Route::get('/coupon', 'index')->name('admin.coupon');
+    Route::get('/coupon/add', 'add')->name('coupon.add');
+    Route::get('/coupon/edit/{id}', 'edit')->name('coupon.edit');
+    Route::post('/coupon/store', 'store')->name('coupon.store');
+    Route::put('/coupon/update/{id}', 'update')->name('coupon.update');
+    Route::delete('/coupon/destroy', 'destroy')->name('coupon.destroy');
+    Route::get('/coupon/search/{name}', 'search')->name('coupon.search');
 });
 
 // ==================== Order ====================
@@ -88,7 +88,7 @@ Route::controller(Order::class)->group(function () {
 
 Route::controller(Customer::class)->group(function () {
     Route::get('/customer', 'index')->name('admin.user');
-    Route::get('/customer/edit/{id}', 'edit')->name('user.edit');
+    Route::get('/customer/view/{id}', 'view')->name('user.view');
     Route::put('/customer/update/{id}', 'update')->name('user.update');
     Route::delete('/customer/destroy', 'destroy')->name('user.destroy');
     Route::get('/customer/search/{name}', 'search')->name('user.search');

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Orders extends Model
 {
     protected $table = 'orders';
     protected $fillable = [
@@ -20,10 +20,11 @@ class Order extends Model
         'eco_tax',
         'discount',
         'shipping',
+        'used_coupon',
     ];
 
     public function order()
     {
-        return $this->hasMany(Order_product::class);
+        return $this->hasMany(OrderItems::class);
     }
 }

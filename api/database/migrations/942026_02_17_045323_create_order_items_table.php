@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('sku', 100);
             $table->unsignedInteger('quantity');
             $table->decimal('price', 10, 2);
-            $table->enum('status', ['0', '1', '2', '3'])->nullable()->default('1')->comment('0: Cancelled, 1: Processing, 2: Shipped, 3: Delivered');
             $table->dateTime('delivery_date')->nullable();
             $table->dateTime('rr_date')->nullable()->comment('Return/Replacement Request Date');
+            $table->enum('status', ['0', '1', '2', '3'])->nullable()->default('1')->comment('0: Cancelled, 1: Processing, 2: Shipped, 3: Delivered');
             $table->timestamps();
         });
     }

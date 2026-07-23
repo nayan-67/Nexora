@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('payment_mode', 100);
             $table->foreignId('billing_address_id')->constrained('order_address');
             $table->foreignId('shipping_address_id')->constrained('order_address');
+            $table->decimal('sub_total', 10, 2);
             $table->decimal('total_price', 10, 2);
             $table->unsignedInteger('eco_tax')->default(0);
             $table->decimal('discount', 10, 2);

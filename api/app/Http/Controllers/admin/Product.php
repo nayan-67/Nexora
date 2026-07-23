@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Products;
-use App\Models\Subcategory;
+use App\Models\SubCategory;
 use App\Models\Variant;
 use App\Models\VariantAttribute;
 use App\Traits\ResizeImage;
@@ -93,7 +93,7 @@ class Product extends Controller
                 $gallery = null;
             }
 
-            $product->gallery_image = $gallery;
+            $product->gallery_images = $gallery;
             if ($product->save()) {
                 $cat = Category::find($request->cat_id);
                 $cat->total_products += 1;
@@ -186,8 +186,8 @@ class Product extends Controller
             } else {
                 $gallery = count($old_glr) > 0 ? $old_glr : null;
             }
-            if ($prddata->gallery_image != null) {
-                $oldImage = array_diff($prddata->gallery_image, $old_glr);
+            if ($prddata->gallery_images != null) {
+                $oldImage = array_diff($prddata->gallery_images, $old_glr);
                 if (count($oldImage) != 0) {
                     foreach ($oldImage as $old) {
                         if (file_exists(public_path('uploads/glr_lg_' . $old)) && file_exists(public_path('uploads/glr_sm_' . $old))) {
@@ -198,7 +198,7 @@ class Product extends Controller
                     }
                 }
             }
-            $prddata->gallery_image = $gallery;
+            $prddata->gallery_images = $gallery;
             if ($prddata->update()) {
                 toast('Product Updated Successfully', 'success');
                 return back();
@@ -262,7 +262,7 @@ class Product extends Controller
 
     public function searchsubcat(string $id)
     {
-        $result = Subcategory::where('category_id', $id)->orderBy('id', 'ASC')->where('status', 1)->get();
+        $result = SubCategory::where('category_id', $id)->orderBy('id', 'ASC')->where('status', 1)->get();
         echo "<option selected disabled value=''>-- SELECT SUB CATEGORY -- </option>";
         if ($result) {
             foreach ($result as $row) {
@@ -448,7 +448,7 @@ class Product extends Controller
                     'attributes' => $attributesJson,
                     // 'images' => $variantGallery ?: $variantFeaturedFilename,
                     'featured_image' => $variantFeaturedFilename,
-                    'gallery_image' => $variantGallery,
+                    'gallery_images' => $variantGallery,
                     'is_active' => true,
                     'is_default' => $variantData['is_default'] ?? false,
                 ]);
@@ -463,7 +463,7 @@ class Product extends Controller
                     $product->featured_image = $productFeatureImage;
                 }
                 if ($productGalleryImage !== null) {
-                    $product->gallery_image = $productGalleryImage;
+                    $product->gallery_images = $productGalleryImage;
                 }
                 $product->save();
             }
@@ -634,7 +634,7 @@ class Product extends Controller
                         }
 
                         if (isset($variantOldGalleryImages[$variantIndex]) && !empty($variantOldGalleryImages[$variantIndex])) {
-                            $oldImage = array_diff($variant->gallery_image, $oldGlrImg);
+                            $oldImage = array_diff($variant->gallery_images, $oldGlrImg);
                             if (count($oldImage) != 0) {
                                 foreach ($oldImage as $old) {
                                     $this->deleteVariantImages($old, 'gallery');
@@ -642,7 +642,7 @@ class Product extends Controller
                             }
                         }
                         // Update gallery images
-                        $variant->gallery_image = $variantGallery;
+                        $variant->gallery_images = $variantGallery;
 
                         $variant->save();
                         $prices[] = $isSale ? $salePrice : $variantData['price'];
@@ -651,8 +651,8 @@ class Product extends Controller
                         if ($productFeatureImage === null && $variant->featured_image) {
                             $productFeatureImage = $variant->featured_image;
                         }
-                        if ($productGalleryImage === null && $variant->gallery_image != null) {
-                            $productGalleryImage = $variant->gallery_image;
+                        if ($productGalleryImage === null && $variant->gallery_images != null) {
+                            $productGalleryImage = $variant->gallery_images;
                         }
                     }
                 } else {
@@ -669,7 +669,7 @@ class Product extends Controller
                         'stock' => $variantData['stock'],
                         'attributes' => $attributesJson,
                         'featured_image' => $variantFeaturedFilename,
-                        'gallery_image' => $variantGallery,
+                        'gallery_images' => $variantGallery,
                         // 'images' => $variantGallery ?: $variantFeaturedFilename,
                         'is_active' => $variantData['is_active'],
                         'is_default' => false,
@@ -694,7 +694,7 @@ class Product extends Controller
                     $product->featured_image = $productFeatureImage;
                 }
                 if ($productGalleryImage !== null) {
-                    $product->gallery_image = $productGalleryImage;
+                    $product->gallery_images = $productGalleryImage;
                 }
                 $product->save();
             }

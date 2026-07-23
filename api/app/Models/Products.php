@@ -8,10 +8,10 @@ class Products extends Model
 {
     protected $table = 'products';
     protected $fillable = [
-        'type',
         'name',
-        'sku',
         'slug',
+        'type',
+        'sku',
         'category_id',
         'sub_category_id',
         'description',

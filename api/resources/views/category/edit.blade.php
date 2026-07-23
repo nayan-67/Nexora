@@ -12,7 +12,7 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Category</h3>
+                        <h3 class="mb-0 page-head fs-4">Edit Category</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
@@ -40,14 +40,14 @@
             <!-- =========== Edit Category Section ============== -->
             <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
-                    <h5 class="text-secondary my-2">Edit Category</h5>
-                    <hr class="my-1">
+                    {{-- <h5 class="text-secondary my-2">Edit Category</h5>
+                    <hr class="my-1"> --}}
                     <form action="{{ route('category.update', $catitem->id) }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row h-100 py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">

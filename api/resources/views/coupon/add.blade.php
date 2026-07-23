@@ -21,7 +21,7 @@
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.discount') }}">Coupon</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.coupon') }}">Coupon</a></li>
                             <li class="breadcrumb-item active page-head" aria-current="page">Add Coupon</li>
                         </ol>
                     </div>
@@ -40,10 +40,10 @@
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     {{-- <h5 class="text-secondary my-2">Add Coupon</h5>
                     <hr class="my-1"> --}}
-                    <form action="{{ route('discount.store') }}" method="post">
+                    <form action="{{ route('coupon.store') }}" method="post">
                         @csrf
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
@@ -139,49 +139,5 @@
         let validFrom = document.querySelector(".valid-from");
         const date = new Date();
         validFrom.value = date.toISOString().slice(0, 10);
-
-        // let addBtn = document.querySelector(".add-btn");
-        // let pageSection = document.querySelector(".page-section");
-        // let addSection = document.querySelector(".add-section");
-
-        // addBtn.addEventListener("click", () => {
-        //     pageSection.style.display = "none";
-        //     addSection.style.display = "block";
-        // });
-
-        // const searchInput = document.getElementById('search');
-        // const resultsDiv = document.querySelector('.results');
-
-        // searchInput.addEventListener('input', () => {
-        //     const query = searchInput.value != "" ? searchInput.value : '0';
-        //     fetch(`discount/search/${query}`)
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             resultsDiv.innerHTML = data;
-        //         })
-        //         .catch(error => console.error('Error:', error));
-        // });
-
-        // const sBtn = document.querySelectorAll(".s-btn");
-
-        // sBtn.forEach(btn => {
-        //     btn.style.background = "#198754";
-        //     btn.style.color = "#fff";
-        //     btn.addEventListener("click", () => {
-        //         searchInput.value = "";
-        //         sBtn.forEach(button => {
-        //             button.style.background = "#198754";
-        //         });
-        //         const btnVal = btn.value != "" ? btn.value : '0';
-        //         fetch(`discount/search/${btnVal}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
-
-        //         btn.style.background = "#196d54";
-        //     });
-        // });
     </script>
 @endsection

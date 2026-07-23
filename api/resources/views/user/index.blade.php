@@ -137,9 +137,9 @@
                                                 <th>User</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
-                                                <th>Status</th>
-                                                <th>No. of order</th>
+                                                <th>Total Orders</th>
                                                 <th>Created</th>
+                                                <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -166,29 +166,29 @@
                                                         </td>
                                                         <td>{{ $row->email }}</td>
                                                         <td>{{ $row->phone }}</td>
+                                                        <td>{{ count($ordresult) }}</td>
+                                                        <td>{{ date('M j, Y', strtotime($date)) }}</td>
                                                         <td>
                                                             <span
                                                                 class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
                                                         </td>
-                                                        <td>{{ count($ordresult) }}</td>
-                                                        <td>{{ date('M j, Y', strtotime($date)) }}</td>
                                                         <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                <a href="{{ route('user.edit', encrypt($row->id)) }}"
-                                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                                    data-bs-title="Edit">
-                                                                    <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
+                                                                <a href="{{ route('user.view', encrypt($row->id)) }}"
+                                                                    class="btn btn-outline-info d-flex" data-bs-toggle="tooltip"
+                                                                    data-bs-title="View">
+                                                                    <i class="bi bi-eye d-flex py-1" aria-hidden="true"> </i>
                                                                 </a>
                                                                 <a href="{{ route('user.order', encrypt($row->id)) }}"
-                                                                    class="btn btn-outline-primary"
+                                                                    class="btn btn-outline-primary d-flex align-items-center"
                                                                     data-bs-toggle="tooltip" data-bs-title="Orders">
-                                                                    <i class="bi bi-cart3" aria-hidden="true"> </i>
+                                                                    <i class="bi bi-cart3 d-flex" aria-hidden="true"> </i>
                                                                 </a>
-                                                                <button type="button" class="btn btn-outline-danger"
+                                                                {{-- <button type="button" class="btn btn-outline-danger"
                                                                     data-bs-toggle="tooltip" data-bs-title="Delete"
                                                                     onclick="openModal('{{ $row->id }}');">
                                                                     <i class="bi bi-trash d-flex" aria-hidden="true"> </i>
-                                                                </button>
+                                                                </button> --}}
                                                             </div>
                                                         </td>
                                                     </tr>

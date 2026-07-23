@@ -121,13 +121,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item sub-nav-item">
-                            <a href="{{ route('discount.add') }}" class="nav-link @yield('disaddactive')">
+                            <a href="{{ route('coupon.add') }}" class="nav-link @yield('disaddactive')">
                                 <i class="nav-icon bi bi-plus-square"></i>
                                 <p>Add Coupon</p>
                             </a>
                         </li>
                         <li class="nav-item sub-nav-item">
-                            <a href="{{ route('admin.discount') }}" class="nav-link @yield('dislactive')">
+                            <a href="{{ route('admin.coupon') }}" class="nav-link @yield('dislactive')">
                                 <i class="nav-icon bi-list-task"></i>
                                 <p>Coupon List</p>
                             </a>

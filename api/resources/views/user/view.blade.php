@@ -12,7 +12,7 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Customer</h3>
+                        <h3 class="mb-0 page-head fs-4">Customer Details</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
@@ -20,7 +20,7 @@
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.user') }}">Customer</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page">Edit Customer</li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">View Customer</li>
                         </ol>
                     </div>
                 </div>
@@ -42,12 +42,12 @@
             @enderror
             <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
-                    <h6 class="text-secondary my-2">Edit Customer</h6>
-                    <hr class="my-1">
+                    {{-- <h6 class="text-secondary my-2">Edit Customer</h6>
+                    <hr class="my-1"> --}}
                     <form action="{{ route('user.update', $item->id) }}" method="post">
                         @csrf
                         @method('PUT')
-                        <div class="row h-100">
+                        <div class="row h-100 py-3">
                             <div class="col-xl-12 px-4">
                                 <div class="card-body">
                                     <h4 class="text-secondary-emphasis my-2">Personal Details</h4>
@@ -56,31 +56,31 @@
                                         <div class="col-md-6">
                                             <h6 class="mb-2 fs-7 fw-bold">First Name</h6>
                                             <input type="text" class="form-control fs-7" name="f-name" placeholder=""
-                                                value="{{ $item->first_name }}" />
+                                                value="{{ $item->first_name }}" readonly/>
                                         </div>
                                         <div class="col-md-6">
                                             <h6 class="mb-2 fs-7 fw-bold">Last Name</h6>
                                             <input type="text" class="form-control fs-7" name="l-name" placeholder=""
-                                                value="{{ $item->last_name }}" />
+                                                value="{{ $item->last_name }}" readonly/>
                                         </div>
                                     </div>
                                     <div class="row pt-1 pb-1">
                                         <div class="col-md-6">
                                             <h6 class="mb-2 fs-7 fw-bold">E-mail</h6>
-                                            <input type="text" class="form-control fs-7" name="e-mail" placeholder=""
-                                                value="{{ $item->email }}" />
+                                            <input type="email" class="form-control fs-7" name="e-mail" placeholder=""
+                                                value="{{ $item->email }}" readonly/>
                                         </div>
                                         <div class="col-md-6">
                                             <h6 class="mb-2 fs-7 fw-bold">Phone</h6>
                                             <input type="text" class="form-control fs-7" name="phone" placeholder=""
-                                                value="{{ $item->phone }}" />
+                                                value="{{ $item->phone }}" readonly/>
                                         </div>
                                     </div>
                                     <div class="row pt-1 pb-1">
                                         <div class="col-md-6">
                                             <h6 class="mb-2 fs-7 fw-bold">Fax</h6>
                                             <input type="text" class="form-control fs-7" name="fax" placeholder=""
-                                                value="{{ $item->fax }}" />
+                                                value="{{ $item->fax }}" readonly/>
                                         </div>
                                         <div class="col-md-6">
                                             <h6 class="mb-2 fs-7 fw-bold">Status</h6>

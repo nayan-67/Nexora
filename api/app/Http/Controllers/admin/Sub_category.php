@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Subcategory;
+use App\Models\SubCategory;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class Sub_category extends Controller
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = Subcategory::orderBy('id', 'DESC')->get();
+        $data = SubCategory::orderBy('id', 'DESC')->get();
         return view('sub_category.index', compact('data'));
     }
 
@@ -40,7 +40,7 @@ class Sub_category extends Controller
                 'status' => $request->status,
             ];
 
-            if (Subcategory::create($crediantial)) {
+            if (SubCategory::create($crediantial)) {
                 toast('Sub Category Added Successfully', 'success');
                 return redirect()->route('admin.subcategory');
             }
@@ -56,7 +56,7 @@ class Sub_category extends Controller
             return redirect()->route('admin.login');
         }
         $id = decrypt($id);
-        $data = Subcategory::find($id);
+        $data = SubCategory::find($id);
         return view('sub_category.edit', compact('data'));
     }
 
@@ -76,7 +76,7 @@ class Sub_category extends Controller
                 'status' => $request->status,
             ];
 
-            if (Subcategory::where('id', $id)->update($crediantial)) {
+            if (SubCategory::where('id', $id)->update($crediantial)) {
                 toast('Sub Category Updated Successfully', 'success');
                 return redirect()->route('admin.subcategory');
             }
@@ -89,7 +89,7 @@ class Sub_category extends Controller
     public function destroy(Request $request)
     {
         $id = $request->post('id');
-        if (Subcategory::destroy($id)) {
+        if (SubCategory::destroy($id)) {
             toast('Sub Category Deleted Successfully', 'success');
             return redirect()->route('admin.subcategory');
         }
@@ -97,7 +97,7 @@ class Sub_category extends Controller
 
     public function search(string $value)
     {
-        $data = $value ? Subcategory::where('name', 'LIKE', '%' . $value . '%')->orderBy('id', 'DESC')->get() : Subcategory::orderBy('id', 'DESC')->get();
+        $data = $value ? SubCategory::where('name', 'LIKE', '%' . $value . '%')->orderBy('id', 'DESC')->get() : SubCategory::orderBy('id', 'DESC')->get();
 
         if (count($data) > 0) {
             foreach ($data as $row) {

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->decimal('sale_price', 10, 2)->nullable();
             $table->text('featured_image')->nullable();
-            $table->json('gallery_image')->nullable()->default(null);
+            $table->json('gallery_images')->nullable()->default(null);
             $table->unsignedInteger('stock')->nullable();
             $table->boolean('is_feature')->default(false)->comment('0 => no, 1 => yes');
             $table->boolean('is_delete')->default(false)->comment('0 => no, 1 => yes');

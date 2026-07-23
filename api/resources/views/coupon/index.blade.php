@@ -14,14 +14,14 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Discount</h3>
+                        <h3 class="mb-0 page-head fs-4">Coupon</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page">Discount</li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">Coupon</li>
                         </ol>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                             <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm del-close"
                                 name="">CANCEL</button>
                         </div>
-                        <form action="{{ route('discount.destroy') }}" method="POST" class=" col-sm-6 m-content">
+                        <form action="{{ route('coupon.destroy') }}" method="POST" class=" col-sm-6 m-content">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" id="modal-id" value="" name="id">
@@ -97,7 +97,7 @@
                                                     placeholder="Search coupon" aria-label="Search coupon"
                                                     style="width: 180px" />
                                             </div>
-                                            <a href="{{ route('discount.add') }}" class="btn btn-sm btn-primary">
+                                            <a href="{{ route('coupon.add') }}" class="btn btn-sm btn-primary">
                                                 <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
                                                 New Coupon
                                             </a>
@@ -143,7 +143,7 @@
                                                         <td>{{ date('M j, Y', strtotime($date)) }}</td>
                                                         <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                <a href="{{ route('discount.edit', encrypt($row->id)) }}"
+                                                                <a href="{{ route('coupon.edit', encrypt($row->id)) }}"
                                                                     class="btn btn-outline-info" data-bs-toggle="tooltip"
                                                                     data-bs-title="Edit">
                                                                     <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
@@ -219,7 +219,7 @@
 
         searchInput.addEventListener('input', () => {
             const query = searchInput.value != "" ? searchInput.value : '0';
-            fetch(`discount/search/${query}`)
+            fetch(`coupon/search/${query}`)
                 .then(response => response.text())
                 .then(data => {
                     resultsDiv.innerHTML = data;

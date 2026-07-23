@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Discount as ModelsDiscount;
+use App\Models\Coupon as ModelsCoupon;
 use Exception;
 use Illuminate\Http\Request;
 
-class Discount extends Controller
+class Coupon extends Controller
 {
     public function index()
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = ModelsDiscount::orderBy('id', 'ASC')->get();
+        $data = ModelsCoupon::orderBy('id', 'ASC')->get();
         return view('coupon.index', compact('data'));
     }
 
@@ -33,7 +33,7 @@ class Discount extends Controller
                 'type' => 'required',
                 'amount' => 'required',
             ]);
-            $data = ModelsDiscount::create([
+            $data = ModelsCoupon::create([
                 'name' => $request->name,
                 'valid_from' => $request->post('valid-from'),
                 'valid_till' => $request->post('valid-till'),
@@ -42,8 +42,8 @@ class Discount extends Controller
                 'status' => $request->status,
             ]);
             if ($data) {
-                toast('Discount Added Successfully', 'success');
-                return redirect()->route('admin.discount');
+                toast('Coupon Added Successfully', 'success');
+                return redirect()->route('admin.coupon');
             }
         } catch (Exception $e) {
             toast($e->getMessage(), 'error');
@@ -57,7 +57,7 @@ class Discount extends Controller
             return redirect()->route('admin.login');
         }
         $id = decrypt($id);
-        $item = ModelsDiscount::find($id);
+        $item = ModelsCoupon::find($id);
         return view('coupon.edit', compact('item'));
     }
 
@@ -72,9 +72,9 @@ class Discount extends Controller
                 'amount' => $request->amount,
                 'status' => $request->status,
             ];
-            if (ModelsDiscount::where('id', $id)->update($data)) {
-                toast('Discount Updated Successfully', 'success');
-                return redirect()->route('admin.discount');
+            if (ModelsCoupon::where('id', $id)->update($data)) {
+                toast('Coupon Updated Successfully', 'success');
+                return redirect()->route('admin.coupon');
             }
         } catch (Exception $e) {
             toast($e->getMessage(), 'error');
@@ -85,15 +85,15 @@ class Discount extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id;
-        if (ModelsDiscount::destroy($id)) {
-            toast('Discount Deleted Successfully', 'success');
-            return redirect()->route('admin.discount');
+        if (ModelsCoupon::destroy($id)) {
+            toast('Coupon Deleted Successfully', 'success');
+            return redirect()->route('admin.coupon');
         }
     }
 
     public function search(string $value)
     {
-        $data = $value ? ModelsDiscount::where('name', 'LIKE', $value . '%')->orderBy('id', 'ASC')->get() : ModelsDiscount::orderBy('id', 'ASC')->get();
+        $data = $value ? ModelsCoupon::where('name', 'LIKE', $value . '%')->orderBy('id', 'ASC')->get() : ModelsCoupon::orderBy('id', 'ASC')->get();
 
         if (count($data) > 0) {
             foreach ($data as $row) {
@@ -110,7 +110,7 @@ class Discount extends Controller
                         <td>" . date('M j, Y', strtotime($date)) . "</td>
                         <td>
                             <div class='btn-group btn-group-sm'>
-                                <a href='" . route('discount.edit', encrypt($row->id)) . "'
+                                <a href='" . route('coupon.edit', encrypt($row->id)) . "'
                                     class='btn btn-outline-info' data-bs-toggle='tooltip'
                                     data-bs-title='Edit'>
                                     <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Address;
-use App\Models\Order as ModelsOrder;
-use App\Models\Order_address;
+use App\Models\Orders;
+use App\Models\OrderAddress;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -16,14 +15,14 @@ class Order extends Controller
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = ModelsOrder::orderBy('id', 'DESC')->get();
+        $data = Orders::orderBy('id', 'DESC')->get();
         return view('order.index', compact('data'));
     }
 
     public function store(Request $request)
     {
         try {
-            $data = ModelsOrder::create([
+            $data = Orders::create([
                 'name' => $request->post('name'),
                 'valid_from' => $request->post('valid-from'),
                 'valid_till' => $request->post('valid-till'),
@@ -47,7 +46,7 @@ class Order extends Controller
             return redirect()->route('admin.login');
         }
         $id = decrypt($id);
-        $data = ModelsOrder::find($id);
+        $data = Orders::find($id);
         return view('order.edit', compact('data'));
     }
 
@@ -58,7 +57,7 @@ class Order extends Controller
                 'order_status' => $request->order_status,
                 'payment_status' => $request->payment_status
             ];
-            if (ModelsOrder::where('id', $id)->update($data)) {
+            if (Orders::where('id', $id)->update($data)) {
                 toast('order Updated Successfully', 'success');
                 return redirect()->route('admin.order');
             }
@@ -71,7 +70,7 @@ class Order extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id;
-        if (ModelsOrder::destroy($id)) {
+        if (Orders::destroy($id)) {
             toast('order Deleted Successfully', 'success');
             return redirect()->route('admin.order');
         }
@@ -79,16 +78,15 @@ class Order extends Controller
 
     public function search(string $value)
     {
-        $data = $value ? ModelsOrder::where('id', 'LIKE', $value . '%')->orderBy('id', 'DESC')->get() : ModelsOrder::orderBy('id', 'DESC')->get();
+        $data = $value ? Orders::where('id', 'LIKE', $value . '%')->orderBy('id', 'DESC')->get() : Orders::orderBy('id', 'DESC')->get();
 
         if (count($data) > 0) {
             foreach ($data as $row) {
                 $bill_id = $row->billing_address_id;
                 $ship_id = $row->shipping_address_id;
-                $billingresult = Order_address::find($bill_id);
-                $shippingresult = Order_address::find($ship_id);
-                $create = $row->created_at;
-                $date = substr($create, 0, 10);
+                $billingresult = OrderAddress::find($bill_id);
+                $shippingresult = OrderAddress::find($ship_id);
+                $date = substr($row->created_at, 0, 10);
                 $name = $billingresult->f_name . ' ' . $billingresult->l_name;
                 $address = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
 

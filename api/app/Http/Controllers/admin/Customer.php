@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
-use App\Models\Order;
+use App\Models\Orders;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class Customer extends Controller
         return view('user.index', compact('data'));
     }
 
-    public function edit(string $id)
+    public function view(string $id)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
@@ -28,7 +28,7 @@ class Customer extends Controller
         $id = decrypt($id);
         $item = User::find($id);
         $billingresult = Address::where('user_id', $id)->orderBy('id', 'ASC')->get();
-        return view('user.edit', compact('item', 'billingresult'));
+        return view('user.view', compact('item', 'billingresult'));
     }
 
     public function update(Request $request, string $id)
@@ -103,7 +103,7 @@ class Customer extends Controller
         if (count($data) > 0) {
             foreach ($data as $row) {
                 $name = $row->first_name . ' ' . $row->last_name;
-                $ordresult = Order::where('user_id', $row->id)->get();
+                $ordresult = Orders::where('user_id', $row->id)->get();
                 $profile = $row->profile_image
                     ? 'uploads/' . $row->profile_image
                     : 'avatar.jpg';
@@ -154,7 +154,7 @@ class Customer extends Controller
     public function userOrder(string $id)
     {
         $uid = decrypt($id);
-        $data = Order::where('user_id', $uid)->get();
+        $data = Orders::where('user_id', $uid)->get();
         return view('user.order', compact('data'));
     }
 }

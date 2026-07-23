@@ -13,15 +13,15 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Discount</h3>
+                        <h3 class="mb-0 page-head fs-4">Edit Coupon</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.discount') }}">Discount</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page">Edit Discount</li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.coupon') }}">Coupon</a></li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">Edit Coupon</li>
                         </ol>
                     </div>
 
@@ -39,13 +39,13 @@
 
             <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
-                    <h5 class="text-secondary my-2">Edit Discount</h5>
-                    <hr class="my-1">
-                    <form action="{{route('discount.update',$item->id)}}" method="post">
+                    {{-- <h5 class="text-secondary my-2">Edit Discount</h5>
+                    <hr class="my-1"> --}}
+                    <form action="{{route('coupon.update',$item->id)}}" method="post">
                         @csrf
                         @method('PUT')
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
@@ -53,7 +53,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7" name="name"
-                                                placeholder="Enter Name.." value="{{$item->name}}" required />
+                                                placeholder="Enter Name ..." value="{{$item->name}}" required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Type<span class="text-danger">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Type<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Amount<span class="text-danger">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Amount<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" class="form-control fs-7" name="amount"

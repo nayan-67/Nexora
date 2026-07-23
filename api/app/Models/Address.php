@@ -19,5 +19,6 @@ class Address extends Model
         'country',
         'state',
         'is_default',
+        'is_delete',
     ];
 }

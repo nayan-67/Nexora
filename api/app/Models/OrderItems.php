@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Order_product extends Model
+class OrderItems extends Model
 {
-    protected $table = 'order_product';
+    protected $table = 'order_items';
     protected $fillable = [
         'user_id',
         'order_id',
@@ -15,10 +15,13 @@ class Order_product extends Model
         'sku',
         'quantity',
         'price',
+        'delivery_date',
+        'rr_date',
+        'status',
     ];
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Orders::class);
     }
 }
