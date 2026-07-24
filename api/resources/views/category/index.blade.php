@@ -64,7 +64,6 @@
                 </div>
             </div>
 
-
             <!-- ====== Category Section ======= -->
 
             <div class="container-fluid">
@@ -76,7 +75,7 @@
                             <!--begin::Card Header-->
                             <div class="card-header">
                                 <div class="row g-2 align-items-center">
-                                    <div class="col-12 col-md-6 d-flex gap-4">
+                                    <div class="col-12 col-md-4 d-flex gap-4">
                                         <div class="d-flex align-items-center gap-3">
                                             <label>Show Data</label>
                                             <select id="show-data" class="form-select form-select-sm w-auto">
@@ -87,13 +86,13 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6">
+                                    <div class="col-12 col-md-8">
                                         <div class="d-flex flex-wrap justify-content-md-end gap-2">
                                             <div class="input-group input-group-sm w-auto">
                                                 <span class="input-group-text">
                                                     <i class="bi bi-search" aria-hidden="true"></i>
                                                 </span>
-                                                <input type="search" id="user-search" class="form-control"
+                                                <input type="search" id="search" class="form-control"
                                                     placeholder="Search category" aria-label="Search category"
                                                     style="width: 180px" />
                                             </div>
@@ -116,8 +115,8 @@
                                                 <th>Slug</th>
                                                 <th>Total Product</th>
                                                 <th>No. of Sub-Category</th>
-                                                <th>Status</th>
                                                 <th>Created</th>
+                                                <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -135,16 +134,26 @@
                                                         <td>{{ $row->slug }}</td>
                                                         <td>{{ $row->total_products }}</td>
                                                         <td>{{ count($sub_cat) }}</td>
-                                                        <td>
-                                                            <span
-                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-danger' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
-                                                        </td>
                                                         <td>{{ date('M j, Y', strtotime($date)) }}</td>
+                                                        <td>
+                                                            {{-- <span
+                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-danger' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span> --}}
+                                                            <div class="form-check form-switch mb-0"
+                                                                style="width: fit-content;margin-left:9px;"
+                                                                title="{{ $row->status == '1' ? 'Active' : 'Inactive' }}">
+                                                                <input class="form-check-input cat-st" type="checkbox"
+                                                                    role="switch" id="{{ $row->id }}"
+                                                                    {{ $row->status == '1' ? 'checked' : '' }} />
+                                                                <label class="visually-hidden" for="{{ $row->id }}">
+                                                                    Toggle Category status
+                                                                </label>
+                                                            </div>
+                                                        </td>
                                                         <td>
                                                             <div class="btn-group btn-group-sm">
                                                                 <a href="{{ route('category.edit', encrypt($row->id)) }}"
-                                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                                    data-bs-title="Edit">
+                                                                    style="margin-right: 1px;" class="btn btn-outline-info"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Edit">
                                                                     <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
                                                                 </a>
                                                                 <button type="button" class="btn btn-outline-danger"
@@ -170,7 +179,14 @@
                             <!--begin::Card Footer-->
                             <div class="card-footer clearfix">
                                 <div class="float-start pt-1 fs-7 text-body-secondary">
-                                    Showing 1 to 9 of 42 categories
+                                    @php
+                                        if ($catdata->total() == 1) {
+                                            $showResults = 'Showing 1 of ' . $catdata->total() . ' categories';
+                                        } else {
+                                            $showResults = 'Showing 1 to 9 of 42 categories';
+                                        }
+                                    @endphp
+                                    {{ $showResults }}
                                 </div>
                                 <ul class="pagination pagination-sm m-0 float-end">
                                     <li class="page-item disabled">
@@ -214,7 +230,22 @@
     <script>
         let appUrl = <?= json_encode(url('/')) ?>;
 
-        const searchInput = document.getElementById('user-search');
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('cat-st')) {
+                fetch(`${appUrl}/category/status/${e.target.id}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data == 'success') {
+                            swalToast('success', 'Status Updated Successfully');
+                        } else {
+                            swalToast('error', 'Status Update Failed');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
+        const searchInput = document.getElementById('search');
         const resultsDiv = document.querySelector('.results');
 
         searchInput.addEventListener('input', () => {

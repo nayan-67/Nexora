@@ -232,11 +232,12 @@ export default function CheckoutPage() {
         api.post("/order/create", updatedFormData)
           .then((res) => {
             resolve
-            if (res.data) {
+            if (res.status == 201) {
               sessionStorage.removeItem("coupon")
               setCartData([])
               navigate(`/checkout/success/${res.data}`)
-              console.log("Order created successfully:", res.data)
+            } else {
+              toast.error("Something went wrong!.");
             }
           })
           .catch((err) => {
@@ -654,19 +655,19 @@ export default function CheckoutPage() {
                           <button onClick={() => { setShowBillAddrMenu(!showBillAddrMenu) }} className="text-primary text-sm hover:underline cursor-pointer outline-none-important mt-3">Change Address</button>
                         )}
                         <div className="flex items-center gap-2 mt-1">
-                          {sameAsShipping ? (
-                            <input type="checkbox" className="text-md" name="sameasshipping" id="sameasshipping" checked onClick={() => {
-                              setSameAsShipping(!sameAsShipping)
-                              setFormData(prev => ({ ...prev, sameAsShipping: !sameAsShipping }))
-                            }}
-                            />
+                          <input type="checkbox" className="text-md" name="sameasshipping" id="sameasshipping" checked={sameAsShipping} onChange={() => {
+                            setSameAsShipping(!sameAsShipping)
+                            setFormData(prev => ({ ...prev, sameAsShipping: !sameAsShipping }))
+                          }}
+                          />
+                          {/* {sameAsShipping ? (
                           ) : (
                             <input type="checkbox" className="text-md" name="sameasshipping" id="sameasshipping" onClick={() => {
                               setSameAsShipping(!sameAsShipping)
                               setFormData(prev => ({ ...prev, sameAsShipping: !sameAsShipping }))
                             }}
                             />
-                          )}
+                          )} */}
                           <label htmlFor="sameasshipping" className="text-md font-medium text-foreground">Same as Shipping</label>
                         </div>
                       </div>

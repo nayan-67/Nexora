@@ -17,7 +17,7 @@ class Category extends Controller
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $catdata = ModelsCategory::orderBy('id', 'DESC')->get();
+        $catdata = ModelsCategory::orderBy('id', 'DESC')->paginate(10);
         return view('category.index', compact('catdata'));
     }
 
@@ -25,7 +25,7 @@ class Category extends Controller
     {
         return view('category.add');
     }
-    
+
     public function store(Request $request)
     {
         try {
@@ -82,7 +82,7 @@ class Category extends Controller
         try {
             $request->validate([
                 'cat-name' => 'required',
-                'slug' => 'required|unique:category,slug',
+                'slug' => 'required|unique:category,slug,' . $id,
                 'cat-desc' => 'required',
                 'cat-img' => 'nullable|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800',
             ]);
@@ -90,7 +90,7 @@ class Category extends Controller
             $catdata->slug = $request->slug;
             $catdata->description = $request->post('cat-desc');
             $catdata->order_number = $request->order;
-            $catdata->status = $request->status;
+            // $catdata->status = $request->status;
             if ($request->hasFile('cat-img')) {
                 $imageFile = $request->file('cat-img');
                 $filename = time() . '.' . $imageFile->getClientOriginalExtension();
@@ -115,6 +115,17 @@ class Category extends Controller
                 unlink(public_path('uploads/cat_sm_' . $filename));
             }
             return back();
+        }
+    }
+
+    public function updateStatus(string $id)
+    {
+        $catdata = ModelsCategory::find($id);
+        $catdata->status = $catdata->status == '1' ? '0' : '1';
+        if ($catdata->update()) {
+            return 'success';
+        } else {
+            return 'error';
         }
     }
 
@@ -148,13 +159,23 @@ class Category extends Controller
                         <td>" . $row->slug . "</td>
                         <td>" . $row->total_products . "</td>
                         <td>" . count($sub_cat) . "</td>
-                        <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-danger') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
-                        </td>
                         <td>" . date('M j, Y', strtotime($date)) . "</td>
+                        <td>
+                            <div class='form-check form-switch mb-0'
+                                style='width: fit-content;margin-left:9px;'
+                                title='" . ($row->status == '1' ? 'Active' : 'Inactive') . "'>
+                                <input class='form-check-input cat-st' type='checkbox'
+                                    role='switch' id='" . $row->id . "'
+                                    " . ($row->status == '1' ? 'checked' : '') . " />
+                                <label class='visually-hidden' for='" . $row->id . "'>
+                                    Toggle Category status
+                                </label>
+                            </div>
+                        </td>
                         <td>
                             <div class='btn-group btn-group-sm'>
                                 <a href='" . route('category.edit', encrypt($row->id)) . "'
-                                    class='btn btn-outline-info' data-bs-toggle='tooltip'
+                                    class='btn btn-outline-info' style='margin-right: 1px;' data-bs-toggle='tooltip'
                                     data-bs-title='Edit'>
                                     <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
                                 </a>

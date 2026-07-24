@@ -73,7 +73,7 @@ class Sub_category extends Controller
                 'slug' => $request->slug,
                 'order_number' => $request->order_number,
                 'category_id' => $request->cat_id,
-                'status' => $request->status,
+                // 'status' => $request->status,
             ];
 
             if (SubCategory::where('id', $id)->update($crediantial)) {
@@ -83,6 +83,17 @@ class Sub_category extends Controller
         } catch (Exception $e) {
             toast($e->getMessage(), 'error');
             return back();
+        }
+    }
+
+    public function updateStatus(string $id)
+    {
+        $subcatdata = SubCategory::find($id);
+        $subcatdata->status = $subcatdata->status == '1' ? '0' : '1';
+        if ($subcatdata->update()) {
+            return 'success';
+        }else{
+            return 'error';
         }
     }
 
@@ -107,12 +118,20 @@ class Sub_category extends Controller
                         <td>" . $row->name . "</td>
                         <td>" . $row->slug . "</td>
                         <td>" . $cat->name . "</td>
-                        <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-danger') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span></td>
                         <td>" . date('M j, Y', strtotime($date)) . "</td>
+                        <td>
+                            <div class='form-check form-switch mb-0'
+                                style='width: fit-content;margin-left:9px;'
+                                title='". ($row->status == '1' ? 'Active' : 'Inactive') ."'>
+                                <input class='form-check-input subcat-st' type='checkbox'
+                                    role='switch' id='". $row->id ."'
+                                    ". ($row->status == '1' ? 'checked' : '') ." />
+                            </div>
+                        </td>
                         <td>
                             <div class='btn-group btn-group-sm'>
                                 <a href='" . route('subcategory.edit', encrypt($row->id)) . "'
-                                    class='btn btn-outline-info' data-bs-toggle='tooltip'
+                                    class='btn btn-outline-info' style='margin-right: 1px;' data-bs-toggle='tooltip'
                                     data-bs-title='Edit'>
                                     <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
                                 </a>

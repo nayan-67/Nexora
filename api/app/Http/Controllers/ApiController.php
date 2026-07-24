@@ -21,6 +21,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller
 {
@@ -49,7 +50,7 @@ class ApiController extends Controller
 
     public function categories()
     {
-        $categories = Category::orderBy('id', 'ASC')->get();
+        $categories = Category::where('status', 1)->orderBy('id', 'ASC')->get();
         return response()->json($categories, 200);
     }
 
@@ -352,7 +353,7 @@ class ApiController extends Controller
                 'message' => 'Unauthenticated',
             ], 401);
         }
-
+        DB::beginTransaction();
         try {
             $orderData = $request->orderData;
             $firstName = $request->firstName;
@@ -379,6 +380,7 @@ class ApiController extends Controller
             if (empty($checkAddress)) {
                 Address::create([
                     'user_id' => $user->id,
+                    'addr_name' => 'Home',
                     'f_name' => $firstName,
                     'l_name' => $lastName,
                     'phone' => $phone,
@@ -407,6 +409,7 @@ class ApiController extends Controller
             if (!$request->sameAsShipping && empty($checkAddress)) {
                 Address::create([
                     'user_id' => $user->id,
+                    'addr_name' => 'Work',
                     'f_name' => $billingFirstName,
                     'l_name' => $billingLastName,
                     'phone' => $billingPhone,
@@ -524,15 +527,17 @@ class ApiController extends Controller
 
             $shippingAddress->order_number = $order->order_number;
             $shippingAddress->save();
-            if ($billAddress) {
+            if (!empty($billAddress)) {
                 $billAddress->order_number = $order->order_number;
                 $billAddress->save();
             }
             Cart::where('u_id', $user->id)->delete();
-
+            DB::commit();
             return response($order_id, 201);
         } catch (Exception $e) {
-            // return response($e->getMessage());
+            DB::rollBack();
+            Log::error($e);
+            return response($e->getMessage());
         }
     }
 

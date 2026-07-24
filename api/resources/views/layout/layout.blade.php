@@ -72,6 +72,7 @@
             overflow: auto;
             scrollbar-color: var(--bs-secondary-bg) transparent;
             scrollbar-width: thin;
+            grid-area: lte-app-main;
         }
 
         .right-section::-webkit-scrollbar {
@@ -169,7 +170,7 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     @include('sweetalert::alert')
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
@@ -181,9 +182,7 @@
         <!--end::Sidebar-->
         <div class="right-section">
             <!--begin::App Main-->
-
             @yield('content')
-
             <!--end::App Main-->
             <!--begin::Footer-->
             @include('layout.footer')
@@ -247,8 +246,7 @@
 
             if (
                 appMain &&
-                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
-                !isMobile
+                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined
             ) {
                 OverlayScrollbarsGlobal.OverlayScrollbars(appMain, {
                     scrollbars: {

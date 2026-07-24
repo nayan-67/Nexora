@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('address', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('addr_name',100);
+            $table->string('addr_name',100)->default('Home');
             $table->string('f_name',100);
             $table->string('l_name',100);
             $table->string('phone',13);

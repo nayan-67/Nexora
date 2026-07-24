@@ -34,6 +34,7 @@
             <!--begin::Container-->
 
             <!-- =========== Edit Sub Category Section ============== -->
+
             <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     <h5 class="text-secondary my-2">Edit Sub Category</h5>
@@ -93,7 +94,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row py-2">
+                                    {{-- <div class="row py-2">
                                         <div class="col-md-3">
                                             <h6 class="mb-0 fs-7 fw-bold">Status</h6>
                                         </div>
@@ -106,7 +107,7 @@
                                                 </option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="row py-2">
                                         <div class="col-md-3">
                                         </div>

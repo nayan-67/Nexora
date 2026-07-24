@@ -30,6 +30,7 @@ Route::controller(Category::class)->group(function () {
     Route::put('/category/update/{id}', 'update')->name('category.update');
     Route::delete('/category/destroy', 'destroy')->name('category.destroy');
     Route::get('/category/search/{name}', 'search')->name('category.search');
+    Route::get('/category/status/{id}', 'updateStatus');
 });
 
 // ==================== Sub_category ====================
@@ -42,6 +43,7 @@ Route::controller(Sub_category::class)->group(function () {
     Route::put('/subcategory/update/{id}', 'update')->name('subcategory.update');
     Route::delete('/subcategory/destroy', 'destroy')->name('subcategory.destroy');
     Route::get('/subcategory/search/{name}', 'search')->name('subcategory.search');
+    Route::get('/subcategory/status/{id}', 'updateStatus');
 });
 
 // ==================== Product ====================

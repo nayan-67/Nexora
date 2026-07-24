@@ -78,7 +78,7 @@
                             <!--begin::Card Header-->
                             <div class="card-header">
                                 <div class="row g-2 align-items-center">
-                                    <div class="col-12 col-md-6 d-flex gap-4">
+                                    <div class="col-12 col-md-4 d-flex gap-4">
                                         <div class="d-flex align-items-center gap-3">
                                             <label>Show Data</label>
                                             <select id="show-data" class="form-select form-select-sm w-auto">
@@ -89,7 +89,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6">
+                                    <div class="col-12 col-md-8">
                                         <div class="d-flex flex-wrap justify-content-md-end gap-2">
                                             <div class="input-group input-group-sm w-auto">
                                                 <span class="input-group-text">
@@ -117,8 +117,8 @@
                                                 <th>Sub Category</th>
                                                 <th>Slug</th>
                                                 <th>Category</th>
-                                                <th>Status</th>
                                                 <th>Created</th>
+                                                <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -135,16 +135,24 @@
                                                         <td>{{ $row->name }}</td>
                                                         <td>{{ $row->slug }}</td>
                                                         <td>{{ $cat->name }}</td>
-                                                        <td>
-                                                            <span
-                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-danger' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
-                                                        </td>
                                                         <td>{{ date('M j, Y', strtotime($date)) }}</td>
+                                                        <td>
+                                                            <div class="form-check form-switch mb-0"
+                                                                style="width: fit-content;margin-left:9px;"
+                                                                title="{{ $row->status == '1' ? 'Active' : 'Inactive' }}">
+                                                                <input class="form-check-input subcat-st" type="checkbox"
+                                                                    role="switch" id="{{ $row->id }}"
+                                                                    {{ $row->status == '1' ? 'checked' : '' }} />
+                                                                <label class="visually-hidden" for="{{ $row->id }}">
+                                                                    Toggle Sub Category status
+                                                                </label>
+                                                            </div>
+                                                        </td>
                                                         <td>
                                                             <div class="btn-group btn-group-sm">
                                                                 <a href="{{ route('subcategory.edit', encrypt($row->id)) }}"
-                                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                                    data-bs-title="Edit">
+                                                                    style="margin-right: 1px;" class="btn btn-outline-info"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Edit">
                                                                     <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
                                                                 </a>
                                                                 <button type="button" class="btn btn-outline-danger"
@@ -217,18 +225,34 @@
     <script>
         let appURL = <?= json_encode(url('/')) ?>;
 
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('subcat-st')) {
+                fetch(`${appURL}/subcategory/status/${e.target.id}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data == 'success') {
+                            swalToast('success', 'Status Updated Successfully');
+                        } else {
+                            swalToast('error', 'Status Update Failed');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
         const searchInput = document.getElementById('search');
         const resultsDiv = document.querySelector('.results');
 
         searchInput.addEventListener('input', () => {
             const query = searchInput.value.trim() != "" ? searchInput.value.trim() : '0';
-            fetch(`${appURL}/subcategory/search/${encodeURIComponent(query)}`)
-                .then(response => response.text())
-                .then(data => {
-                    resultsDiv.innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
+            setTimeout(() => {
+                fetch(`${appURL}/subcategory/search/${encodeURIComponent(query)}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        resultsDiv.innerHTML = data;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }, 500);
         });
-
     </script>
 @endsection

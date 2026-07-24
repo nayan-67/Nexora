@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row py-2">
+                                    {{-- <div class="row py-2">
                                         <div class="col-md-3">
                                             <h6 class="mb-0 fs-7 fw-bold">Status</h6>
                                         </div>
@@ -114,12 +114,12 @@
                                             <select class="form-control form-select fs-7"
                                                 aria-label="Default select example" name="status">
                                                 <option {{ $catitem->status == '1' ? 'selected' : '' }} value="1">
-                                                    ACTIVE</option>
+                                                    Active</option>
                                                 <option {{ $catitem->status == '0' ? 'selected' : '' }}
-                                                    value="0">INACTIVE</option>
+                                                    value="0">Inactive</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="row py-2">
                                         <div class="col-md-3">
                                         </div>

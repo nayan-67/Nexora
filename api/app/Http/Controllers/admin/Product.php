@@ -11,6 +11,7 @@ use App\Models\VariantAttribute;
 use App\Traits\ResizeImage;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Product extends Controller
@@ -35,6 +36,7 @@ class Product extends Controller
 
     public function store(Request $request)
     {
+        DB::beginTransaction();
         try {
             $request->validate([
                 'cat_id' => 'required',
@@ -94,14 +96,17 @@ class Product extends Controller
             }
 
             $product->gallery_images = $gallery;
-            if ($product->save()) {
-                $cat = Category::find($request->cat_id);
-                $cat->total_products += 1;
-                $cat->save();
-                toast('Product Added Successfully', 'success');
-                return redirect()->route('admin.product');
-            }
+            $product->save();
+            $cat = Category::find($request->cat_id);
+            $cat->total_products += 1;
+            $cat->save();
+
+            DB::commit();
+
+            toast('Product Added Successfully', 'success');
+            return redirect()->route('admin.product');
         } catch (Exception $e) {
+            DB::rollBack();
             toast($e->getMessage(), 'error');
             return back()->withInput();
         }
@@ -127,7 +132,7 @@ class Product extends Controller
         $prddata = Products::find($id);
         $oldpimg = $prddata->featured_image;
         $old_glr = $request->old_glr ? explode(",", $request->old_glr) : [];
-
+        DB::beginTransaction();
         try {
             $request->validate([
                 'sku' => 'required|unique:products,sku,' . $id,
@@ -199,11 +204,14 @@ class Product extends Controller
                 }
             }
             $prddata->gallery_images = $gallery;
-            if ($prddata->update()) {
-                toast('Product Updated Successfully', 'success');
-                return back();
-            }
+            $prddata->update();
+
+            DB::commit();
+
+            toast('Product Updated Successfully', 'success');
+            return back();
         } catch (Exception $e) {
+            DB::rollBack();
             toast($e->getMessage(), 'error');
             return back();
         }
@@ -211,18 +219,33 @@ class Product extends Controller
 
     public function destroy(Request $request)
     {
-        $id = $request->id;
-        $products = Products::find($id);
-        $products->is_delete = 1;
-        if ($products->save()) {
-            $cat = Category::find($products->category_id);
-            $cat->total_products -= 1;
-            $cat->save();
-            if ($products->type == 2) {
-                Variant::where('product_id', $id)->update(['is_active' => '0']);
+        DB::beginTransaction();
+        try {
+            $id = $request->post('id');
+            $products = Products::find($id);
+            if (!$products) {
+                throw new Exception('Product not found');
             }
-            toast('Product Deleted Successfully', 'success');
-            return redirect()->route('admin.product');
+            $products->is_delete = 1;
+            if ($products->save()) {
+                $cat = Category::find($products->category_id);
+                if ($cat) {
+                    $cat->total_products -= 1;
+                    $cat->save();
+                }
+                if ($products->type == 2) {
+                    Variant::where('product_id', $id)->update(['is_active' => '0']);
+                }
+                DB::commit();
+                toast('Product Deleted Successfully', 'success');
+                return redirect()->route('admin.product');
+            } else {
+                throw new Exception('Failed to delete product');
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            toast($e->getMessage(), 'error');
+            return back();
         }
     }
 
@@ -287,6 +310,7 @@ class Product extends Controller
      */
     public function storeVariant(Request $request)
     {
+        DB::beginTransaction();
         try {
             $request->validate([
                 'cat_id' => 'required',
@@ -471,12 +495,15 @@ class Product extends Controller
             $cat = Category::find($request->cat_id);
             $cat->total_products += 1;
             $cat->save();
+            
+            DB::commit();
 
             toast('Variable Product Added Successfully', 'success');
             return redirect()->route('admin.product');
         } catch (Exception $e) {
+            DB::rollBack();
             toast($e->getMessage(), 'error');
-            return back();
+            return back()->withInput();
         }
     }
 
@@ -485,6 +512,7 @@ class Product extends Controller
      */
     public function variableupdate(Request $request, string $id)
     {
+        DB::beginTransaction();
         try {
             $request->validate([
                 'cat_id' => 'required',
@@ -699,11 +727,14 @@ class Product extends Controller
                 $product->save();
             }
 
+            DB::commit();
+
             toast('Variable Product Updated Successfully', 'success');
             return back();
         } catch (Exception $e) {
+            DB::rollBack();
             toast($e->getMessage(), 'error');
-            return back()->withInput();
+            return back();
         }
     }
 
