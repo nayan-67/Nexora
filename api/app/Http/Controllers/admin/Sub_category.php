@@ -15,7 +15,7 @@ class Sub_category extends Controller
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = SubCategory::orderBy('id', 'DESC')->get();
+        $data = SubCategory::orderBy('id', 'DESC')->paginate(10);
         return view('sub_category.index', compact('data'));
     }
 
@@ -92,7 +92,7 @@ class Sub_category extends Controller
         $subcatdata->status = $subcatdata->status == '1' ? '0' : '1';
         if ($subcatdata->update()) {
             return 'success';
-        }else{
+        } else {
             return 'error';
         }
     }
@@ -122,10 +122,10 @@ class Sub_category extends Controller
                         <td>
                             <div class='form-check form-switch mb-0'
                                 style='width: fit-content;margin-left:9px;'
-                                title='". ($row->status == '1' ? 'Active' : 'Inactive') ."'>
+                                title='" . ($row->status == '1' ? 'Active' : 'Inactive') . "'>
                                 <input class='form-check-input subcat-st' type='checkbox'
-                                    role='switch' id='". $row->id ."'
-                                    ". ($row->status == '1' ? 'checked' : '') ." />
+                                    role='switch' id='" . $row->id . "'
+                                    " . ($row->status == '1' ? 'checked' : '') . " />
                             </div>
                         </td>
                         <td>

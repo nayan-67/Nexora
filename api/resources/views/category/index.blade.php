@@ -183,33 +183,29 @@
                                         if ($catdata->total() == 1) {
                                             $showResults = 'Showing 1 of ' . $catdata->total() . ' categories';
                                         } else {
-                                            $showResults = 'Showing 1 to 9 of 42 categories';
+                                            $showResults =
+                                                'Showing ' .
+                                                $catdata->firstItem() .
+                                                ' to ' .
+                                                $catdata->lastItem() .
+                                                ' of ' .
+                                                $catdata->total() .
+                                                ' categories';
                                         }
                                     @endphp
                                     {{ $showResults }}
                                 </div>
                                 <ul class="pagination pagination-sm m-0 float-end">
-                                    <li class="page-item disabled">
+                                    {{-- <li class="page-item disabled">
                                         <a class="page-link" href="#" aria-label="Previous"> &laquo; </a>
                                     </li>
                                     <li class="page-item active">
                                         <a class="page-link" href="#">1</a>
                                     </li>
-                                    {{-- <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">5</a>
-                                    </li> --}}
                                     <li class="page-item disabled">
                                         <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
-                                    </li>
+                                    </li> --}}
+                                    {{ $catdata->links() }}
                                 </ul>
                             </div>
                             <!--end::Card Footer-->

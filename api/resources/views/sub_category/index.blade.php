@@ -177,32 +177,7 @@
                             <!--end::Card Body-->
                             <!--begin::Card Footer-->
                             <div class="card-footer clearfix">
-                                <div class="float-start pt-1 fs-7 text-body-secondary">
-                                    Showing 1 to 9 of 42 Sub Categories
-                                </div>
-                                <ul class="pagination pagination-sm m-0 float-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Previous"> &laquo; </a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    {{-- <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">5</a>
-                                    </li> --}}
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
-                                    </li>
-                                </ul>
+                                {{ $data->links() }}
                             </div>
                             <!--end::Card Footer-->
                         </div>
@@ -221,7 +196,6 @@
 @endsection
 
 @section('script')
-
     <script>
         let appURL = <?= json_encode(url('/')) ?>;
 

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="{{ asset('css/toast.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.css">
     <!--end::Required Plugin(AdminLTE)-->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> --}}
 
     @yield('css')
     <style>
