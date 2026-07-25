@@ -122,16 +122,6 @@
             letter-spacing: 0.05em;
         }
 
-        /* .list-badge:before {
-            content: '';
-            display: inline-block;
-            width: 0.5rem;
-            height: 0.5rem;
-            border-radius: 9999px;
-            margin-right: 0.5rem;
-            color: inherit;
-        } */
-
         .list-badge.active {
             background-color: #0f9b1866;
             color: #1b6e02;
@@ -347,6 +337,20 @@
                 modal.style.display = "none";
                 modalBox.style.opacity = "0";
             });
+        }
+
+        const tableData = document.querySelector('.data-results');
+
+        function loadData(url) {
+            fetch(url, {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    tableData.innerHTML = html;
+                });
         }
     </script>
 

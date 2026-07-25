@@ -10,12 +10,19 @@ use Illuminate\Http\Request;
 
 class Sub_category extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = SubCategory::orderBy('id', 'DESC')->paginate(10);
+        $query = Subcategory::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        $data = $query->orderBy('id', 'DESC')->paginate(10)->withQueryString();
+        if ($request->ajax()) {
+            return view('sub_category.table', compact('data'))->render();
+        }
         return view('sub_category.index', compact('data'));
     }
 
