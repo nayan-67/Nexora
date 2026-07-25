@@ -108,9 +108,33 @@
                                 </div>
                             </div>
                             <!--end::Card Header-->
-                            
-                            <!--begin::Data Table-->
-                            @include('sub_category.table')
+
+                            <!--begin::Card Body-->
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle m-0">
+                                        <thead class="fs-7">
+                                            <tr align="center">
+                                                <th>Sub Category</th>
+                                                <th>Slug</th>
+                                                <th>Category</th>
+                                                <th>Created</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        @include('sub_category.table')
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!--end::Card Body-->
+                            <!--begin::Card Footer-->
+                            <div class="card-footer clearfix">
+                                @yield('pagination')
+                            </div>
+                            <!--end::Card Footer-->
+
                         </div>
                         <!--end::Card-->
                     </div>
