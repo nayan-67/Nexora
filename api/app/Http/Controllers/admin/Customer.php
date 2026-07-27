@@ -11,12 +11,23 @@ use Illuminate\Http\Request;
 
 class Customer extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = User::orderBy('id', 'ASC')->get();
+        $perPage = $request->input('per_page', 10);
+        $query = User::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('first_name', 'like', '%' . $request->search . '%')
+                ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%')
+                ->orWhere('phone', 'like', '%' . $request->search . '%');
+        }
+        $data = $query->orderBy('id', 'ASC')->paginate($perPage)->withQueryString();
+        if ($request->ajax()) {
+            return view('user.table', compact('data'))->render();
+        }
         return view('user.index', compact('data'));
     }
 
@@ -87,69 +98,69 @@ class Customer extends Controller
         }
     }
 
-    public function search(string $value)
-    {
-        $data = $value
-            ? User::where(function ($query) use ($value) {
-                $query->where('first_name', 'LIKE', $value . '%')
-                    ->orWhere('last_name', 'LIKE', $value . '%')
-                    ->orWhere('phone', 'LIKE', $value . '%')
-                    ->orWhere('email', 'LIKE', $value . '%');
-            })
-            ->orderBy('id', 'ASC')
-            ->get()
-            : User::orderBy('id', 'ASC')->get();
+    // public function search(string $value)
+    // {
+    //     $data = $value
+    //         ? User::where(function ($query) use ($value) {
+    //             $query->where('first_name', 'LIKE', $value . '%')
+    //                 ->orWhere('last_name', 'LIKE', $value . '%')
+    //                 ->orWhere('phone', 'LIKE', $value . '%')
+    //                 ->orWhere('email', 'LIKE', $value . '%');
+    //         })
+    //         ->orderBy('id', 'ASC')
+    //         ->get()
+    //         : User::orderBy('id', 'ASC')->get();
 
-        if (count($data) > 0) {
-            foreach ($data as $row) {
-                $name = $row->first_name . ' ' . $row->last_name;
-                $ordresult = Orders::where('user_id', $row->id)->get();
-                $profile = $row->profile_image
-                    ? 'uploads/' . $row->profile_image
-                    : 'avatar.jpg';
-                $date = substr($row->created_at, 0, 10);
+    //     if (count($data) > 0) {
+    //         foreach ($data as $row) {
+    //             $name = $row->first_name . ' ' . $row->last_name;
+    //             $ordresult = Orders::where('user_id', $row->id)->get();
+    //             $profile = $row->profile_image
+    //                 ? 'uploads/' . $row->profile_image
+    //                 : 'avatar.jpg';
+    //             $date = substr($row->created_at, 0, 10);
 
-                echo "<tr align='center'>
-                        <td>
-                            <div class='d-flex align-items-center justify-content-center'>
-                                <img src='" . asset($profile) . "' alt=''
-                                    class='img-size-32 rounded-circle me-2' />
-                                <span class='fw-medium'>" . $name . "</span>
-                            </div>
-                        </td>
-                        <td>" . $row->email . "</td>
-                        <td>" . $row->phone . "</td>
-                        <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-warning') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
-                        </td>
-                        <td>" . count($ordresult) . "</td>
-                        <td>" . date('M j, Y', strtotime($date)) . "</td>
-                        <td>
-                            <div class='btn-group btn-group-sm'>
-                                <a href='" . route('user.edit', encrypt($row->id)) . "'
-                                    class='btn btn-outline-info' data-bs-toggle='tooltip'
-                                    data-bs-title='Edit'>
-                                    <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
-                                </a>
-                                <a href='" . route('user.order', encrypt($row->id)) . "'
-                                    class='btn btn-outline-primary'
-                                    data-bs-toggle='tooltip' data-bs-title='Orders'>
-                                    <i class='bi bi-cart3' aria-hidden='true'> </i>
-                                </a>
-                                <button type='button' class='btn btn-outline-danger'
-                                    data-bs-toggle='tooltip' data-bs-title='Delete'
-                                    onclick=\"openModal('" . $row->id . "');\">
-                                    <i class='bi bi-trash d-flex' aria-hidden='true'> </i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>";
-            }
-        } else {
-            echo "<tr align='center'>
-                    <td colspan='7'>No User Found</td>
-                </tr>";
-        }
-    }
+    //             echo "<tr align='center'>
+    //                     <td>
+    //                         <div class='d-flex align-items-center justify-content-center'>
+    //                             <img src='" . asset($profile) . "' alt=''
+    //                                 class='img-size-32 rounded-circle me-2' />
+    //                             <span class='fw-medium'>" . $name . "</span>
+    //                         </div>
+    //                     </td>
+    //                     <td>" . $row->email . "</td>
+    //                     <td>" . $row->phone . "</td>
+    //                     <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-warning') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
+    //                     </td>
+    //                     <td>" . count($ordresult) . "</td>
+    //                     <td>" . date('M j, Y', strtotime($date)) . "</td>
+    //                     <td>
+    //                         <div class='btn-group btn-group-sm'>
+    //                             <a href='" . route('user.edit', encrypt($row->id)) . "'
+    //                                 class='btn btn-outline-info' data-bs-toggle='tooltip'
+    //                                 data-bs-title='Edit'>
+    //                                 <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
+    //                             </a>
+    //                             <a href='" . route('user.order', encrypt($row->id)) . "'
+    //                                 class='btn btn-outline-primary'
+    //                                 data-bs-toggle='tooltip' data-bs-title='Orders'>
+    //                                 <i class='bi bi-cart3' aria-hidden='true'> </i>
+    //                             </a>
+    //                             <button type='button' class='btn btn-outline-danger'
+    //                                 data-bs-toggle='tooltip' data-bs-title='Delete'
+    //                                 onclick=\"openModal('" . $row->id . "');\">
+    //                                 <i class='bi bi-trash d-flex' aria-hidden='true'> </i>
+    //                             </button>
+    //                         </div>
+    //                     </td>
+    //                 </tr>";
+    //         }
+    //     } else {
+    //         echo "<tr align='center'>
+    //                 <td colspan='7'>No User Found</td>
+    //             </tr>";
+    //     }
+    // }
 
     public function userOrder(string $id)
     {

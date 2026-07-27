@@ -59,41 +59,11 @@
             @error('password')
                 {{ toast($message, 'error') }}
             @enderror
-            {{-- <section class="bg-white h-100 page-section"
-                style="margin:0 10px;border-radius: 10px;box-shadow: 0 0px 4px #00000057;">
-                <div class="container h-100 border-2 border-top border-primary p-3 rounded">
-                    <form action="{{ route('admin.update', $data->id) }}" method="post">
-                        @csrf
-                        @method('PUT')
-                        <div class="row mx-1 py-3">
-                            <div class="col-sm-6">
-                                <h6 class="mb-2 page-head fs-7 fw-bold">Username (Admin Mail)</h6>
-                                <input class="form-control me-2 fs-7" type="email" name="email"
-                                    value="{{ $data->email }}" autocomplete="off" />
-                            </div>
-                            <div class="col-sm-6">
-                                <h6 class="mb-2 page-head fs-7 fw-bold">Password</h6>
-                                <div class="pass-box form-control">
-                                    <input class="me-2 fs-7 bg-white" type="password" id="pass" name="password"
-                                        value="{{ $data->password }}" autocomplete="off"
-                                        style="outline: none;color:#212529;" />
-                                    <i class="fa-regular fa-eye-slash show-btn"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mx-1">
-                            <div class="col-sm-12 d-flex justify-content-end">
-                                <button class="btn btn-success fs-7" type="submit" name="edit-admin">SAVE</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </section> --}}
 
             <div class="container-fluid">
                 <div class="row g-3">
                     <!-- Left rail -->
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="list-group list-group-flush nav nav-pills flex-column" id="settings-nav" role="tablist">
                             <a href="#account" class="list-group-item list-group-item-action active" data-bs-toggle="pill"
                                 role="tab" aria-selected="true">
@@ -107,7 +77,7 @@
                     </div>
 
                     <!-- Tab content -->
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <div class="tab-content">
                             <!-- Account -->
                             <div class="tab-pane fade show active" id="account" role="tabpanel">

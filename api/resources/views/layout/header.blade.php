@@ -44,7 +44,7 @@
             <!--end::Notifications Dropdown Menu-->
             <!--begin::Color Mode Toggle (#6010)-->
             <li class="nav-item dropdown">
-                <a class="nav-link" href="#" id="bd-theme" aria-label="Toggle color scheme"
+                <a class="nav-link" href="javascript:void(0)" id="bd-theme" aria-label="Toggle color scheme"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-sun-fill" data-lte-theme-icon="light"></i>
                     <i class="bi bi-moon-fill d-none" data-lte-theme-icon="dark"></i>
@@ -82,14 +82,14 @@
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
                 <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="{{ asset('adminlte/dist/assets/img/avatar5.png') }}"
+                    <img src="{{ asset('adminlte/dist/assets/img/user3-128x128.jpg') }}"
                         class="user-image rounded-circle shadow" alt="User Image" />
                     <span class="d-none d-md-inline">Admin</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end rounded-top-1">
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary rounded-top-1">
-                        <img src="{{ asset('adminlte/dist/assets/img/avatar5.png') }}" class="rounded-circle shadow"
+                        <img src="{{ asset('adminlte/dist/assets/img/user3-128x128.jpg') }}" class="rounded-circle shadow"
                             alt="User Image" />
                         <p>
                             Admin - Nexora

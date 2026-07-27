@@ -12,12 +12,20 @@ use Illuminate\Http\Request;
 class Category extends Controller
 {
     use ResizeImage;
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $catdata = ModelsCategory::orderBy('id', 'DESC')->paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $query = ModelsCategory::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        $catdata = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
+        if ($request->ajax()) {
+            return view('category.table', compact('catdata'))->render();
+        }
         return view('category.index', compact('catdata'));
     }
 
@@ -145,54 +153,54 @@ class Category extends Controller
         }
     }
 
-    public function search(string $value)
-    {
-        $data = $value ? ModelsCategory::where('name', 'LIKE', '%' . $value . '%')->orderBy('id', 'DESC')->get() : ModelsCategory::orderBy('id', 'DESC')->get();
+    // public function search(string $value)
+    // {
+    //     $data = $value ? ModelsCategory::where('name', 'LIKE', '%' . $value . '%')->orderBy('id', 'DESC')->get() : ModelsCategory::orderBy('id', 'DESC')->get();
 
-        if (count($data) > 0) {
-            foreach ($data as $row) {
-                $sub_cat = SubCategory::where('category_id', $row->id)->get();
-                $date = substr($row->created_at, 0, 10);
-                echo " 
-                    <tr align='center'>
-                        <td>" . $row->name . "</td>
-                        <td>" . $row->slug . "</td>
-                        <td>" . $row->total_products . "</td>
-                        <td>" . count($sub_cat) . "</td>
-                        <td>" . date('M j, Y', strtotime($date)) . "</td>
-                        <td>
-                            <div class='form-check form-switch mb-0'
-                                style='width: fit-content;margin-left:9px;'
-                                title='" . ($row->status == '1' ? 'Active' : 'Inactive') . "'>
-                                <input class='form-check-input cat-st' type='checkbox'
-                                    role='switch' id='" . $row->id . "'
-                                    " . ($row->status == '1' ? 'checked' : '') . " />
-                                <label class='visually-hidden' for='" . $row->id . "'>
-                                    Toggle Category status
-                                </label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class='btn-group btn-group-sm'>
-                                <a href='" . route('category.edit', encrypt($row->id)) . "'
-                                    class='btn btn-outline-info' style='margin-right: 1px;' data-bs-toggle='tooltip'
-                                    data-bs-title='Edit'>
-                                    <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
-                                </a>
-                                <button type='button' class='btn btn-outline-danger'
-                                    data-bs-toggle='tooltip' data-bs-title='Delete'
-                                    onclick=\"openModal('" . $row->id . "');\">
-                                    <i class='bi bi-trash d-flex' aria-hidden='true'></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>";
-            }
-        } else {
-            echo "
-                <tr align='center'>
-                    <td colspan='7'>No Category Found</td>
-                </tr>";
-        }
-    }
+    //     if (count($data) > 0) {
+    //         foreach ($data as $row) {
+    //             $sub_cat = SubCategory::where('category_id', $row->id)->get();
+    //             $date = substr($row->created_at, 0, 10);
+    //             echo " 
+    //                 <tr align='center'>
+    //                     <td>" . $row->name . "</td>
+    //                     <td>" . $row->slug . "</td>
+    //                     <td>" . $row->total_products . "</td>
+    //                     <td>" . count($sub_cat) . "</td>
+    //                     <td>" . date('M j, Y', strtotime($date)) . "</td>
+    //                     <td>
+    //                         <div class='form-check form-switch mb-0'
+    //                             style='width: fit-content;margin-left:9px;'
+    //                             title='" . ($row->status == '1' ? 'Active' : 'Inactive') . "'>
+    //                             <input class='form-check-input cat-st' type='checkbox'
+    //                                 role='switch' id='" . $row->id . "'
+    //                                 " . ($row->status == '1' ? 'checked' : '') . " />
+    //                             <label class='visually-hidden' for='" . $row->id . "'>
+    //                                 Toggle Category status
+    //                             </label>
+    //                         </div>
+    //                     </td>
+    //                     <td>
+    //                         <div class='btn-group btn-group-sm'>
+    //                             <a href='" . route('category.edit', encrypt($row->id)) . "'
+    //                                 class='btn btn-outline-info' style='margin-right: 1px;' data-bs-toggle='tooltip'
+    //                                 data-bs-title='Edit'>
+    //                                 <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
+    //                             </a>
+    //                             <button type='button' class='btn btn-outline-danger'
+    //                                 data-bs-toggle='tooltip' data-bs-title='Delete'
+    //                                 onclick=\"openModal('" . $row->id . "');\">
+    //                                 <i class='bi bi-trash d-flex' aria-hidden='true'></i>
+    //                             </button>
+    //                         </div>
+    //                     </td>
+    //                 </tr>";
+    //         }
+    //     } else {
+    //         echo "
+    //             <tr align='center'>
+    //                 <td colspan='7'>No Category Found</td>
+    //             </tr>";
+    //     }
+    // }
 }

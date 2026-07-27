@@ -29,7 +29,7 @@ Route::controller(Category::class)->group(function () {
     Route::post('/category/store', 'store')->name('category.store');
     Route::put('/category/update/{id}', 'update')->name('category.update');
     Route::delete('/category/destroy', 'destroy')->name('category.destroy');
-    Route::get('/category/search/{name}', 'search')->name('category.search');
+    // Route::get('/category/search/{name}', 'search')->name('category.search');
     Route::get('/category/status/{id}', 'updateStatus');
 });
 
@@ -42,7 +42,7 @@ Route::controller(Sub_category::class)->group(function () {
     Route::post('/subcategory/store', 'store')->name('subcategory.store');
     Route::put('/subcategory/update/{id}', 'update')->name('subcategory.update');
     Route::delete('/subcategory/destroy', 'destroy')->name('subcategory.destroy');
-    Route::get('/subcategory/search/{name}', 'search')->name('subcategory.search');
+    // Route::get('/subcategory/search/{name}', 'search')->name('subcategory.search');
     Route::get('/subcategory/status/{id}', 'updateStatus');
 });
 
@@ -72,7 +72,7 @@ Route::controller(Coupon::class)->group(function () {
     Route::post('/coupon/store', 'store')->name('coupon.store');
     Route::put('/coupon/update/{id}', 'update')->name('coupon.update');
     Route::delete('/coupon/destroy', 'destroy')->name('coupon.destroy');
-    Route::get('/coupon/search/{name}', 'search')->name('coupon.search');
+    // Route::get('/coupon/search/{name}', 'search')->name('coupon.search');
 });
 
 // ==================== Order ====================
@@ -93,7 +93,7 @@ Route::controller(Customer::class)->group(function () {
     Route::get('/customer/view/{id}', 'view')->name('user.view');
     Route::put('/customer/update/{id}', 'update')->name('user.update');
     Route::delete('/customer/destroy', 'destroy')->name('user.destroy');
-    Route::get('/customer/search/{name}', 'search')->name('user.search');
+    // Route::get('/customer/search/{name}', 'search')->name('user.search');
     Route::get('/customer/order/{id}', 'userOrder')->name('user.order');
     Route::delete('/customer/order/destroy', 'delorder')->name('order.delete');
 });

@@ -74,7 +74,7 @@
                 <div class="row">
                     <div class="col-12">
                         <!--begin::Card-->
-                        <div class="card mb-4">
+                        <div id="subcat-table-container" class="card mb-4">
                             <!--begin::Card Header-->
                             <div class="card-header">
                                 <div class="row g-2 align-items-center">
@@ -108,33 +108,9 @@
                                 </div>
                             </div>
                             <!--end::Card Header-->
-
-                            <!--begin::Card Body-->
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle m-0">
-                                        <thead class="fs-7">
-                                            <tr align="center">
-                                                <th>Sub Category</th>
-                                                <th>Slug</th>
-                                                <th>Category</th>
-                                                <th>Created</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        @include('sub_category.table')
-                                    </table>
-                                </div>
-                                <!-- /.table-responsive -->
+                            <div id="subcat-table-content">
+                                @include('sub_category.table')
                             </div>
-                            <!--end::Card Body-->
-                            <!--begin::Card Footer-->
-                            <div class="card-footer clearfix">
-                                @yield('pagination')
-                            </div>
-                            <!--end::Card Footer-->
-
                         </div>
                         <!--end::Card-->
                     </div>
@@ -170,19 +146,22 @@
         });
 
         const searchInput = document.getElementById('search');
+        const showDataSelect = document.getElementById('show-data');
+        let searchTimeout;
+
+        function reloadSubcategoryTable() {
+            const query = encodeURIComponent(searchInput.value.trim());
+            const perPage = encodeURIComponent(showDataSelect.value);
+            loadData(`${appURL}/subcategory?search=${query}&per_page=${perPage}`, '#subcat-table-content');
+        }
 
         searchInput.addEventListener('input', (e) => {
-            // const query = this.value.trim() != "" ? this.value.trim() : '0';
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(reloadSubcategoryTable, 500);
+        });
 
-            setTimeout(() => {
-                // fetch(`${appURL}/subcategory/search/${encodeURIComponent(query)}`)
-                //     .then(response => response.text())
-                //     .then(data => {
-                //         resultsDiv.innerHTML = data;
-                //     })
-                //     .catch(error => console.error('Error:', error));
-                loadData(`${appURL}/subcategory?search=${encodeURIComponent(e.target.value)}`)
-            }, 500);
+        showDataSelect.addEventListener('change', () => {
+            reloadSubcategoryTable();
         });
     </script>
 @endsection

@@ -106,98 +106,9 @@
                                 </div>
                             </div>
                             <!--end::Card Header-->
-                            <!--begin::Card Body-->
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle m-0">
-                                        <thead class="fs-7">
-                                            <tr align="center">
-                                                <th>Coupon</th>
-                                                <th>Valid From</th>
-                                                <th>Valid Till</th>
-                                                <th>Amount</th>
-                                                <th>Coupon Used</th>
-                                                <th>Status</th>
-                                                <th>Created</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="fs-7 results">
-                                            @if (count($data) > 0)
-                                                @foreach ($data as $row)
-                                                    @php
-                                                        $date = substr($row->created_at, 0, 10);
-                                                    @endphp
-                                                    <tr align="center">
-                                                        <td>{{ $row->name }}</td>
-                                                        <td>{{ date('M j, Y', strtotime($row->valid_from)) }}</td>
-                                                        <td>{{ $row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set' }}
-                                                        </td>
-                                                        <td>{{ $row->type == '1' ? $row->amount . ' %' : '₹ ' . $row->amount }}
-                                                        </td>
-                                                        <td>{{$row->uses_number}}</td>
-                                                        <td>
-                                                            <span
-                                                                class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
-                                                        </td>
-                                                        <td>{{ date('M j, Y', strtotime($date)) }}</td>
-                                                        <td>
-                                                            <div class="btn-group btn-group-sm">
-                                                                <a href="{{ route('coupon.edit', encrypt($row->id)) }}"
-                                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                                    data-bs-title="Edit">
-                                                                    <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
-                                                                </a>
-                                                                <button type="button" class="btn btn-outline-danger"
-                                                                    data-bs-toggle="tooltip" data-bs-title="Delete"
-                                                                    onclick="openModal('{{ $row->id }}');">
-                                                                    <i class="bi bi-trash d-flex" aria-hidden="true"></i>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                                <tr align="center">
-                                                    <td colspan="8">No Coupon Found</td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.table-responsive -->
+                            <div id="coupon-table-content">
+                                @include('coupon.table')
                             </div>
-                            <!--end::Card Body-->
-                            <!--begin::Card Footer-->
-                            <div class="card-footer clearfix">
-                                <div class="float-start pt-1 fs-7 text-body-secondary">
-                                    Showing 1 to 9 of 42 Coupon
-                                </div>
-                                <ul class="pagination pagination-sm m-0 float-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Previous"> &laquo; </a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    {{-- <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">5</a>
-                                    </li> --}}
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--end::Card Footer-->
                         </div>
                         <!--end::Card-->
                     </div>
@@ -214,17 +125,36 @@
 @section('script')
 
     <script>
-        const searchInput = document.getElementById('search');
-        const resultsDiv = document.querySelector('.results');
+        // const searchInput = document.getElementById('search');
+        // const resultsDiv = document.querySelector('.results');
 
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value != "" ? searchInput.value : '0';
-            fetch(`coupon/search/${query}`)
-                .then(response => response.text())
-                .then(data => {
-                    resultsDiv.innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
+        // searchInput.addEventListener('input', () => {
+        //     const query = searchInput.value != "" ? searchInput.value : '0';
+        //     fetch(`coupon/search/${query}`)
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             resultsDiv.innerHTML = data;
+        //         })
+        //         .catch(error => console.error('Error:', error));
+        // });
+
+        const searchInput = document.getElementById('search');
+        const showDataSelect = document.getElementById('show-data');
+        let searchTimeout;
+
+        function reloadCouponTable() {
+            const query = encodeURIComponent(searchInput.value.trim());
+            const perPage = encodeURIComponent(showDataSelect.value);
+            loadData(`coupon?search=${query}&per_page=${perPage}`, '#coupon-table-content');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(reloadCouponTable, 500);
+        });
+
+        showDataSelect.addEventListener('change', () => {
+            reloadCouponTable();
         });
 
     </script>

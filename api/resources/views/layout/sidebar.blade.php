@@ -2,7 +2,7 @@
     <!--begin::Sidebar Brand-->
     <div class="sidebar-brand" style="height: 3.56rem !important;">
         <!--begin::Brand Link-->
-        <a href="#" class="brand-link">
+        <a href="javascript:void(0)" class="brand-link">
             <!--begin::Brand Image-->
             <img src="{{ asset('adminlte/dist/assets/img/nexora-logo2.svg') }}" alt="Nexora Logo"
                 class="brand-image opacity-75 shadow" />

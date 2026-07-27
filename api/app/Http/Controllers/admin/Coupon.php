@@ -9,12 +9,20 @@ use Illuminate\Http\Request;
 
 class Coupon extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = ModelsCoupon::orderBy('id', 'ASC')->get();
+        $perPage = $request->input('per_page', 10);
+        $query = ModelsCoupon::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        $data = $query->orderBy('id', 'ASC')->paginate($perPage)->withQueryString();
+        if ($request->ajax()) {
+            return view('coupon.table', compact('data'))->render();
+        }
         return view('coupon.index', compact('data'));
     }
 
@@ -91,43 +99,43 @@ class Coupon extends Controller
         }
     }
 
-    public function search(string $value)
-    {
-        $data = $value ? ModelsCoupon::where('name', 'LIKE', $value . '%')->orderBy('id', 'ASC')->get() : ModelsCoupon::orderBy('id', 'ASC')->get();
+    // public function search(string $value)
+    // {
+    //     $data = $value ? ModelsCoupon::where('name', 'LIKE', $value . '%')->orderBy('id', 'ASC')->get() : ModelsCoupon::orderBy('id', 'ASC')->get();
 
-        if (count($data) > 0) {
-            foreach ($data as $row) {
-                $amount = $row->type == '1' ? $row->amount . ' %' : '₹ ' . $row->amount;
-                $date = substr($row->created_at, 0, 10);
-                echo "<tr align='center'>
-                        <td>" . $row->name . "</td>
-                        <td>" . date('M j, Y', strtotime($row->valid_from)) . "</td>
-                        <td>" . ($row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set') . "</td>
-                        <td>" . $amount . "</td>
-                        <td>" . $row->uses_number . "</td>
-                        <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-warning') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
-                        </td>
-                        <td>" . date('M j, Y', strtotime($date)) . "</td>
-                        <td>
-                            <div class='btn-group btn-group-sm'>
-                                <a href='" . route('coupon.edit', encrypt($row->id)) . "'
-                                    class='btn btn-outline-info' data-bs-toggle='tooltip'
-                                    data-bs-title='Edit'>
-                                    <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
-                                </a>
-                                <button type='button' class='btn btn-outline-danger'
-                                    data-bs-toggle='tooltip' data-bs-title='Delete'
-                                    onclick=\"openModal('" . $row->id . "');\">
-                                    <i class='bi bi-trash d-flex' aria-hidden='true'></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>";
-            }
-        } else {
-            echo "<tr align='center'>
-                    <td colspan='8'>No Coupon Found</td>
-                </tr>";
-        }
-    }
+    //     if (count($data) > 0) {
+    //         foreach ($data as $row) {
+    //             $amount = $row->type == '1' ? $row->amount . ' %' : '₹ ' . $row->amount;
+    //             $date = substr($row->created_at, 0, 10);
+    //             echo "<tr align='center'>
+    //                     <td>" . $row->name . "</td>
+    //                     <td>" . date('M j, Y', strtotime($row->valid_from)) . "</td>
+    //                     <td>" . ($row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set') . "</td>
+    //                     <td>" . $amount . "</td>
+    //                     <td>" . $row->uses_number . "</td>
+    //                     <td><span class='list-badge " . ($row->status == '1' ? 'text-bg-success' : 'text-bg-warning') . "'> " . ($row->status == '1' ? 'Active' : 'Inactive') . " </span>
+    //                     </td>
+    //                     <td>" . date('M j, Y', strtotime($date)) . "</td>
+    //                     <td>
+    //                         <div class='btn-group btn-group-sm'>
+    //                             <a href='" . route('coupon.edit', encrypt($row->id)) . "'
+    //                                 class='btn btn-outline-info' data-bs-toggle='tooltip'
+    //                                 data-bs-title='Edit'>
+    //                                 <i class='bi bi-pencil d-flex' aria-hidden='true'> </i>
+    //                             </a>
+    //                             <button type='button' class='btn btn-outline-danger'
+    //                                 data-bs-toggle='tooltip' data-bs-title='Delete'
+    //                                 onclick=\"openModal('" . $row->id . "');\">
+    //                                 <i class='bi bi-trash d-flex' aria-hidden='true'></i>
+    //                             </button>
+    //                         </div>
+    //                     </td>
+    //                 </tr>";
+    //         }
+    //     } else {
+    //         echo "<tr align='center'>
+    //                 <td colspan='8'>No Coupon Found</td>
+    //             </tr>";
+    //     }
+    // }
 }

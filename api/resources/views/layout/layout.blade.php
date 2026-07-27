@@ -339,9 +339,11 @@
             });
         }
 
-        const tableData = document.querySelector('.data-results');
-
-        function loadData(url) {
+        function loadData(url, selector = '.data-results') {
+            const target = document.querySelector(selector);
+            if (!target) {
+                return;
+            }
             fetch(url, {
                     headers: {
                         "X-Requested-With": "XMLHttpRequest"
@@ -349,9 +351,33 @@
                 })
                 .then(response => response.text())
                 .then(html => {
-                    tableData.innerHTML = html;
-                });
+                    target.innerHTML = html;
+                })
+                .catch(error => console.error('Error:', error));
         }
+
+        document.addEventListener("click", function(e) {
+            const pagLink = e.target.closest(".pagination a");
+            if (!pagLink) {
+                return;
+            }
+            e.preventDefault();
+            const url = pagLink.href;
+            const container = pagLink.closest('#subcat-table-content') || document.querySelector('.data-results');
+            if (!container) {
+                return;
+            }
+            fetch(url, {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    container.innerHTML = html;
+                })
+                .catch(error => console.error('Error:', error));
+        });
     </script>
 
     <!--end::OverlayScrollbars Configure-->

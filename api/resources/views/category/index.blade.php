@@ -105,49 +105,9 @@
                                 </div>
                             </div>
                             <!--end::Card Header-->
-                            <!--begin::Card Body-->
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <!--begin::Data Table-->
-                                    @include('category.table')
-                                    <!--end::Data Table-->
-                                </div>
-                                <!-- /.table-responsive -->
+                            <div id="cat-table-content">
+                                @include('category.table')
                             </div>
-                            <!--end::Card Body-->
-                            <!--begin::Card Footer-->
-                            <div class="card-footer clearfix">
-                                {{-- <div class="float-start pt-1 fs-7 text-body-secondary">
-                                    @php
-                                        if ($catdata->total() == 1) {
-                                            $showResults = 'Showing 1 of ' . $catdata->total() . ' categories';
-                                        } else {
-                                            $showResults =
-                                                'Showing ' .
-                                                $catdata->firstItem() .
-                                                ' to ' .
-                                                $catdata->lastItem() .
-                                                ' of ' .
-                                                $catdata->total() .
-                                                ' categories';
-                                        }
-                                    @endphp
-                                    {{ $showResults }}
-                                </div>
-                                <ul class="pagination pagination-sm m-0 float-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Previous"> &laquo; </a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1</a>
-                                    </li>
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" aria-label="Next"> &raquo; </a>
-                                    </li>
-                                </ul> --}}
-                                {{ $catdata->links() }}
-                            </div>
-                            <!--end::Card Footer-->
                         </div>
                         <!--end::Card-->
                     </div>
@@ -181,18 +141,22 @@
         });
 
         const searchInput = document.getElementById('search');
+        const showDataSelect = document.getElementById('show-data');
+        let searchTimeout;
 
-        searchInput.addEventListener('input', () => {
-            // const query = this.value.trim() == "" ? '0' : this.value.trim();
-            setTimeout(() => {
-                // fetch(`${appUrl}/category/search/${query}`)
-                //     .then(response => response.text())
-                //     .then(data => {
-                //         resultsDiv.innerHTML = data;
-                //     })
-                //     .catch(error => console.error('Error:', error));
-                loadData(`${appURL}/category?search=${encodeURIComponent(this.value)}`)
-            }, 500);
+        function reloadCategoryTable() {
+            const query = encodeURIComponent(searchInput.value.trim());
+            const perPage = encodeURIComponent(showDataSelect.value);
+            loadData(`${appURL}/category?search=${query}&per_page=${perPage}`, '#cat-table-content');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(reloadCategoryTable, 500);
+        });
+
+        showDataSelect.addEventListener('change', () => {
+            reloadCategoryTable();
         });
     </script>
 @endsection
