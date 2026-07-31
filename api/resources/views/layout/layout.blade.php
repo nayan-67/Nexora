@@ -109,7 +109,6 @@
         .delete-modal-dialog {
             height: auto;
             width: 325px;
-            background: #fff;
             opacity: 0;
             transition: .8s;
         }
@@ -168,6 +167,35 @@
         <!--begin::Header-->
         @include('layout.header')
         <!--end::Header-->
+        <!-- ========= Modal ============ -->
+        <div class="delete-modal" id="del-modal">
+            <div class="delete-modal-dialog bg-body rounded-3">
+                <!-- Modal content-->
+                <div class="row modal-top d-flex align-items-center px-4 py-3">
+                    <div class="col-sm-3 fs-1">
+                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                    </div>
+                    <div class=" col-sm-9 m-content">
+                        <h5 class="p-0 m-0 fw-bold uppercase">DELETE @yield('modal-head')</h5>
+                        <p class="p-0 m-0">This action cannot be undone.</p>
+                    </div>
+                </div>
+                <hr class="m-0 text-secondery opacity-10">
+                <div class="row modal-btn d-flex align-items-center justify-content-space-between px-4 py-3">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm del-close"
+                            name="">CANCEL</button>
+                    </div>
+                    <form action="@yield('delete-route')" method="POST" class=" col-sm-6 m-content">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" id="modal-id" value="" name="id">
+                        <input type="submit" class="btn btn-danger btn-md w-100 shadow-sm" value="DELETE">
+                    </form>
+                </div>
+
+            </div>
+        </div>
         <!--begin::Sidebar-->
         @include('layout.sidebar')
         <!--end::Sidebar-->
@@ -319,10 +347,10 @@
         let modal = document.querySelector(".delete-modal");
         let modalBox = document.querySelector(".delete-modal-dialog");
         let delClose = document.querySelector(".del-close");
-        let delImage = document.querySelector("#modal-id");
+        let modalId = document.querySelector("#modal-id");
 
         function openModal(val) {
-            delImage.value = val;
+            modalId.value = val;
             modal.style.display = "grid";
             modalBox.style.opacity = "1";
         }

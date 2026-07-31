@@ -32,41 +32,9 @@
         <div class="app-content" style="min-height:88%;">
             <!--begin::Container-->
 
-            <!-- ========= Modal ============ -->
-
-            <div class="delete-modal" id="del-modal">
-                <div class="delete-modal-dialog rounded-3">
-
-                    <!-- Modal content-->
-                    <div class="row modal-top d-flex align-items-center px-4 py-3">
-                        <div class="col-sm-3 fs-1">
-                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
-                        </div>
-                        <div class=" col-sm-9 m-content">
-                            <h5 class="p-0 m-0 fw-bold">DELETE ORDER</h5>
-                            <p class="p-0 m-0">This action cannot be undone.</p>
-                        </div>
-                    </div>
-                    <hr class="m-0 text-secondery opacity-10">
-                    <div class="row modal-btn d-flex align-items-center justify-content-space-between px-4 py-3">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm del-close"
-                                name="">CANCEL</button>
-                        </div>
-                        <form action="{{ route('order.destroy') }}" method="POST" class=" col-sm-6 m-content">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" id="modal-id" value="" name="id">
-                            <input type="submit" class="btn btn-danger btn-md w-100 shadow-sm" value="DELETE">
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-
             <!-- ====== Order Section ======= -->
 
-            <section class="bg-white h-100 page-section" style="margin:0 10px;">
+            {{-- <section class="bg-white h-100 page-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary p-0 rounded">
                     <div class="row mx-1 py-3">
                         <div class="col-sm-2 d-flex align-items-center">
@@ -76,8 +44,6 @@
                             <form class="d-flex" role="search" action="javascript:void(0)">
                                 <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
                                     aria-label="Search" id="search" value="" autocomplete="off" />
-                                {{-- <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
                             </form>
                         </div>
                     </div>
@@ -168,7 +134,53 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> --}}
+
+            <div class="container-fluid">
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-12">
+                        <!--begin::Card-->
+                        <div class="card mb-4">
+                            <!--begin::Card Header-->
+                            <div class="card-header">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-12 col-md-6 d-flex gap-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label>Show Data</label>
+                                            <select id="show-data" class="form-select form-select-sm w-auto">
+                                                <option value="10" selected>10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                                            <div class="input-group input-group-sm w-auto">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                                </span>
+                                                <input type="search" id="search" class="form-control"
+                                                    placeholder="Search orders" aria-label="Search orders"
+                                                    style="width: 180px" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Card Header-->
+                            <div id="order-table-content">
+                                @include('order.table')
+                            </div>
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!--end::Row-->
+            </div>
             <!--end::Container-->
         </div>
         <!--end::App Content-->
@@ -180,16 +192,22 @@
 
     <script>
         const searchInput = document.getElementById('search');
-        const resultsDiv = document.querySelector('.results');
+        const showDataSelect = document.getElementById('show-data');
+        let searchTimeout;
 
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value != "" ? searchInput.value : "0";
-            fetch(`order/search/${query}`)
-                .then(response => response.text())
-                .then(data => {
-                    resultsDiv.innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
+        function reloadOrderTable() {
+            const query = encodeURIComponent(searchInput.value.trim());
+            const perPage = encodeURIComponent(showDataSelect.value);
+            loadData(`order?search=${query}&per_page=${perPage}`, '#order-table-content');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(reloadOrderTable, 500);
+        });
+
+        showDataSelect.addEventListener('change', () => {
+            reloadOrderTable();
         });
     </script>
 

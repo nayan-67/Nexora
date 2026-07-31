@@ -9,14 +9,13 @@
     $ship_id = $data->shipping_address_id;
     $billingresult = DB::table('order_address')->where('id', $bill_id)->first();
     $shippingresult = DB::table('order_address')->where('id', $ship_id)->first();
-    $create = $data->created_at;
-    $date = substr($create, 0, 10);
+    $date = substr($data->created_at, 0, 10);
     
     $billingaddress = $billingresult->address1 . ', ' . $billingresult->city . ', ' . $billingresult->postcode . ', ' . $billingresult->state . ', ' . $billingresult->country;
     
     $shippingaddress = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
     
-    $prdresult = DB::table('order_product')->where('order_id', $data->id)->get();
+    $prdresult = DB::table('order_items')->where('order_id', $data->id)->get();
     
     ?>
     <main class="app-main">
@@ -49,14 +48,14 @@
             <!--begin::Container-->
 
             <!-- =========== Edit Order Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     {{-- <h6 class="text-secondary my-2">Edit Order</h6>
                     <hr class="my-1"> --}}
                     <form action="{{ route('order.update', $data->id) }}" method="post">
                         @csrf
                         @method('PUT')
-                        <div class="row h-100">
+                        <div class="row h-100 py-3">
                             <div class="col-xl-12 px-4">
                                 <div class="card-body">
                                     <h4 class="text-secondary-emphasis my-2">Product Details</h4>

@@ -125,19 +125,6 @@
 @section('script')
 
     <script>
-        // const searchInput = document.getElementById('search');
-        // const resultsDiv = document.querySelector('.results');
-
-        // searchInput.addEventListener('input', () => {
-        //     const query = searchInput.value != "" ? searchInput.value : '0';
-        //     fetch(`coupon/search/${query}`)
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             resultsDiv.innerHTML = data;
-        //         })
-        //         .catch(error => console.error('Error:', error));
-        // });
-
         const searchInput = document.getElementById('search');
         const showDataSelect = document.getElementById('show-data');
         let searchTimeout;

@@ -37,7 +37,7 @@
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('coupon.edit', encrypt($row->id)) }}" class="btn btn-outline-info"
                                         data-bs-toggle="tooltip" data-bs-title="Edit">
-                                        <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
+                                        <i class="bi bi-pencil d-flex" aria-hidden="true"></i>
                                     </a>
                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip"
                                         data-bs-title="Delete" onclick="openModal('{{ $row->id }}');">
@@ -61,8 +61,10 @@
 <!--begin::Card Footer-->
 <div class="card-footer clearfix">
     <div class="float-start pt-1 fs-7 text-body-secondary">
-        @if ($data->total() > 0)
-            Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} Coupon
+        @if ($data->total() == 1)
+            Showing 1 Coupon
+        @elseif($data->total() > 1)
+            Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} Customer
         @else
             Showing 0 of 0 Coupon
         @endif

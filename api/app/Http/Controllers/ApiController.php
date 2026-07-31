@@ -480,7 +480,7 @@ class ApiController extends Controller
                 'user_id' => $user->id,
                 'order_status' => '1',
                 'payment_status' => '1',
-                'payment_mode' => 'card',
+                'payment_mode' => '2',
                 'billing_address_id' => $request->sameAsShipping ? $shippingAddress->id : $billAddress->id,
                 'shipping_address_id' => $shippingAddress->id,
                 'sub_total' => $orderData['subtotal'],

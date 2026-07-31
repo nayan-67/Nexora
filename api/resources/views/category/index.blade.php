@@ -5,6 +5,10 @@
 @section('catlactive', 'active')
 @section('catmenuopen', 'menu-open')
 
+@section('modal-head', 'CATEGORY')
+@section('delete-route', route('category.destroy'))
+
+
 @section('content')
     <main class="app-main">
         <!--begin::App Content Header-->
@@ -33,36 +37,6 @@
         <!--begin::App Content-->
         <div class="app-content">
             <!--begin::Container-->
-
-            <!-- ========= Modal ============ -->
-
-            <div class="delete-modal" id="del-modal">
-                <div class="delete-modal-dialog rounded-3">
-                    <!-- Modal content-->
-                    <div class="row modal-top d-flex align-items-center px-4 py-3">
-                        <div class="col-sm-3 fs-1">
-                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
-                        </div>
-                        <div class=" col-sm-9 m-content">
-                            <h5 class="p-0 m-0 fw-bold">DELETE CATEGORY</h5>
-                            <p class="p-0 m-0">This action cannot be undone.</p>
-                        </div>
-                    </div>
-                    <hr class="m-0 text-secondery opacity-10">
-                    <div class="row modal-btn d-flex align-items-center justify-content-space-between px-4 py-3">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm del-close"
-                                name="add-subpage">CANCEL</button>
-                        </div>
-                        <form action="{{ route('category.destroy') }}" method="POST" class=" col-sm-6 m-content">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" id="modal-id" value="" name="id">
-                            <input type="submit" class="btn btn-danger btn-md w-100 shadow-sm" value="DELETE">
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             <!-- ====== Category Section ======= -->
 

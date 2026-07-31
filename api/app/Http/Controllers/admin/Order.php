@@ -10,12 +10,20 @@ use Illuminate\Http\Request;
 
 class Order extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = Orders::orderBy('id', 'DESC')->get();
+        $perPage = $request->input('per_page', 10);
+        $query = Orders::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('order_number', 'like', '%' . $request->search . '%');
+        }
+        $data = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
+        if ($request->ajax()) {
+            return view('order.table', compact('data'))->render();
+        }
         return view('order.index', compact('data'));
     }
 

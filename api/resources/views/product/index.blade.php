@@ -155,19 +155,31 @@
                                                     placeholder="Search products" aria-label="Search products"
                                                     style="width: 180px" />
                                             </div>
-                                            {{-- <select id="user-role-filter" class="form-select form-select-sm w-auto"
-                                                aria-label="Filter by role">
-                                                <option value="all" selected>All roles</option>
-                                                <option value="administrator">Administrator</option>
-                                                <option value="editor">Editor</option>
-                                                <option value="author">Author</option>
-                                                <option value="subscriber">Subscriber</option>
-                                            </select>
-                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            {{-- <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#modal-add-user">
-                                                <i class="bi bi-person-plus-fill me-1" aria-hidden="true"> </i>
-                                                New user
+                                                <i class="bi bi-plus-circle me-1" aria-hidden="true"> </i>
+                                                New Product
                                             </button> --}}
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                                                    New Product
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li class="d-flex align-items-center gap-2">
+                                                        <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                                                        <a class="dropdown-item" href="#">Simple Product</a>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider" />
+                                                    </li>
+                                                    <li class="d-flex align-items-center gap-2">
+                                                        <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                                                        <a class="dropdown-item" href="#">Variant Product</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -210,20 +222,19 @@
                                                             $row->type == 2
                                                                 ? 'uploads/var_sm_' . $row->featured_image
                                                                 : 'uploads/prd_sm_' . $row->featured_image;
-                                                        $create = $row->created_at;
-                                                        $date = substr($create, 0, 10);
+                                                        $date = substr($row->created_at, 0, 10);
                                                     @endphp
                                                     <tr align="center">
                                                         <td>
                                                             <div class="d-flex align-items-center justify-content-start">
                                                                 <img src="{{ asset($img) }}" alt=""
-                                                                    class="rounded me-2" style="height: 80px;"/>
+                                                                    class="rounded me-2" style="height: 80px;" />
                                                                 <span class="fw-medium">{{ $row->name }}</span>
                                                             </div>
                                                         </td>
                                                         <td>{{ $cat->name }}</td>
                                                         <td>{{ $subcat->name }}</td>
-                                                        <td>{{ $row->sale_price ?? $row->price }}</td>
+                                                        <td>₹ {{ $row->sale_price ?? $row->price }}</td>
                                                         <td>{{ $row->type == '1' ? 'Simple' : 'Variable' }}</td>
                                                         <td>
                                                             <span
@@ -235,7 +246,8 @@
                                                                 <a href="{{ route('product.edit', encrypt($row->id)) }}"
                                                                     class="btn btn-outline-info" data-bs-toggle="tooltip"
                                                                     data-bs-title="Edit">
-                                                                    <i class="bi bi-pencil d-flex" aria-hidden="true"> </i>
+                                                                    <i class="bi bi-pencil d-flex" aria-hidden="true">
+                                                                    </i>
                                                                 </a>
                                                                 <button type="button" class="btn btn-outline-danger"
                                                                     data-bs-toggle="tooltip" data-bs-title="Delete"
@@ -320,7 +332,6 @@
         //         })
         //         .catch(error => console.error('Error:', error));
         // });
-
     </script>
 
 @endsection

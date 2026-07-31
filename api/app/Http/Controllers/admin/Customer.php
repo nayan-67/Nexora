@@ -39,7 +39,8 @@ class Customer extends Controller
         $id = decrypt($id);
         $item = User::find($id);
         $billingresult = Address::where('user_id', $id)->orderBy('id', 'ASC')->get();
-        return view('user.view', compact('item', 'billingresult'));
+        $orders = Orders::where('user_id', $id)->get();
+        return view('user.view', compact('item', 'billingresult', 'orders'));
     }
 
     public function update(Request $request, string $id)
