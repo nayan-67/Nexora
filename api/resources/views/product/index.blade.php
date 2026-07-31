@@ -167,16 +167,20 @@
                                                     New Product
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li class="d-flex align-items-center gap-2">
-                                                        <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
-                                                        <a class="dropdown-item" href="#">Simple Product</a>
+                                                    <li>
+                                                        <a class="dropdown-item fs-7" href="{{ route('admin.simple-product') }}">
+                                                            <i class="nav-icon bi bi-node-plus me-1"></i>
+                                                            Simple Product
+                                                        </a>
                                                     </li>
                                                     <li>
                                                         <hr class="dropdown-divider" />
                                                     </li>
-                                                    <li class="d-flex align-items-center gap-2">
-                                                        <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
-                                                        <a class="dropdown-item" href="#">Variant Product</a>
+                                                    <li>
+                                                        <a class="dropdown-item fs-7" href="{{ route('admin.variable-product') }}">
+                                                            <i class="nav-icon bi bi-node-plus me-1"></i>
+                                                            Variant Product
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>

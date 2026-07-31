@@ -82,7 +82,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item sub-nav-item @yield('addpmenuopen')">
-                            <a href="#" class="nav-link @yield('addpactive')">
+                            <a href="javascript:void(0)" class="nav-link @yield('addpactive')">
                                 <i class="nav-icon bi bi-plus-square"></i>
                                 <p>
                                     Add Product
