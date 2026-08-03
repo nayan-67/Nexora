@@ -97,7 +97,7 @@
 
 @section('script')
     <script>
-        let appURL = <?= json_encode(url('/')) ?>;
+        let appURL = @php echo json_encode(url('/')) @endphp;
 
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('cat-st')) {

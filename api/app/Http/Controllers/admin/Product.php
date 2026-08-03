@@ -17,12 +17,24 @@ use Illuminate\Support\Str;
 class Product extends Controller
 {
     use ResizeImage;
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = Products::where('is_delete', '0')->orderBy('id', 'ASC')->get();
+        $perPage = $request->input('per_page', 10);
+        $query = Products::query()->where('is_delete', '0');
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('sku', 'like', '%' . $request->search . '%')
+                    ->orWhere('type', 'like', '%' . $request->search . '%');
+            });
+        }
+        $data = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
+        if ($request->ajax()) {
+            return view('product.table', compact('data'))->render();
+        }
         return view('product.index', compact('data'));
     }
 
