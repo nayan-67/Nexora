@@ -5,8 +5,10 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Orders;
 use App\Models\OrderAddress;
+use App\Models\OrderItems;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Controller
 {
@@ -60,18 +62,36 @@ class Order extends Controller
 
     public function update(Request $request, string $id)
     {
+        DB::beginTransaction();
         try {
-            $data = [
-                'order_status' => $request->order_status,
-                'payment_status' => $request->payment_status
-            ];
-            if (Orders::where('id', $id)->update($data)) {
-                toast('order Updated Successfully', 'success');
-                return redirect()->route('admin.order');
+            $order_items = OrderItems::where('order_id', $id)->get();
+            foreach ($order_items as $item) {
+                $item->status = $request->post('item_status_' . $item->id);
+                if($request->post('item_status_' . $item->id) == 3){
+                    $item->delivery_date = now();
+                }
+                $item->save();
             }
+            $order = Orders::find($id);
+            $order->payment_status = $request->payment_status;
+            $order->save();
+            $flag = 0;
+            foreach ($order_items as $item) {
+                if ($item->status == 3) {
+                    $flag += 1;
+                }
+            }
+            if ($flag == count($order_items)) {
+                $order->order_status = 2;
+                $order->save();
+            }
+            DB::commit();
+            toast('Order Status Updated Successfully', 'success');
+            return back();
         } catch (Exception $e) {
+            DB::rollBack();
             toast($e->getMessage(), 'error');
-            return redirect()->route('admin.order');
+            return back();
         }
     }
 
@@ -84,54 +104,54 @@ class Order extends Controller
         }
     }
 
-    public function search(string $value)
-    {
-        $data = $value ? Orders::where('id', 'LIKE', $value . '%')->orderBy('id', 'DESC')->get() : Orders::orderBy('id', 'DESC')->get();
+    // public function search(string $value)
+    // {
+    //     $data = $value ? Orders::where('id', 'LIKE', $value . '%')->orderBy('id', 'DESC')->get() : Orders::orderBy('id', 'DESC')->get();
 
-        if (count($data) > 0) {
-            foreach ($data as $row) {
-                $bill_id = $row->billing_address_id;
-                $ship_id = $row->shipping_address_id;
-                $billingresult = OrderAddress::find($bill_id);
-                $shippingresult = OrderAddress::find($ship_id);
-                $date = substr($row->created_at, 0, 10);
-                $name = $billingresult->f_name . ' ' . $billingresult->l_name;
-                $address = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
+    //     if (count($data) > 0) {
+    //         foreach ($data as $row) {
+    //             $bill_id = $row->billing_address_id;
+    //             $ship_id = $row->shipping_address_id;
+    //             $billingresult = OrderAddress::find($bill_id);
+    //             $shippingresult = OrderAddress::find($ship_id);
+    //             $date = substr($row->created_at, 0, 10);
+    //             $name = $billingresult->f_name . ' ' . $billingresult->l_name;
+    //             $address = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
 
-                if ($row->order_status == 0) {
-                    $class = 'cancelled';
-                    $order_status = 'Cancelled';
-                } else if ($row->order_status == 1) {
-                    $class = 'processing';
-                    $order_status = 'Processing';
-                } else if ($row->order_status == 2) {
-                    $class = 'shipped';
-                    $order_status = 'Shipped';
-                } else {
-                    $class = 'delivered';
-                    $order_status = 'Delivered';
-                }
+    //             if ($row->order_status == 0) {
+    //                 $class = 'cancelled';
+    //                 $order_status = 'Cancelled';
+    //             } else if ($row->order_status == 1) {
+    //                 $class = 'processing';
+    //                 $order_status = 'Processing';
+    //             } else if ($row->order_status == 2) {
+    //                 $class = 'shipped';
+    //                 $order_status = 'Shipped';
+    //             } else {
+    //                 $class = 'delivered';
+    //                 $order_status = 'Delivered';
+    //             }
 
-                echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                    <div class='row fs-7'>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->id . "</div>
-                        <div class='col-sm-3 text-center d-flex align-items-center justify-content-center text-wrap'>" . $address . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . date('j-M-y', strtotime($date)) . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>$ " . $row->total_price . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center
-                        '><span class='list-badge " . $class . "'>" . $order_status . "</span></div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $name . "</div>
-                        <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                            <a href='" . route('order.edit', encrypt($row->id)) . "' class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                            <button type='button' class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;' onclick=\"openModal('" . $row->id . "');\"><i class='fa-regular fa-trash-can'></i>DELETE</button>
-                        </div>
-                    </div>";
-            }
-        } else {
-            echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                <div class='row fs-7'>
-                    <div class='col-sm-12 text-center'>No Order Found</div>
-                </div>";
-        }
-    }
+    //             echo "  <hr class='m-2 text-body-tertiary opacity-10'>
+    //                 <div class='row fs-7'>
+    //                     <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->id . "</div>
+    //                     <div class='col-sm-3 text-center d-flex align-items-center justify-content-center text-wrap'>" . $address . "</div>
+    //                     <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . date('j-M-y', strtotime($date)) . "</div>
+    //                     <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>$ " . $row->total_price . "</div>
+    //                     <div class='col-sm-1 text-center d-flex align-items-center justify-content-center
+    //                     '><span class='list-badge " . $class . "'>" . $order_status . "</span></div>
+    //                     <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $name . "</div>
+    //                     <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
+    //                         <a href='" . route('order.edit', encrypt($row->id)) . "' class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
+    //                         <button type='button' class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;' onclick=\"openModal('" . $row->id . "');\"><i class='fa-regular fa-trash-can'></i>DELETE</button>
+    //                     </div>
+    //                 </div>";
+    //         }
+    //     } else {
+    //         echo "  <hr class='m-2 text-body-tertiary opacity-10'>
+    //             <div class='row fs-7'>
+    //                 <div class='col-sm-12 text-center'>No Order Found</div>
+    //             </div>";
+    //     }
+    // }
 }

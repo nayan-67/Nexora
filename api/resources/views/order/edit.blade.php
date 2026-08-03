@@ -4,20 +4,65 @@
 @section('oactive', 'active')
 
 @section('content')
-    <?php
-    $bill_id = $data->billing_address_id;
-    $ship_id = $data->shipping_address_id;
-    $billingresult = DB::table('order_address')->where('id', $bill_id)->first();
-    $shippingresult = DB::table('order_address')->where('id', $ship_id)->first();
-    $date = substr($data->created_at, 0, 10);
-    
-    $billingaddress = $billingresult->address1 . ', ' . $billingresult->city . ', ' . $billingresult->postcode . ', ' . $billingresult->state . ', ' . $billingresult->country;
-    
-    $shippingaddress = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
-    
-    $prdresult = DB::table('order_items')->where('order_id', $data->id)->get();
-    
-    ?>
+    @php
+        $bill_id = $data->billing_address_id;
+        $ship_id = $data->shipping_address_id;
+        $billingresult = DB::table('order_address')->where('id', $bill_id)->first();
+        $shippingresult = DB::table('order_address')->where('id', $ship_id)->first();
+        $date = substr($data->created_at, 0, 10);
+
+        $billingaddress =
+            $billingresult->address1 .
+            ', ' .
+            $billingresult->city .
+            ', ' .
+            $billingresult->postcode .
+            ', ' .
+            $billingresult->state .
+            ', ' .
+            $billingresult->country;
+
+        $shippingaddress =
+            $shippingresult->address1 .
+            ', ' .
+            $shippingresult->city .
+            ', ' .
+            $shippingresult->postcode .
+            ', ' .
+            $shippingresult->state .
+            ', ' .
+            $shippingresult->country;
+
+        $prdresult = DB::table('order_items')->where('order_id', $data->id)->get();
+
+        if ($data->order_status == '1') {
+            $statusClass = 'text-bg-warning';
+            $statusText = 'Processing';
+        } elseif ($data->order_status == '2') {
+            $statusClass = 'text-bg-success';
+            $statusText = 'Completed';
+        } else {
+            $statusClass = 'text-bg-danger';
+            $statusText = 'Cancelled';
+        }
+        if ($data->payment_mode == '1') {
+            $method = 'Cash on Delivery';
+            $icon = '<i class="bi bi-cash-coin me-1" aria-hidden="true"></i>';
+        } elseif ($data->payment_mode == '2') {
+            $method = 'Razorpay';
+            $icon = '<i class="bi bi-credit-card me-1" aria-hidden="true"></i>';
+        } else {
+            $method = 'Wallet';
+            $icon = '<i class="bi bi-wallet2 me-1" aria-hidden="true"></i>';
+        }
+        if ($data->payment_status == '1') {
+            $paymentStatusClass = 'border border-warning-subtle';
+        } elseif ($data->payment_status == '2') {
+            $paymentStatusClass = 'border border-success';
+        } else {
+            $paymentStatusClass = 'border border-danger-subtle';
+        }
+    @endphp
     <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header py-2">
@@ -50,34 +95,103 @@
             <!-- =========== Edit Order Section ============== -->
             <section class="bg-body add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
-                    {{-- <h6 class="text-secondary my-2">Edit Order</h6>
-                    <hr class="my-1"> --}}
+                    <h6 class="my-3 d-flex align-items-center gap-4">
+                        <span class="text-primary">#{{ $data->order_number }}</span>
+                        <span class="">{{ $data->created_at }}</span>
+                        <span class="list-badge {{ $statusClass }}">{{ $statusText }}</span>
+                    </h6>
+                    <hr class="my-1">
                     <form action="{{ route('order.update', $data->id) }}" method="post">
                         @csrf
                         @method('PUT')
-                        <div class="row h-100 py-3">
+                        <div class="row h-100">
                             <div class="col-xl-12 px-4">
                                 <div class="card-body">
-                                    <h4 class="text-secondary-emphasis my-2">Product Details</h4>
-                                    <hr class="my-1">
-                                    @foreach ($prdresult as $key => $item)
-                                        <?php
-                                        $p_id = $item->product_id;
-                                        $presult = DB::table('products')->where('id', $p_id)->first();
-                                        ?>
-                                        <div class="row pt-1 pb-1">
-                                            <div class="col-md-6">
-                                                <h6 class="mb-2 fs-7 fw-bold">Product <?php echo $key + 1; ?></h6>
-                                                <input type="text" class="form-control fs-7" name=""
-                                                    placeholder="" value="{{ $presult->name }}" disabled />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h6 class="mb-2 fs-7 fw-bold">Quantity</h6>
-                                                <input type="text" class="form-control fs-7" name=""
-                                                    placeholder="" value="{{ $item->quantity }}" disabled />
-                                            </div>
-                                        </div>
-                                    @endforeach
+                                    <table class="table table-hover align-middle m-0">
+                                        <thead class="fs-7">
+                                            <tr align="center">
+                                                <th class="text-left">Products</th>
+                                                <th>SKU</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fs-7 data-results">
+                                            @foreach ($prdresult as $orderItem)
+                                                @php
+                                                    $product = DB::table('products')
+                                                        ->where('id', $orderItem->product_id)
+                                                        ->first();
+                                                    $isVariableProduct = $product->type == 2;
+                                                    if ($isVariableProduct) {
+                                                        $varProduct = DB::table('variants')
+                                                            ->where('sku', $orderItem->sku)
+                                                            ->first();
+                                                    }
+                                                    $attributes = $isVariableProduct
+                                                        ? json_decode($varProduct->attributes, true)
+                                                        : [];
+                                                    $img = $isVariableProduct
+                                                        ? 'uploads/var_sm_' . $varProduct->featured_image
+                                                        : 'uploads/prd_sm_' . $product->featured_image;
+                                                    if ($orderItem->status == '1') {
+                                                        $statusClass = 'border border-warning-subtle';
+                                                    } elseif ($orderItem->status == '2') {
+                                                        $statusClass = 'border border-primary-subtle';
+                                                    } elseif ($orderItem->status == '3') {
+                                                        $statusClass = 'border border-success';
+                                                    } else {
+                                                        $statusClass = 'border border-danger-subtle';
+                                                    }
+                                                @endphp
+                                                <tr align="center">
+                                                    <td align="left">
+                                                        <div class="d-flex align-items-center justify-content-start">
+                                                            <img src="{{ asset($img) }}" alt=""
+                                                                class="rounded me-2" style="width: 60px;" />
+                                                            <div class="d-flex flex-column">
+                                                                <span>
+                                                                    {{ $product->name }}
+                                                                </span>
+                                                                <span class="fs-8">
+                                                                    @foreach ($attributes as $key => $val)
+                                                                        {{ $val['name'] }}:
+                                                                        &nbsp;
+                                                                        {{ $val['value']['name'] ?? $val['value'] }}
+                                                                        &nbsp;
+                                                                        {{ $key < count($attributes) - 1 ? '|' : '' }}
+                                                                        &nbsp;
+                                                                    @endforeach
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $orderItem->sku }}</td>
+                                                    <td>{{ $orderItem->quantity }}</td>
+                                                    <td>₹ {{ $orderItem->price }}</td>
+                                                    <td>
+                                                        <select class="form-control form-select fs-7 {{ $statusClass }}"
+                                                            aria-label="Default select example"
+                                                            name="item_status_{{ $orderItem->id }}">
+                                                            <option {{ $orderItem->status == 1 ? 'selected' : '' }}
+                                                                value="1">
+                                                                Processing</option>
+                                                            <option {{ $orderItem->status == 2 ? 'selected' : '' }}
+                                                                value="2">
+                                                                Shipped</option>
+                                                            <option {{ $orderItem->status == 3 ? 'selected' : '' }}
+                                                                value="3">
+                                                                Delivered</option>
+                                                            <option {{ $orderItem->status == 0 ? 'selected' : '' }}
+                                                                value="0">
+                                                                Canceled</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
 
                                     <h4 class="text-secondary-emphasis my-2 mt-3">Address Details</h4>
                                     <hr class="my-1">
@@ -92,92 +206,88 @@
                                         </div>
                                     </div>
 
-                                    <h4 class="text-secondary-emphasis my-2 mt-3">Billing Details</h4>
-                                    <hr class="my-1">
                                     <div class="row pt-1 pb-2">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-2 fs-7 fw-bold">SubTotal</h6>
-                                            <input class="form-control fs-7" type="text" id="" name=""
-                                                value="{{ $data->sub_total }}" disabled>
+                                        <div class="col-md-8 position-relative">
+                                            <h4 class="text-secondary-emphasis my-2 mt-3">Payment Details</h4>
+                                            <hr class="my-1">
+                                            <div class="row g-3 fs-7">
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Payment
+                                                        Method</label>
+                                                    <p class="mb-0 fs-7 form-control">
+                                                        {!! $icon !!}
+                                                        {{ $method }}
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="form-label">Payment
+                                                        Status</label>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-center"
+                                                        style="min-height: 2.1rem;">
+                                                        <select class="form-control form-select fs-7 {{ $paymentStatusClass }}"
+                                                            aria-label="Default select example" name="payment_status">
+                                                            <option {{ $data->payment_status == 1 ? 'selected' : '' }}
+                                                                value="1">
+                                                                Pending</option>
+                                                            <option {{ $data->payment_status == 2 ? 'selected' : '' }}
+                                                                value="2">
+                                                                Paid</option>
+                                                            <option {{ $data->payment_status == 3 ? 'selected' : '' }}
+                                                                value="3">
+                                                                Refunded</option>
+                                                        </select>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Transaction
+                                                        ID</label>
+                                                    <p class="mb-0 fs-7 form-control" style="min-height: 2.1rem;">
+                                                        {{ $data->transaction_id }}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6 position-relative">
-                                            <h6 class="mb-2 fs-7 fw-bold">Eco Tax (8%)</h6>
-                                            <input class="form-control fs-7" type="text" id="" name=""
-                                                value="{{ $data->eco_tax }}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-1 pb-2">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-2 fs-7 fw-bold">VAT (20%)</h6>
-                                            <input class="form-control fs-7" type="text" id="" name=""
-                                                value="{{ $data->vat }}" disabled>
-                                        </div>
-                                        <div class="col-md-6 position-relative">
-                                            <h6 class="mb-2 fs-7 fw-bold">Discount</h6>
-                                            <input class="form-control fs-7" type="text" id="" name=""
-                                                value="{{ $data->discount }}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-1 pb-2">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-2 fs-7 fw-bold">Total</h6>
-                                            <input class="form-control fs-7" type="text" id="" name=""
-                                                value="{{ $data->total_price }}" disabled>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="text-secondary-emphasis my-2 mt-3">Payment Details</h4>
-                                    <hr class="my-1">
-                                    <div class="row pt-1 pb-2">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-2 fs-7 fw-bold">Payment Mode</h6>
-                                            <input class="form-control fs-7" type="text" id=""
-                                                name="" value="{{ $data->payment_mode }}" disabled>
-                                        </div>
-                                        <div class="col-md-6 position-relative">
-                                            <h6 class="mb-2 fs-7 fw-bold">Order Date</h6>
-                                            <input class="form-control fs-7" type="text" id=""
-                                                name="" value="{{ date('j-M-y', strtotime($date)) }}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-1 pb-2">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-2 fs-7 fw-bold">Transanction Id</h6>
-                                            <input class="form-control fs-7" type="text" id=""
-                                                name="" value="" disabled>
-                                        </div>
-                                        <div class="col-md-6 position-relative">
-                                            <h6 class="mb-2 fs-7 fw-bold">Order Status</h6>
-                                            <select class="form-control form-select fs-7"
-                                                aria-label="Default select example" name="order_status">
-                                                <option {{ $data->order_status == 1 ? 'selected' : '' }}
-                                                    value="1">Processing</option>
-                                                <option {{ $data->order_status == 2 ? 'selected' : '' }}
-                                                    value="2">Shipped</option>
-                                                <option {{ $data->order_status == 3 ? 'selected' : '' }}
-                                                    value="3">Delivered</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-1 pb-2">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-2 fs-7 fw-bold">Payment Status</h6>
-                                            <select class="form-control form-select fs-7"
-                                                aria-label="Default select example" name="payment_status">
-                                                <option {{ $data->payment_status == 0 ? 'selected' : '' }}
-                                                    value="0">Pending</option>
-                                                <option {{ $data->payment_status == 1 ? 'selected' : '' }}
-                                                    value="1">Paid</option>
-                                                <option {{ $data->payment_status == 2 ? 'selected' : '' }}
-                                                    value="2">Refunded</option>
-                                            </select>
+                                        <div class="col-md-4">
+                                            <h4 class="text-secondary-emphasis my-2 mt-3">Billing Details</h4>
+                                            <hr class="my-1">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Subtotal :</span>
+                                                        <span>₹
+                                                            {{ $data->sub_total }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Discount :</span>
+                                                        <span>- ₹
+                                                            {{ $data->discount }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Shipping :</span>
+                                                        <span>₹
+                                                            {{ $data->shipping }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>GST(8%) :</span>
+                                                        <span>₹
+                                                            {{ $data->eco_tax }}</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span class="fw-semibold">Total
+                                                            :</span>
+                                                        <span class="fw-semibold">₹
+                                                            {{ $data->total_price }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="row py-2">
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="edit-order">Update</button>
+                                                class="btn btn-primary btn-sm" name="order_update">Update Status</button>
                                         </div>
                                     </div>
                                 </div>

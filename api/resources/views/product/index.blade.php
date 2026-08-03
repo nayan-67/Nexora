@@ -155,11 +155,6 @@
                                                     placeholder="Search products" aria-label="Search products"
                                                     style="width: 180px" />
                                             </div>
-                                            {{-- <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#modal-add-user">
-                                                <i class="bi bi-plus-circle me-1" aria-hidden="true"> </i>
-                                                New Product
-                                            </button> --}}
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
