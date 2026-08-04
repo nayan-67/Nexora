@@ -98,7 +98,7 @@
                                             <div class="col-md-6">
                                                 <label class="form-label" for="pass"> Password </label>
                                                 <div class="pass-box form-control">
-                                                    <input class="me-2 fs-7 bg-body" type="password" id="pass"
+                                                    <input class="me-2 fs-7 bg-body form-control" type="password" id="pass"
                                                         name="password" value="{{ $data->password }}" autocomplete="off"
                                                         style="outline: none;" />
                                                     <i class="fa-regular fa-eye-slash show-btn"></i>

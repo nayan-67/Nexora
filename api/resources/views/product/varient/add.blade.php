@@ -347,7 +347,7 @@
 
 @section('script')
     <script>
-        const appURL = <?= json_encode(url('/')) ?>;
+        const appURL = @php echo json_encode(url('/')) @endphp;
 
         let productName = '';
         let attributes = [];

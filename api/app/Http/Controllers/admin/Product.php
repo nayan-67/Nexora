@@ -28,7 +28,12 @@ class Product extends Controller
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')
                     ->orWhere('sku', 'like', '%' . $request->search . '%')
-                    ->orWhere('type', 'like', '%' . $request->search . '%');
+                    ->orWhereHas('category', function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->search . '%');
+                    })
+                    ->orWhereHas('sub_category', function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->search . '%');
+                    });
             });
         }
         $data = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
@@ -507,7 +512,7 @@ class Product extends Controller
             $cat = Category::find($request->cat_id);
             $cat->total_products += 1;
             $cat->save();
-            
+
             DB::commit();
 
             toast('Variable Product Added Successfully', 'success');

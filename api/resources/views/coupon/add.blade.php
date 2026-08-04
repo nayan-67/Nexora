@@ -134,7 +134,6 @@
 @endsection
 
 @section('script')
-
     <script>
         let validFrom = document.querySelector(".valid-from");
         const date = new Date();

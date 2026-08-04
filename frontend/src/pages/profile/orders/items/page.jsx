@@ -158,7 +158,7 @@ export default function OrderDetailPage() {
                                         className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors"
                                     >
                                         <div className="flex items-center gap-4 flex-1">
-                                            <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                                            <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted shrink-0">
                                                 <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
                                             </div>
                                             <div className="text-left">

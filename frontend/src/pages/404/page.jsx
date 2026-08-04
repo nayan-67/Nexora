@@ -31,21 +31,21 @@ export default function NotFound() {
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient orbs */}
         <div
-          className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-3xl animate-pulse"
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-linear-to-br from-primary/20 to-transparent blur-3xl animate-pulse"
           style={{
             animation: 'float 6s ease-in-out infinite',
             transform: `translate(${mousePos.x * 20}px, ${mousePos.y * 20}px)`,
           }}
         />
         <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-gradient-to-tr from-primary/10 to-transparent blur-3xl"
+          className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-linear-to-tr from-primary/10 to-transparent blur-3xl"
           style={{
             animation: 'float 8s ease-in-out infinite reverse',
             transform: `translate(${mousePos.x * -15}px, ${mousePos.y * -15}px)`,
           }}
         />
         <div
-          className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full bg-gradient-to-br from-accent/5 to-transparent blur-3xl"
+          className="absolute top-1/2 left-1/2 w-96 h-96 rounded-full bg-linear-to-br from-accent/5 to-transparent blur-3xl"
           style={{
             animation: 'float 10s ease-in-out infinite',
             transform: `translate(-50%, -50%) translate(${mousePos.x * 10}px, ${mousePos.y * 10}px)`,
@@ -59,7 +59,7 @@ export default function NotFound() {
           {/* Animated 404 text */}
           <div className="mb-8 relative">
             <div
-              className="text-9xl sm:text-10xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-primary/70"
+              className="text-9xl sm:text-10xl font-bold text-transparent bg-clip-text bg-linear-to-r from-primary via-primary to-primary/70"
               style={{
                 fontFamily: 'var(--font-heading)',
                 animation: 'fadeInScale 0.8s ease-out',
@@ -110,9 +110,9 @@ export default function NotFound() {
               animation: 'fadeInUp 0.8s ease-out 0.6s both',
             }}
           >
-            <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-primary/50" />
+            <div className="w-12 h-0.5 bg-linear-to-r from-transparent to-primary/50" />
             <div className="w-2 h-2 rounded-full bg-primary/50" />
-            <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-primary/50" />
+            <div className="w-12 h-0.5 bg-linear-to-l from-transparent to-primary/50" />
           </div>
 
           {/* Action buttons */}

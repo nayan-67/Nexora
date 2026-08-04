@@ -8,90 +8,90 @@ import { toast } from "react-hot-toast"
 const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "")
 
 
-const orders = [
-  {
-    id: "NX-8FK2JH",
-    date: "March 28, 2026",
-    status: "delivered",
-    total: 922,
-    items: [
-      {
-        id: 1,
-        name: "Premium Wireless Headphones",
-        price: 299,
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop&q=80",
-        quantity: 1,
-      },
-      {
-        id: 2,
-        name: "Minimalist Watch Collection",
-        price: 189,
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&q=80",
-        quantity: 2,
-      },
-      {
-        id: 5,
-        name: "Leather Crossbody Bag",
-        price: 245,
-        image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop&q=80",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: "NX-3PQ9MN",
-    date: "March 15, 2026",
-    status: "shipped",
-    trackingNumber: "1Z999AA10123456784",
-    total: 328,
-    items: [
-      {
-        id: 4,
-        name: "Smart Home Speaker",
-        price: 129,
-        image: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=100&h=100&fit=crop&q=80",
-        quantity: 1,
-      },
-      {
-        id: 3,
-        name: "Designer Sunglasses",
-        price: 159,
-        image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop&q=80",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: "NX-7YT5WX",
-    date: "February 22, 2026",
-    status: "processing",
-    total: 79,
-    items: [
-      {
-        id: 8,
-        name: "Portable Charger Pro",
-        price: 79,
-        image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=100&h=100&fit=crop&q=80",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: "NX-1AB2CD",
-    date: "January 10, 2026",
-    status: "cancelled",
-    total: 89,
-    items: [
-      {
-        id: 6,
-        name: "Ceramic Vase Set",
-        price: 89,
-        image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=100&h=100&fit=crop&q=80",
-        quantity: 1,
-      },
-    ],
-  },
-]
+// const orders = [
+//   {
+//     id: "NX-8FK2JH",
+//     date: "March 28, 2026",
+//     status: "delivered",
+//     total: 922,
+//     items: [
+//       {
+//         id: 1,
+//         name: "Premium Wireless Headphones",
+//         price: 299,
+//         image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop&q=80",
+//         quantity: 1,
+//       },
+//       {
+//         id: 2,
+//         name: "Minimalist Watch Collection",
+//         price: 189,
+//         image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&q=80",
+//         quantity: 2,
+//       },
+//       {
+//         id: 5,
+//         name: "Leather Crossbody Bag",
+//         price: 245,
+//         image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop&q=80",
+//         quantity: 1,
+//       },
+//     ],
+//   },
+//   {
+//     id: "NX-3PQ9MN",
+//     date: "March 15, 2026",
+//     status: "shipped",
+//     trackingNumber: "1Z999AA10123456784",
+//     total: 328,
+//     items: [
+//       {
+//         id: 4,
+//         name: "Smart Home Speaker",
+//         price: 129,
+//         image: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=100&h=100&fit=crop&q=80",
+//         quantity: 1,
+//       },
+//       {
+//         id: 3,
+//         name: "Designer Sunglasses",
+//         price: 159,
+//         image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop&q=80",
+//         quantity: 1,
+//       },
+//     ],
+//   },
+//   {
+//     id: "NX-7YT5WX",
+//     date: "February 22, 2026",
+//     status: "processing",
+//     total: 79,
+//     items: [
+//       {
+//         id: 8,
+//         name: "Portable Charger Pro",
+//         price: 79,
+//         image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=100&h=100&fit=crop&q=80",
+//         quantity: 1,
+//       },
+//     ],
+//   },
+//   {
+//     id: "NX-1AB2CD",
+//     date: "January 10, 2026",
+//     status: "cancelled",
+//     total: 89,
+//     items: [
+//       {
+//         id: 6,
+//         name: "Ceramic Vase Set",
+//         price: 89,
+//         image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=100&h=100&fit=crop&q=80",
+//         quantity: 1,
+//       },
+//     ],
+//   },
+// ]
 
 const statusConfig = {
   delivered: {
@@ -123,8 +123,10 @@ const statusConfig = {
 // Helper function to get delivery message
 function getDeliveryMessage(item) {
   if (Number(item.status) === 3) {
+    let deliveredOn = new Date(item.delivery_date).toLocaleDateString("en-US", { month: "long", day: '2-digit', year: "numeric" })
+    let deliveredTime = new Date(item.delivery_date).toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })
     return {
-      text: `Delivered on ${item.deliveredOn}`,
+      text: `Delivered on ${deliveredOn} at ${deliveredTime}`,
       subtext: "Your item has been delivered",
       icon: CheckCircle2,
       color: "text-green-600",

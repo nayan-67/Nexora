@@ -291,7 +291,7 @@
 
 @section('script')
     <script>
-        const appURL = <?= json_encode(url('/')) ?>;
+        const appURL = @php echo json_encode(url('/')) @endphp;
 
         let ProductImage = document.querySelector("#p-image");
         let galleryImages = document.querySelectorAll(".g-img");

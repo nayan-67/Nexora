@@ -42,21 +42,21 @@
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('user.view', encrypt($row->id)) }}"
                                         class="btn btn-outline-info d-flex" data-bs-toggle="tooltip"
-                                        data-bs-title="View">
+                                        data-bs-title="View Details">
                                         <i class="bi bi-eye d-flex py-1" aria-hidden="true">
                                         </i>
                                     </a>
-                                    <a href="{{ route('user.order', encrypt($row->id)) }}"
+                                    {{-- <a href="{{ route('user.order', encrypt($row->id)) }}"
                                         class="btn btn-outline-primary d-flex align-items-center"
                                         data-bs-toggle="tooltip" data-bs-title="Orders">
                                         <i class="bi bi-cart3 d-flex" aria-hidden="true">
                                         </i>
-                                    </a>
-                                    {{-- <button type="button" class="btn btn-outline-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Delete"
+                                    </a> --}}
+                                    <button type="button" class="btn btn-outline-danger"
+                                        data-bs-toggle="tooltip" data-bs-title="Block User"
                                         onclick="openModal('{{ $row->id }}');">
-                                        <i class="bi bi-trash d-flex" aria-hidden="true"> </i>
-                                    </button> --}}
+                                        <i class="bi bi-ban d-flex" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

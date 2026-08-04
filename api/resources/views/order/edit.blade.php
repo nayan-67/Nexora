@@ -3,6 +3,20 @@
 @section('title', 'Order')
 @section('oactive', 'active')
 
+@section('css')
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     @php
         $bill_id = $data->billing_address_id;
@@ -62,6 +76,10 @@
         } else {
             $paymentStatusClass = 'border border-danger-subtle';
         }
+        // if ($data->discount) {
+        //    $discountData= DB::table('discounts')->where('id', $data->discount_id)->first();
+        // }
+        // $discountValue = $data->discount;
     @endphp
     <main class="app-main">
         <!--begin::App Content Header-->
@@ -224,7 +242,8 @@
                                                         Status</label>
                                                     <p class="mb-0 d-flex align-items-center justify-content-center"
                                                         style="min-height: 2.1rem;">
-                                                        <select class="form-control form-select fs-7 {{ $paymentStatusClass }}"
+                                                        <select
+                                                            class="form-control form-select fs-7 {{ $paymentStatusClass }}"
                                                             aria-label="Default select example" name="payment_status">
                                                             <option {{ $data->payment_status == 1 ? 'selected' : '' }}
                                                                 value="1">
@@ -287,7 +306,11 @@
                                     <div class="row py-2">
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-sm" name="order_update">Update Status</button>
+                                                class="btn btn-primary btn-sm d-flex align-items-center"
+                                                name="order_update" id="order_update">
+                                                <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
+                                                Update Status
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -301,4 +324,14 @@
         </div>
         <!--end::App Content-->
     </main>
+@endsection
+
+@section('script')
+    <script>
+        let button = document.querySelector("#order_update");
+        let icon = document.querySelector("#arrow_repeat");
+        button.addEventListener("click", function() {
+            icon.style.animation = "spin 1s linear infinite";
+        });
+    </script>
 @endsection

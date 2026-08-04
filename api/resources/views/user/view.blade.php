@@ -69,15 +69,15 @@
                                 <ul class="list-group list-group-flush text-start small">
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Orders</span>
-                                        <span class="fw-semibold">22</span>
+                                        <span class="fw-semibold">{{count($orders)}}</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Ordered Items</span>
-                                        <span class="fw-semibold">43</span>
+                                        <span class="fw-semibold">{{count($order_items)}}</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Order Value</span>
-                                        <span class="fw-semibold">₹ 13,287</span>
+                                        <span class="fw-semibold">₹ {{$order_value}}</span>
                                     </li>
                                 </ul>
                             </div>

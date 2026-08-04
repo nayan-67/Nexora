@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\OrderItems;
 use App\Models\Orders;
 use App\Models\User;
 use Exception;
@@ -40,7 +41,10 @@ class Customer extends Controller
         $item = User::find($id);
         $billingresult = Address::where('user_id', $id)->orderBy('id', 'ASC')->get();
         $orders = Orders::where('user_id', $id)->get();
-        return view('user.view', compact('item', 'billingresult', 'orders'));
+        
+        $order_items = OrderItems::where('user_id', $id)->get();
+        $order_value = Orders::where('user_id', $id)->sum('total_price');
+        return view('user.view', compact('item', 'billingresult', 'orders', 'order_items', 'order_value'));
     }
 
     public function update(Request $request, string $id)
