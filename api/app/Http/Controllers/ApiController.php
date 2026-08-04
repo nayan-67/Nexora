@@ -68,7 +68,7 @@ class ApiController extends Controller
 
     public function productDetails(int $id)
     {
-        $products = Products::where('id', $id)->first();
+        $products = Products::find($id);
         return response()->json($products, 200);
     }
 

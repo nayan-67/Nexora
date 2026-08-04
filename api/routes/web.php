@@ -58,7 +58,7 @@ Route::controller(Product::class)->group(function () {
     Route::put('/product/update/simple/{id}', 'update')->name('product.simpleupdate');
     Route::put('/product/update/variable/{id}', 'variableupdate')->name('product.variableupdate');
     Route::delete('/product/destroy', 'destroy')->name('product.destroy');
-    Route::get('/product/search/{name}', 'search')->name('product.search');
+    // Route::get('/product/search/{name}', 'search')->name('product.search');
     Route::get('/product/subcat/{name}', 'searchsubcat')->name('product.subcat');
 });
 
@@ -83,7 +83,7 @@ Route::controller(Order::class)->group(function () {
     Route::post('/order/store', 'store')->name('order.store');
     Route::put('/order/update/{id}', 'update')->name('order.update');
     Route::delete('/order/destroy', 'destroy')->name('order.destroy');
-    Route::get('/order/search/{name}', 'search')->name('order.search');
+    // Route::get('/order/search/{name}', 'search')->name('order.search');
 });
 
 // ==================== Customer ====================

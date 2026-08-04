@@ -101,7 +101,7 @@
 
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('cat-st')) {
-                fetch(`${appUrl}/category/status/${e.target.id}`)
+                fetch(`${appURL}/category/status/${e.target.id}`)
                     .then(response => response.text())
                     .then(data => {
                         if (data == 'success') {
