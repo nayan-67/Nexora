@@ -176,7 +176,7 @@
                         <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                     </div>
                     <div class=" col-sm-9 m-content">
-                        <h5 class="p-0 m-0 fw-bold uppercase">DELETE @yield('modal-head')</h5>
+                        <h5 class="p-0 m-0 fw-bold text-uppercase">DELETE @yield('modal-head')</h5>
                         <p class="p-0 m-0">This action cannot be undone.</p>
                     </div>
                 </div>

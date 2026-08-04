@@ -5,11 +5,13 @@
 @section('pactive', 'active')
 @section('pmenuopen', 'menu-open')
 
+@section('modal-head', 'Product')
+@section('delete-route', route('product.destroy'))
 
 
 @section('css')
     <style>
-        .imginput::-webkit-file-upload-button {
+        /* .imginput::-webkit-file-upload-button {
             visibility: hidden;
         }
 
@@ -46,6 +48,13 @@
             right: 0;
             cursor: pointer;
             backdrop-filter: blur(10px);
+        } */
+
+        .p-name {
+            max-width: 320px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 

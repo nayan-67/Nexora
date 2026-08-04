@@ -64,7 +64,7 @@
         @if ($data->total() == 1)
             Showing 1 Coupon
         @elseif($data->total() > 1)
-            Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} Customer
+            Showing {{ $data->firstItem() }} - {{ $data->lastItem() }} of {{ $data->total() }} Coupons
         @else
             Showing 0 of 0 Coupon
         @endif

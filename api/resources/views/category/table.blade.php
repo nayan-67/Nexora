@@ -65,8 +65,10 @@
 <!--begin::Card Footer-->
 <div class="card-footer clearfix">
     <div class="float-start pt-1 fs-7 text-body-secondary">
-        @if ($catdata->total() > 0)
-            Showing {{ $catdata->firstItem() }} to {{ $catdata->lastItem() }} of {{ $catdata->total() }} Category
+        @if ($catdata->total() == 1)
+            Showing 1 Category
+        @elseif ($catdata->total() > 0)
+            Showing {{ $catdata->firstItem() }} - {{ $catdata->lastItem() }} of {{ $catdata->total() }} Categories
         @else
             Showing 0 of 0 Category
         @endif

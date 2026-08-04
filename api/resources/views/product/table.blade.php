@@ -36,7 +36,7 @@
                                 <div class="d-flex align-items-center justify-content-start">
                                     <img src="{{ asset($img) }}" alt="" class="rounded me-2"
                                         style="height: 80px;" />
-                                    <span class="fw-medium">{{ $row->name }}</span>
+                                    <span class="fw-medium p-name">{{ $row->name }}</span>
                                 </div>
                             </td>
                             <td>{{ $cat->name }}</td>
@@ -80,7 +80,7 @@
         @if ($data->total() == 1)
             Showing 1 Product
         @elseif($data->total() > 1)
-            Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} Product
+            Showing {{ $data->firstItem() }} - {{ $data->lastItem() }} of {{ $data->total() }} Products
         @else
             Showing 0 of 0 Product
         @endif
