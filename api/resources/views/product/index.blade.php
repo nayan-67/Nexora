@@ -288,7 +288,6 @@
                                                 return (attr.name || '') + ': ' + (attr.value ?? '');
                                             }).join(', ')
                                             : '-';
-                                            console.log('Variant:', variant);
                                             let img=`${appURL}/uploads/var_sm_${variant.featured_image}`;
                                         return `
                                             <tr class="text-center fs-7">
