@@ -20,32 +20,58 @@
                         @php
                             $cat = DB::table('category')->where('id', $row->category_id)->first();
                             $subcat = DB::table('sub_category')->where('id', $row->sub_category_id)->first();
-                            if ($row->type == 2) {
+                            $isVariant = $row->type == 2;
+                            if ($isVariant) {
+                                $stClass = 'text-bg-primary';
+                                $type = 'Variant';
                                 $stock = DB::table('variants')->where('product_id', $row->id)->sum('stock');
+                                $totalVariants = DB::table('variants')->where('product_id', $row->id)->count();
+                                $minPrice = DB::table('variants')->where('product_id', $row->id)->min('sale_price');
+                                $maxPrice = DB::table('variants')->where('product_id', $row->id)->max('sale_price');
+                                $priceDisplay =
+                                    $minPrice == $maxPrice ? '₹ ' . $minPrice : '₹ ' . $minPrice . ' - ₹ ' . $maxPrice;
                             } else {
+                                $stClass = 'text-bg-success';
+                                $type = 'Simple';
                                 $stock = $row->stock;
+                                $priceDisplay = '₹ ' . ($row->sale_price ?? $row->price);
                             }
                             $img =
                                 $row->type == 2
                                     ? 'uploads/var_sm_' . $row->featured_image
                                     : 'uploads/prd_sm_' . $row->featured_image;
                             $date = substr($row->created_at, 0, 10);
+                            if ($stock >= 20) {
+                                $stockClass = 'bg-success';
+                            } elseif ($stock >= 10) {
+                                $stockClass = 'bg-primary';
+                            } elseif ($stock >= 5) {
+                                $stockClass = 'bg-warning';
+                            } else {
+                                $stockClass = 'bg-danger';
+                            }
                         @endphp
                         <tr align="center">
-                            <td>
-                                <div class="d-flex align-items-center justify-content-start">
+                            <td class="product-row" data-product-id="{{ $row->id }}" style="cursor: pointer;">
+                                <div class="d-flex align-items-center justify-content-start ">
                                     <img src="{{ asset($img) }}" alt="" class="rounded me-2"
                                         style="height: 80px;" />
-                                    <span class="fw-medium p-name">{{ $row->name }}</span>
+                                    <div class="d-flex flex-column align-items-start justify-content-center">
+                                        <span class="fw-medium p-name mb-1">{{ $row->name }}</span>
+                                        <span class="fs-8">SKU: {{ $row->sku }}</span>
+                                        <span class="fs-8">{{ $isVariant ? $totalVariants . ' Variants' : '' }}</span>
+                                    </div>
                                 </div>
                             </td>
                             <td>{{ $cat->name }}</td>
                             <td>{{ $subcat->name }}</td>
-                            <td>₹ {{ $row->sale_price ?? $row->price }}</td>
-                            <td>{{ $row->type == '1' ? 'Simple' : 'Variable' }}</td>
+                            <td>{{ $priceDisplay }}</td>
+                            <td><span class='list-badge {{ $stClass }}'>{{ $type }}</span></td>
                             <td>
-                                <span
-                                    class='{{ $stock > 0 ? 'text-success' : 'text-danger' }}'>{{ $stock }}</span>
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <span class="dot {{ $stockClass }}"></span>
+                                    {{ $stock }}
+                                </div>
                             </td>
                             <td>{{ date('M j, Y', strtotime($date)) }}</td>
                             <td>

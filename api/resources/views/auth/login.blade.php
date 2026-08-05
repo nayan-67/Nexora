@@ -5,45 +5,50 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin | Login</title>
+
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <!--end::Accessibility Meta Tags-->
+
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="Admin | Login" />
+    <meta name="title" content="Nexora | Login" />
     <meta name="author" content="ColorlibHQ" />
     <meta name="description"
         content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance." />
     <meta name="keywords"
         content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant" />
     <!--end::Primary Meta Tags-->
+
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
     <link rel="preload" href="{{ asset('adminlte/dist/css/adminlte.css') }}" as="style" />
     <link rel="icon" href="{{ asset('images/favicon.png') }}">
     <!--end::Accessibility Features-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
         integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" media="print"
-        onload="this.media='all'" />
+        onload="this.media = 'all'" />
     <!--end::Fonts-->
+
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
         crossorigin="anonymous" />
     <!--end::Third Party Plugin(OverlayScrollbars)-->
+
     <!--begin::Third Party Plugin(Bootstrap Icons)-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
         crossorigin="anonymous" />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
+
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/toast.css') }}" />
     <!--end::Required Plugin(AdminLTE)-->
-
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -52,22 +57,27 @@
     @include('sweetalert::alert')
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b class="fw-bold">Admin </b>| Nexora</a>
+            <a href="#"><strong>Admin </strong>| Nexora</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
-            <div class="card-body login-card-body">
+            <div class="card-body login-card-body rounded-5">
                 <p class="login-box-msg">Sign in to access Dashboard</p>
-                <form action="{{route('admin.logcheck')}}" method="post">
+
+                <form action="{{ route('admin.logcheck') }}" method="post">
                     @csrf
                     <div class="input-group my-3">
-                        <input type="email" class="form-control" placeholder="Email" name="email" required value="{{old('email')}}"/>
-                        <div class="input-group-text"><i class="bi bi-envelope"></i></span></div>
+                        <input type="email" class="form-control" placeholder="Email" name="email" required
+                            value="{{ old('email') }}" />
+                        <div class="input-group-text">
+                            <span class="bi bi-envelope"></span>
+                        </div>
                     </div>
-
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" name="password" required/>
-                        <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
+                        <input type="password" class="form-control" placeholder="Password" name="password" required />
+                        <div class="input-group-text">
+                            <span class="bi bi-lock-fill"></span>
+                        </div>
                     </div>
                     <!--begin::Row-->
                     <div class="row">
@@ -80,7 +90,7 @@
                         <!-- /.col -->
                         <div class="col-4">
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary" name="login">Sign In</button>
+                                <button type="submit" class="btn btn-primary">Sign In</button>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -93,21 +103,18 @@
         </div>
     </div>
     <!-- /.login-box -->
+
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
         crossorigin="anonymous"></script>
-    <!--end::Third Party Plugin(OverlayScrollbars)-->
-    <!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous">
     </script>
-    <!--end::Required Plugin(popperjs for Bootstrap 5)-->
-    <!--begin::Required Plugin(Bootstrap 5)-->
+    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <!--end::Required Plugin(Bootstrap 5)-->
-    <!--begin::Required Plugin(AdminLTE)-->
+    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
-    <!--end::Required Plugin(AdminLTE)-->
-    <!--begin::OverlayScrollbars Configure-->
+    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
         const Default = {
@@ -117,7 +124,15 @@
         };
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-            if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+
+            // Disable OverlayScrollbars on mobile devices to prevent touch interference
+            const isMobile = window.innerWidth <= 992;
+
+            if (
+                sidebarWrapper &&
+                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
+                !isMobile
+            ) {
                 OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
                     scrollbars: {
                         theme: Default.scrollbarTheme,
@@ -129,7 +144,71 @@
         });
     </script>
     <!--end::OverlayScrollbars Configure-->
+    <!--begin::Color Mode Toggle (#6010)-->
+    <script>
+        (() => {
+            'use strict';
 
+            const STORAGE_KEY = 'lte-theme';
+
+            const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
+            const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
+
+            const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            const getPreferredTheme = () => {
+                const stored = getStoredTheme();
+                if (stored) return stored;
+                return prefersDark() ? 'dark' : 'light';
+            };
+
+            const setTheme = (theme) => {
+                const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme;
+                document.documentElement.setAttribute('data-bs-theme', resolved);
+            };
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme) => {
+                // Highlight the active dropdown option
+                document.querySelectorAll('[data-bs-theme-value]').forEach((el) => {
+                    el.classList.remove('active');
+                    el.setAttribute('aria-pressed', 'false');
+                    const check = el.querySelector('.bi-check-lg');
+                    if (check) check.classList.add('d-none');
+                });
+                const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+                if (active) {
+                    active.classList.add('active');
+                    active.setAttribute('aria-pressed', 'true');
+                    const check = active.querySelector('.bi-check-lg');
+                    if (check) check.classList.remove('d-none');
+                }
+                // Sync the topbar trigger icon
+                document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => {
+                    icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme);
+                });
+            };
+
+            globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const stored = getStoredTheme();
+                if (!stored || stored === 'auto') setTheme(getPreferredTheme());
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+                document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => {
+                    toggle.addEventListener('click', () => {
+                        const theme = toggle.getAttribute('data-bs-theme-value');
+                        setStoredTheme(theme);
+                        setTheme(theme);
+                        showActiveTheme(theme);
+                    });
+                });
+            });
+        })();
+    </script>
+    <!--end::Color Mode Toggle-->
     <!--end::Script-->
 </body>
 <!--end::Body-->

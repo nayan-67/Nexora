@@ -34,8 +34,8 @@ class Admin extends Controller
     }
     public function logcheck(Request $request)
     {
-        $email = $request->post('email');
-        $password = $request->post('password');
+        $email = $request->email;
+        $password = $request->password;
 
         $result = DB::table('admin')->where('email', $email)->first();
         if ($result) {
@@ -45,11 +45,11 @@ class Admin extends Controller
                 return redirect()->route('dashboard');
             } else {
                 toast('Invalid Password', 'error');
-                return redirect()->route('admin.login');
+                return back()->withInput($request->only('email'));
             }
         } else {
             toast('Invalid Email', 'error');
-            return redirect()->route('admin.login');
+            return back()->withInput($request->only('email'));
         }
     }
     public function logout()

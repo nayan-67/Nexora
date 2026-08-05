@@ -245,6 +245,7 @@
             const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
 
             const appMain = document.querySelector('.right-section');
+            const productPanel = document.querySelector('.product-detail-panel');
 
             // Disable OverlayScrollbars on mobile devices to prevent touch interference
             const isMobile = window.innerWidth <= 992;
@@ -268,6 +269,19 @@
                 OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined
             ) {
                 OverlayScrollbarsGlobal.OverlayScrollbars(appMain, {
+                    scrollbars: {
+                        theme: Default.scrollbarTheme,
+                        autoHide: Default.scrollbarAutoHide,
+                        clickScroll: Default.scrollbarClickScroll,
+                    },
+                });
+            }
+
+            if (
+                productPanel &&
+                OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined
+            ) {
+                OverlayScrollbarsGlobal.OverlayScrollbars(productPanel, {
                     scrollbars: {
                         theme: Default.scrollbarTheme,
                         autoHide: Default.scrollbarAutoHide,
@@ -367,7 +381,7 @@
             });
         }
 
-        function loadData(url, selector = '.data-results') {
+        function loadData(url, selector = '.data-results', callback = null) {
             const target = document.querySelector(selector);
             if (!target) {
                 return;
@@ -380,6 +394,9 @@
                 .then(response => response.text())
                 .then(html => {
                     target.innerHTML = html;
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 })
                 .catch(error => console.error('Error:', error));
         }
