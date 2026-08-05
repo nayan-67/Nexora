@@ -373,7 +373,7 @@ export default function CartPage() {
                 <div className="mt-6 space-y-3 border-t border-border/40 pt-6">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Truck className="h-4 w-4" />
-                    Free shipping on orders over ₹ 500
+                    Free shipping on orders over ₹ 499
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Lock className="h-4 w-4" />

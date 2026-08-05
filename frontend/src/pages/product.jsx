@@ -506,7 +506,7 @@ export default function ProductPage() {
                                 : "opacity-60 hover:opacity-100"
                             )}
                           >
-                            <img src={`${apiBase}/uploads/var_glr_md_${image}`} alt="" className="h-full w-full object-cover" />
+                            <img src={`${apiBase}/uploads/var_glr_sm_${image}`} alt="" className="h-full w-full object-cover" />
                           </button>
                         ))}
                       </>

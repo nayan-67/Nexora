@@ -53,10 +53,12 @@
                         @endphp
                         <tr align="center">
                             <td class="product-row" data-product-id="{{ $row->id }}" style="cursor: pointer;">
-                                <div class="d-flex align-items-center justify-content-start ">
-                                    <img src="{{ asset($img) }}" alt="" class="rounded me-2"
-                                        style="height: 80px;" />
-                                    <div class="d-flex flex-column align-items-start justify-content-center">
+                                <div class="d-flex align-items-center justify-content-start row">
+                                    <div class="col-md-4">
+                                        <img src="{{ asset($img) }}" alt="" class="rounded me-2"
+                                            style="height: 80px;" />
+                                    </div>
+                                    <div class="col-md-8 d-flex flex-column align-items-start justify-content-center">
                                         <span class="fw-medium p-name mb-1">{{ $row->name }}</span>
                                         <span class="fs-8">SKU: {{ $row->sku }}</span>
                                         <span class="fs-8">{{ $isVariant ? $totalVariants . ' Variants' : '' }}</span>

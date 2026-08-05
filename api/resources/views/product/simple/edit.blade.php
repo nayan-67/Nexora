@@ -10,16 +10,16 @@
 @section('css')
     <style>
         /* .imginput::-webkit-file-upload-button {
-                        visibility: hidden;
-                    }
+                                visibility: hidden;
+                            }
 
-                    .imginput::before {
-                        content: 'Choose Image Above 800 x 800 px';
-                        display: inline-block;
-                        background: #eeeeeee0;
-                        padding: 0.45rem;
-                        margin-right: -4rem;
-                    } */
+                            .imginput::before {
+                                content: 'Choose Image Above 800 x 800 px';
+                                display: inline-block;
+                                background: #eeeeeee0;
+                                padding: 0.45rem;
+                                margin-right: -4rem;
+                            } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -43,13 +43,13 @@
         }
 
         /* .fa-xmark {
-                        color: #862828;
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        cursor: pointer;
-                        backdrop-filter: blur(10px);
-                    } */
+                                color: #862828;
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+                                cursor: pointer;
+                                backdrop-filter: blur(10px);
+                            } */
         .img-remove-icon {
             position: absolute;
             right: 0;
@@ -67,7 +67,7 @@
 @section('content')
     <?php
     $subcatresult = DB::table('sub_category')->where('category_id', $item->category_id)->where('is_delete', '0')->orderBy('id', 'ASC')->get();
-    $oldImg = $item->gallery_image;
+    $oldImg = $item->gallery_images;
     $features = $item->features ? implode(' | ', $item->features) : '';
     ?>
     <main class="app-main">
@@ -288,7 +288,11 @@
                                         </div>
                                         <div class="col-md-9 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="edit-product">Update</button>
+                                                class="btn btn-primary btn-md d-flex align-items-center"
+                                                name="edit-product" id="product_update">
+                                                <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
+                                                Update
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -441,13 +445,13 @@
         });
 
         function validate() {
-            if (ProductImage.naturalWidth < 600) {
-                imageError.innerHTML = "Please Select Image Above 400 x 400 px";
+            if (ProductImage.naturalWidth < 800) {
+                imageError.innerHTML = "Please Select Image Above 800 x 800 px";
                 return false;
             }
             galleryImages.forEach(val => {
-                if (val.naturalWidth < 600) {
-                    gimageError.innerHTML = "Please Select Image Above 400 x 400 px";
+                if (val.naturalWidth < 800) {
+                    gimageError.innerHTML = "Please Select Image Above 800 x 800 px";
                     return false;
                 }
             });
@@ -471,6 +475,14 @@
 
         pNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(pNameInput.value);
+        });
+
+        let button = document.querySelector("#product_update");
+        let icon = document.querySelector("#arrow_repeat");
+        button.addEventListener("click", async function() {
+            icon.style.animation = "spin 1s linear infinite";
+            await new Promise(resolve => setTimeout(resolve, 500));
+            this.disabled = true;
         });
     </script>
 @endsection

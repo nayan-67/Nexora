@@ -19,7 +19,7 @@ class Products extends Model
         'price',
         'sale_price',
         'featured_image',
-        'gallery_image',
+        'gallery_images',
         'stock',
         'is_feature',
         'is_delete',
@@ -27,7 +27,7 @@ class Products extends Model
 
     protected $casts = [
         'features' => 'array',
-        'gallery_image' => 'array',
+        'gallery_images' => 'array',
     ];
 
     public function category()

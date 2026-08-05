@@ -377,9 +377,16 @@
                                         {{-- <div class="col-md-3"></div> --}}
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="add-product">Update Product</button>
+                                                class="btn btn-primary btn-md d-flex align-items-center" name="update_product" id="update_product">
+                                                <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
+                                                Update Product
+                                            </button>
                                             <a href="{{ route('admin.product') }}"
-                                                class="btn btn-warning btn-md">Back</a>
+                                                class="btn btn-warning btn-md d-flex align-items-center" id="back_button">
+                                                {{-- <i class="bi bi-arrow-left me-1"></i> --}}
+                                                <i class="bi bi-arrow-left-short"></i>
+                                                Back
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -611,7 +618,7 @@
                     ];
                 }
             @endphp
-            attributes = <?= json_encode($attributesData) ?>;
+            attributes = @php echo json_encode($attributesData) @endphp;
         }
 
         function loadExistingVariants() {
@@ -626,7 +633,7 @@
                 is_sale: v.is_sale,
                 sale_price: v.sale_price,
                 featured_image: v.featured_image,
-                gallery_image: v.gallery_image,
+                gallery_image: v.gallery_images,
                 is_active: v.is_active,
                 attributes: v.attributes ? (typeof v.attributes === 'string' ? JSON.parse(v.attributes) : v
                     .attributes) : [],
@@ -1242,6 +1249,16 @@
 
         pNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(pNameInput.value);
+        });
+
+        let button = document.querySelector("#update_product");
+        let backButton = document.querySelector("#back_button");
+        let icon = document.querySelector("#arrow_repeat");
+        button.addEventListener("click", async function() {
+            icon.style.animation = "spin 1s linear infinite";
+            await new Promise(resolve => setTimeout(resolve, 500));
+            this.disabled = true;
+            backButton.disabled = true;
         });
     </script>
 @endsection

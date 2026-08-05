@@ -3,20 +3,6 @@
 @section('title', 'Order')
 @section('oactive', 'active')
 
-@section('css')
-    <style>
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-@endsection
-
 @section('content')
     @php
         $bill_id = $data->billing_address_id;
@@ -330,8 +316,10 @@
     <script>
         let button = document.querySelector("#order_update");
         let icon = document.querySelector("#arrow_repeat");
-        button.addEventListener("click", function() {
+        button.addEventListener("click", async function() {
             icon.style.animation = "spin 1s linear infinite";
+            await new Promise(resolve => setTimeout(resolve, 500));
+            this.disabled = true;
         });
     </script>
 @endsection

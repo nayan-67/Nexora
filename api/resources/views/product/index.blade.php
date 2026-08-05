@@ -12,7 +12,7 @@
 @section('css')
     <style>
         .p-name {
-            max-width: 320px;
+            max-width: 250px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -40,7 +40,6 @@
             pointer-events: auto;
         }
     </style>
-
 @endsection
 
 @section('content')
@@ -323,7 +322,7 @@
                     </div>
                     <span class="list-badge bg-primary">SKU: ${product.sku}</span>
                     <div class="d-flex gap-2 my-2">
-                        <span class="list-badge ${product.stock >= 20 ? 'bg-success' : product.stock >= 10 ? 'primary' : product.stock >= 5 ? 'bg-warning text-black' : 'bg-danger'}">Stock: ${product.stock ?? '—'}</span>
+                        <span class="list-badge ${product.stock >= 20 ? 'bg-success' : product.stock >= 10 ? 'bg-primary' : product.stock >= 5 ? 'bg-warning text-black' : 'bg-danger'}">Stock: ${product.stock ?? '—'}</span>
                         ${product.type == 2 ? `<span class="list-badge bg-info-subtle">Variants: ${product.variants.length}</span>` : ''}
                     </div>
                 </div>
