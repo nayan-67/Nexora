@@ -487,7 +487,7 @@ class ApiController extends Controller
                 'total_price' => $orderData['total'],
                 'eco_tax' => $orderData['tax'],
                 'discount' => $orderData['discount'],
-                'used_coupon' => $orderData['coupon']['name'],
+                'used_coupon' => $orderData['coupon']['name'] ?? null,
                 'shipping' => $orderData['shipping'],
             ]);
 

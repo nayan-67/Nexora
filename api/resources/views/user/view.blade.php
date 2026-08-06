@@ -216,7 +216,7 @@
                                         <div class="card-body">
                                             <div class="accordion" id="accordionExample">
                                                 @if (count($orders) > 0)
-                                                    @foreach ($orders as $item)
+                                                    @foreach ($orders as $key=> $item)
                                                         @php
                                                             $orderItems = DB::table('order_items')
                                                                 ->where('order_id', $item->id)
@@ -297,7 +297,7 @@
                                                                 </button>
                                                             </h2>
                                                             <div id="collapse-{{ $item->id }}"
-                                                                class="accordion-collapse collapse show"
+                                                                class="accordion-collapse collapse {{ $key === 0 ? 'show' : '' }}"
                                                                 data-bs-parent="#accordionExample">
                                                                 <div class="accordion-body">
                                                                     <table class="table table-hover align-middle m-0">

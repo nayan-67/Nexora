@@ -231,7 +231,7 @@ function ItemCard({ item, products, variants }) {
                 <div className="mt-2 flex items-center gap-2 text-sm">
                   <span className="font-medium text-foreground">Qty: {item.quantity}</span>
                   <span className="text-muted-foreground">•</span>
-                  <span className="text-foreground font-medium">${item.price * item.quantity}</span>
+                  <span className="text-foreground font-medium">₹ {Number(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -349,9 +349,9 @@ export default function OrdersPage() {
 
   // Apply sorting
   if (selectedSort === "recent") {
-    filteredItems = [...filteredItems].sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+    filteredItems = [...filteredItems].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
   } else if (selectedSort === "oldest") {
-    filteredItems = [...filteredItems].sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate))
+    filteredItems = [...filteredItems].sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
   } else if (selectedSort === "price-high") {
     filteredItems = [...filteredItems].sort((a, b) => (b.price * b.quantity) - (a.price * a.quantity))
   } else if (selectedSort === "price-low") {

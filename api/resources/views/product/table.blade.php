@@ -53,7 +53,7 @@
                         @endphp
                         <tr align="center">
                             <td class="product-row" data-product-id="{{ $row->id }}" style="cursor: pointer;">
-                                <div class="d-flex align-items-center justify-content-start row">
+                                <div class="d-flex align-items-center justify-content-start row" title="{{ $row->name }}">
                                     <div class="col-md-4">
                                         <img src="{{ asset($img) }}" alt="" class="rounded me-2"
                                             style="height: 80px;" />

@@ -193,7 +193,7 @@ export default function CheckoutPage() {
   }, 0)
   const coupon = JSON.parse(sessionStorage.getItem("coupon"))
   const discount = coupon ? (coupon.type == 2 ? Number(coupon.amount) : subtotal * (coupon.amount / 100)) : 0
-  const shipping = subtotal > 500 ? 0 : 40
+  const shipping = subtotal > 499 ? 0 : 40
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax - discount
 
@@ -1062,7 +1062,7 @@ export default function CheckoutPage() {
                     {isProcessing ? (
                       "Processing..."
                     ) : currentStep === 4 ? (
-                      `Pay $${total.toFixed(2)}`
+                      `Pay ₹ ${total.toFixed(2)}`
                     ) : (
                       "Continue"
                     )}

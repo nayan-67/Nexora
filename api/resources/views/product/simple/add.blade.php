@@ -10,16 +10,16 @@
 @section('css')
     <style>
         /* .imginput::-webkit-file-upload-button {
-            visibility: hidden;
-        }
+                        visibility: hidden;
+                    }
 
-        .imginput::before {
-            content: 'Choose Image Above 800 x 800 px';
-            display: inline-block;
-            background: #eeeeeee0;
-            padding: 0.45rem;
-            margin-right: -4rem;
-        } */
+                    .imginput::before {
+                        content: 'Choose Image Above 800 x 800 px';
+                        display: inline-block;
+                        background: #eeeeeee0;
+                        padding: 0.45rem;
+                        margin-right: -4rem;
+                    } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -43,14 +43,14 @@
         }
 
         /* .fa-xmark {
-            color: #862828;
-            position: absolute;
-            top: 0;
-            right: 0;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        } */
-         .img-remove-icon {
+                        color: #862828;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        cursor: pointer;
+                        backdrop-filter: blur(10px);
+                    } */
+        .img-remove-icon {
             position: absolute;
             right: 0;
             top: 0;
@@ -103,6 +103,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         @method('POST')
+                        <input type="text" id="sku" name="sku" value="" hidden />
                         <div class="row h-100 py-3">
                             <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
@@ -146,7 +147,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
-                                                placeholder="Enter Name.." value="{{old('name')}}" required />
+                                                placeholder="Enter Name.." value="{{ old('name') }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -155,7 +156,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-slug" name="slug"
-                                                placeholder="Enter Slug.." value="{{old('slug')}}" required />
+                                                placeholder="Enter Slug.." value="{{ old('slug') }}" required />
                                         </div>
                                     </div>
 
@@ -164,7 +165,8 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Description</h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Description ..." value="{{old('description')}}"></textarea>
+                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Description ..."
+                                                value="{{ old('description') }}"></textarea>
                                         </div>
                                     </div>
 
@@ -174,7 +176,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <textarea class="form-control fs-7" rows="3" name="features" placeholder="Use | to separate features"
-                                                value="{{old('features')}}"></textarea>
+                                                value="{{ old('features') }}"></textarea>
                                         </div>
                                     </div>
 
@@ -185,7 +187,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 price" name="price"
-                                                placeholder="0.00" value="{{old('price')}}" required />
+                                                placeholder="0.00" value="{{ old('price') }}" required />
                                             <div class="price-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -196,7 +198,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" class="form-control fs-7 sale-price" name="sale_price"
-                                                placeholder="0.00" value="{{old('sale_price')}}" />
+                                                placeholder="0.00" value="{{ old('sale_price') }}" />
                                             <div class="sale-price-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -214,7 +216,8 @@
                                                 <input class="form-control fs-7 p-imginput imginput" type="file"
                                                     id="formFile" name="p-img" accept="image/*" required>
                                             </div>
-                                            <div class="text-info fs-8 mt-n3">*** Please choose image above (800px * 800px) dimension  ***</div>
+                                            <div class="text-info fs-8 mt-n3">*** Please choose image above (800px * 800px)
+                                                dimension ***</div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
                                         </div>
                                     </div>
@@ -226,7 +229,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="number" class="form-control fs-7" name="stock"
-                                                placeholder="0" value="{{old('stock')}}" min="0" required />
+                                                placeholder="0" value="{{ old('stock') }}" min="0" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -257,7 +260,8 @@
                                         </div> --}}
                                         <div class="col-md-3 fs-7">
                                             <input class="form-check-input" type="checkbox" value="1"
-                                                id="checkChecked" name="feature" {{ old('feature') == 1 ? 'checked' : '' }}>
+                                                id="checkChecked" name="feature"
+                                                {{ old('feature') == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label ps-1 text-body" for="checkChecked">
                                                 Add to Featured Product
                                             </label>
@@ -409,6 +413,16 @@
             }
         });
 
+        function generateSku(productName) {
+            const prefix = productName
+                .replace(/[^a-zA-Z]/g, '')
+                .substring(0, 3)
+                .toUpperCase();
+
+            const suffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+
+            return `NX-${prefix}-${suffix}`;
+        }
 
         function validate() {
             if (ProductImage.naturalWidth < 800) {
@@ -431,9 +445,15 @@
 
         let productNameInput = document.querySelector(".p-name");
         let slugInput = document.querySelector(".p-slug");
+        let skuInput = document.getElementById("sku");
 
         productNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(productNameInput.value);
+            skuInput.value = generateSku(productNameInput.value);
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            skuInput.value = generateSku(productNameInput.value);
         });
     </script>
 

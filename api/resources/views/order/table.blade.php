@@ -67,11 +67,11 @@
                                         <i class="bi bi-cart3 d-flex" aria-hidden="true">
                                         </i>
                                     </a> --}}
-                                    {{-- <button type="button" class="btn btn-outline-danger"
+                                    <button type="button" class="btn btn-outline-danger"
                                         data-bs-toggle="tooltip" data-bs-title="Delete"
-                                        onclick="openModal('{{ $row->id }}');">
-                                        <i class="bi bi-trash d-flex" aria-hidden="true"> </i>
-                                    </button> --}}
+                                        onclick="openCancelModal('{{ $row->id }}');">
+                                        <i class="bi bi-trash d-flex" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

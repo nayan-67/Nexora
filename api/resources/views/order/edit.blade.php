@@ -297,6 +297,12 @@
                                                 <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
                                                 Update Status
                                             </button>
+                                            <a href="{{route('admin.order')}}" class="text-decoration-none">
+                                                <button type="button" class="btn btn-warning btn-sm d-flex align-items-center">
+                                                    <i class="bi bi-arrow-left-short me-1 d-flex" aria-hidden="true"></i>
+                                                    Back
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

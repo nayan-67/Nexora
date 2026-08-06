@@ -60,16 +60,17 @@ class Product extends Controller
                 'sub_cat_id' => 'required',
                 'name' => 'required',
                 'slug' => 'required|unique:products,slug',
+                'sku' => 'required|unique:products,sku',
                 'price' => 'required|numeric',
                 'sale_price' => 'nullable|numeric|lt:price',
                 'stock' => 'required|numeric',
                 'p-img' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif|dimensions:min_width=800|max:8192',
                 'g-img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|dimensions:min_width=800|max:8192',
             ]);
-            $sku = 'NX-' . strtoupper(Str::random(3)) . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 3));
+            // $sku = 'NX-' . strtoupper(Str::random(3)) . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 3));
             $features = $request->features ? explode("|", preg_replace('/\s*\|\s*/', '|', trim($request->features))) : '';
             $product = new Products();
-            $product->sku = $sku;
+            $product->sku = $request->sku;
             $product->name = $request->name;
             $product->slug = $request->slug;
             $product->category_id = $request->cat_id;

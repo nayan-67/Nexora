@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('order_number', 100)->nullable();
+            $table->string('order_number', 100)->unique()->nullable();
             $table->enum('order_status', ['1', '2', '3'])->nullable()->default('1')->comment('1: Pending, 2: Complete, 3:Canceled');
             $table->enum('payment_status', ['1', '2','3'])->nullable()->default('1')->comment('1: Pending, 2: Paid, 3: Refunded');
             $table->string('payment_mode', 100);

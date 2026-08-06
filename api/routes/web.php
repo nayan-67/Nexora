@@ -79,7 +79,7 @@ Route::controller(Order::class)->group(function () {
     Route::get('/order/edit/{id}', 'edit')->name('order.edit');
     Route::post('/order/store', 'store')->name('order.store');
     Route::put('/order/update/{id}', 'update')->name('order.update');
-    Route::delete('/order/destroy', 'destroy')->name('order.destroy');
+    Route::delete('/order/cancel', 'cancel')->name('order.cancel');
 });
 
 // ==================== Customer ====================
