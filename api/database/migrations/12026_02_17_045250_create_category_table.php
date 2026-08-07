@@ -20,7 +20,11 @@ return new class extends Migration
             $table->text('image');
             $table->integer('total_products')->default(0)->nullable();
             $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
+            
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('name', 'slug');
         });
     }
 

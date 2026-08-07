@@ -92,3 +92,7 @@ Route::controller(Customer::class)->group(function () {
     Route::get('/customer/order/{id}', 'userOrder')->name('user.order');
     Route::delete('/customer/order/destroy', 'delorder')->name('order.delete');
 });
+
+// Route::get('/loader', function () {
+//     return view('loader');
+// });

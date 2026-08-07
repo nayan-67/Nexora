@@ -187,9 +187,11 @@
                                                             <option {{ $orderItem->status == 3 ? 'selected' : '' }}
                                                                 value="3">
                                                                 Delivered</option>
-                                                            <option {{ $orderItem->status == 0 ? 'selected' : '' }}
-                                                                value="0">
-                                                                Canceled</option>
+                                                            @if ($orderItem->status != 3)
+                                                                <option {{ $orderItem->status == 0 ? 'selected' : '' }}
+                                                                    value="0">
+                                                                    Canceled</option>
+                                                            @endif
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -231,9 +233,11 @@
                                                         <select
                                                             class="form-control form-select fs-7 {{ $paymentStatusClass }}"
                                                             aria-label="Default select example" name="payment_status">
-                                                            <option {{ $data->payment_status == 1 ? 'selected' : '' }}
-                                                                value="1">
-                                                                Pending</option>
+                                                            @if ($data->payment_status != 2)
+                                                                <option {{ $data->payment_status == 1 ? 'selected' : '' }}
+                                                                    value="1">
+                                                                    Pending</option>
+                                                            @endif
                                                             <option {{ $data->payment_status == 2 ? 'selected' : '' }}
                                                                 value="2">
                                                                 Paid</option>
@@ -297,8 +301,9 @@
                                                 <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
                                                 Update Status
                                             </button>
-                                            <a href="{{route('admin.order')}}" class="text-decoration-none">
-                                                <button type="button" class="btn btn-warning btn-sm d-flex align-items-center">
+                                            <a href="{{ route('admin.order') }}" class="text-decoration-none">
+                                                <button type="button"
+                                                    class="btn btn-warning btn-sm d-flex align-items-center">
                                                     <i class="bi bi-arrow-left-short me-1 d-flex" aria-hidden="true"></i>
                                                     Back
                                                 </button>

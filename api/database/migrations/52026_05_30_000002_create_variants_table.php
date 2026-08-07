@@ -25,8 +25,8 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_default')->default(false);
 
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->timestamps();
+            $table->index('product_id', 'sku', 'is_active');
         });
     }
 

@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('prd_id')->constrained('products');
             $table->tinyInteger('prd_type');
             $table->string('sku',100);
-            // $table->unsignedInteger('quantity');
+
             $table->timestamps();
+            $table->index('u_id', 'prd_id', 'sku');
         });
     }
 

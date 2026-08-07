@@ -18,8 +18,12 @@ return new class extends Migration
             $table->string('order_number',100)->default('0');
             $table->foreignId('category_id')->constrained('category')->onDelete('cascade');
             $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
-            $table->boolean('is_delete')->default(false)->comment('0: Not Deleted, 1: Deleted');
+            // $table->boolean('is_delete')->default(false)->comment('0: Not Deleted, 1: Deleted');
+            
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('name', 'slug');
         });
     }
 

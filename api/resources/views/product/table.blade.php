@@ -70,7 +70,7 @@
                             <td>{{ $priceDisplay }}</td>
                             <td><span class='list-badge {{ $stClass }}'>{{ $type }}</span></td>
                             <td>
-                                <div class="d-flex align-items-center justify-content-start">
+                                <div class="d-flex align-items-center justify-content-center">
                                     <span class="dot {{ $stockClass }}"></span>
                                     {{ $stock }}
                                 </div>

@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('attribute_name'); // "Color", "Size", etc.
             $table->json('attribute_values'); // ["Red", "Blue", "Green"]
             $table->string('display_type')->default('radio'); // color_picker, radio
+            
             $table->timestamps();
+
+            $table->index('product_id', 'attribute_name');
         });
     }
 

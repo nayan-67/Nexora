@@ -21,9 +21,12 @@ return new class extends Migration
             $table->unsignedInteger('quantity');
             $table->decimal('price', 10, 2);
             $table->dateTime('delivery_date')->nullable();
-            $table->dateTime('rr_date')->nullable()->comment('Return/Replacement Request Date');
-            $table->enum('status', ['0', '1', '2', '3'])->nullable()->default('1')->comment('0: Cancelled, 1: Processing, 2: Shipped, 3: Delivered');
+            $table->dateTime('request_date')->nullable()->comment('Return/Replacement Request Date');
+            $table->dateTime('rr_date')->nullable()->comment('Return/Replacement Date');
+            $table->tinyInteger('status')->unsigned()->default(0)->comment('0: Processing, 1: Shipped, 2: Out for Delivery, 3: Delivered, 4: Cancelled, 5: Return Requested, 6: Replacement Requested, 7: Returned, 8: Replaced, 9: Refund Requested, 10: Refund Initiated, 11: Refunded');
+
             $table->timestamps();
+            $table->index('user_id', 'order_id', 'product_id', 'sku');
         });
     }
 

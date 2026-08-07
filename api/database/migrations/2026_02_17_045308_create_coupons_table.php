@@ -13,14 +13,24 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->string('coupon_code', 50)->unique();
+            $table->text('description')->nullable();
             $table->date('valid_from');
             $table->date('valid_till')->nullable();
             $table->enum('type', ['1', '2'])->comment('1: Percentage, 2: Fixed_Amount');
-            $table->decimal('amount', 10);
+            $table->decimal('discount_value', 10);
+            $table->decimal('max_discount', 10)->nullable();
+            $table->decimal('minimum_order', 10)->nullable();
+            $table->unsignedInteger('usage_number')->nullable()->default(0);
+            $table->unsignedInteger('usage_limit')->nullable();
+            $table->unsignedInteger('usage_per_user')->nullable();
+            $table->boolean('first_order_only')->default(false)->comment('0: No, 1: Yes');
             $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
-            $table->unsignedInteger('uses_number')->nullable()->default(0);
+            
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('coupon_code');
         });
     }
 

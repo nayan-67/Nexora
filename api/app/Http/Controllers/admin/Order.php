@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Orders;
 use App\Models\OrderItems;
+use App\Models\Products;
+use App\Models\Variant;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +68,7 @@ class Order extends Controller
             $order_items = OrderItems::where('order_id', $id)->get();
             foreach ($order_items as $item) {
                 $item->status = $request->post('item_status_' . $item->id);
-                if($request->post('item_status_' . $item->id) == 3){
+                if ($request->post('item_status_' . $item->id) == 3) {
                     $item->delivery_date = now();
                 }
                 $item->save();
@@ -101,11 +103,20 @@ class Order extends Controller
         try {
             $order_items = OrderItems::where('order_id', $id)->get();
             foreach ($order_items as $item) {
-                $item->status = 0;
+                $item->status = '0';
                 $item->save();
+                if ($item->product->type == 1) {
+                    $product = Products::find($item->product_id);
+                    $product->stock += $item->quantity;
+                    $product->save();
+                } else {
+                    $product = Variant::where('sku', $item->sku)->first();
+                    $product->stock += $item->quantity;
+                    $product->save();
+                }
             }
             $order = Orders::find($id);
-            $order->order_status = 3;
+            $order->order_status = '3';
             $order->save();
             DB::commit();
             toast('Order Cancelled Successfully', 'success');

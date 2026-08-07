@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('coupon_name',100);
             $table->string('amount_type',100);
             $table->unsignedInteger('amount');
+            
             $table->timestamps();
+
+            $table->index('user_id', 'order_no', 'coupon_name');
         });
     }
 

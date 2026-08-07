@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('country',100);
             $table->string('state',100);
             $table->boolean('is_default')->default(false);
-            $table->boolean('is_delete')->default(false);
+
             $table->timestamps();
         });
     }

@@ -166,6 +166,40 @@
             }
         }
     </style>
+    <!--begin::Loader Style-->
+    <style>
+        .loader {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-bottom: 13px solid #4183D7;
+            border-top: 13px solid #F5AB35;
+            -webkit-animation: loader 1.2s ease-in-out infinite alternate;
+            animation: loader 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes loader {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(720deg);
+            }
+        }
+
+        @-webkit-keyframes loader {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(720deg);
+            }
+        }
+    </style>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -174,6 +208,11 @@
     @include('sweetalert::alert')
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
+        <!--begin::Loader-->
+        <div class="position-fixed h-100 bg-body bg-opacity-75 w-100 d-none align-items-center justify-content-center"
+            style="z-index: 9999;" id="loader">
+            <div class="loader"></div>
+        </div>
         <!--begin::Header-->
         @include('layout.header')
         <!--end::Header-->

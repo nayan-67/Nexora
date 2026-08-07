@@ -27,8 +27,12 @@ return new class extends Migration
             $table->json('gallery_images')->nullable()->default(null);
             $table->unsignedInteger('stock')->nullable();
             $table->boolean('is_feature')->default(false)->comment('0 => no, 1 => yes');
-            $table->boolean('is_delete')->default(false)->comment('0 => no, 1 => yes');
+            // $table->boolean('is_delete')->default(false)->comment('0 => no, 1 => yes');
+            
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('name', 'slug', 'sku');
         });
     }
 

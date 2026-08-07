@@ -34,13 +34,13 @@
                                 ', ' .
                                 $shippingresult->country;
                             if ($row->order_status == 1) {
-                                $stCalss = 'text-bg-warning';
+                                $stClass = 'text-bg-warning';
                                 $status = 'Processing';
                             } elseif ($row->order_status == 2) {
-                                $stCalss = 'text-bg-success';
+                                $stClass = 'text-bg-success';
                                 $status = 'Completed';
                             } else {
-                                $stCalss = 'text-bg-danger';
+                                $stClass = 'text-bg-danger';
                                 $status = 'Cancelled';
                             }
                         @endphp
@@ -51,8 +51,7 @@
                             <td>₹ {{ $row->total_price }}</td>
                             <td>{{ $name ?? 'User' }}</td>
                             <td>
-                                <span
-                                    class='list-badge {{ $stCalss }}'>{{ $status }}</span>
+                                <span class='list-badge {{ $stClass }}'>{{ $status }}</span>
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
@@ -67,11 +66,13 @@
                                         <i class="bi bi-cart3 d-flex" aria-hidden="true">
                                         </i>
                                     </a> --}}
-                                    <button type="button" class="btn btn-outline-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Delete"
-                                        onclick="openCancelModal('{{ $row->id }}');">
-                                        <i class="bi bi-trash d-flex" aria-hidden="true"></i>
-                                    </button>
+                                    @if ($row->order_status === '1')
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                            data-bs-title="Cancel Order"
+                                            onclick="openCancelModal('{{ $row->id }}');">
+                                            <i class="bi bi-x-lg d-flex" aria-hidden="true"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

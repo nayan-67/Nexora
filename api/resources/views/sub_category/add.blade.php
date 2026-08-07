@@ -40,7 +40,7 @@
                 <div class="container h-100 pt-2 border-2 border-top border-primary rounded">
                     {{-- <h5 class="text-secondary my-2">Add Sub Category</h5>
                     <hr class="my-1"> --}}
-                    <form action="{{ route('subcategory.store') }}" method="post">
+                    <form action="{{ route('subcategory.store') }}" onsubmit="return validate();" method="post">
                         @csrf
                         <div class="row h-100">
                             <div class="col-xl-10">
@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 sub_cat" name="name"
-                                                placeholder="Enter Name.." value="{{old('name')}}" required />
+                                                placeholder="Enter Name.." value="{{ old('name') }}" required />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -60,13 +60,13 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 slug" name="slug"
-                                                placeholder="Enter Slug.." value="{{old('slug')}}" required />
+                                                placeholder="Enter Slug.." value="{{ old('slug') }}" required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Category<span
-                                                    class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Category<span class="text-danger ps-1">*</span>
+                                            </h6>
                                         </div>
                                         <div class="col-md-9">
                                             <select class="form-control form-select fs-7"
@@ -76,7 +76,8 @@
                                                 $result = DB::table('category')->orderBy('id', 'ASC')->get();
                                                 ?>
                                                 @foreach ($result as $catrow)
-                                                    <option value="{{ $catrow->id }}" {{ old('cat_id') == $catrow->id ? 'selected' : '' }}>
+                                                    <option value="{{ $catrow->id }}"
+                                                        {{ old('cat_id') == $catrow->id ? 'selected' : '' }}>
                                                         {{ $catrow->name }}
                                                     </option>
                                                 @endforeach
@@ -111,7 +112,8 @@
                                         </div>
                                         <div class="col-md-9 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="add-subcat">Add Sub Category</button>
+                                                class="btn btn-primary btn-md" name="add-subcat" id="add_subcat">Add Sub
+                                                Category</button>
                                             <button type="reset" data-mdb-button-init data-mdb-ripple-init
                                                 class="btn btn-warning btn-md" name="reset">Reset</button>
                                         </div>
@@ -147,6 +149,26 @@
 
         subCatInput.addEventListener("input", () => {
             slugInput.value = generateSlug(subCatInput.value);
+        });
+
+        function validate() {
+            let subCatValue = subCatInput.value.trim();
+            let slugValue = slugInput.value.trim();
+
+            if (subCatValue === "" || slugValue === "") {
+                // alert("Please fill in all required fields.");
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+
+        let loader = document.getElementById("loader");
+        let addBtn = document.getElementById("add_subcat");
+        addBtn.addEventListener("click", () => {
+            if(validate()) {
+                loader.classList.replace("d-none", "d-flex");
+            }
         });
     </script>
 @endsection

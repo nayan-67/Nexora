@@ -26,7 +26,10 @@ return new class extends Migration
             $table->decimal('discount', 10, 2);
             $table->string('used_coupon', 100)->nullable();
             $table->decimal('shipping', 10, 2);
+            
             $table->timestamps();
+
+            $table->index('user_id', 'order_number');
         });
     }
 

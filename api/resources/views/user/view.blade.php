@@ -69,15 +69,15 @@
                                 <ul class="list-group list-group-flush text-start small">
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Orders</span>
-                                        <span class="fw-semibold">{{count($orders)}}</span>
+                                        <span class="fw-semibold">{{ count($orders) }}</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Ordered Items</span>
-                                        <span class="fw-semibold">{{count($order_items)}}</span>
+                                        <span class="fw-semibold">{{ count($order_items) }}</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Order Value</span>
-                                        <span class="fw-semibold">₹ {{$order_value}}</span>
+                                        <span class="fw-semibold">₹ {{ $order_value }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -216,7 +216,7 @@
                                         <div class="card-body">
                                             <div class="accordion" id="accordionExample">
                                                 @if (count($orders) > 0)
-                                                    @foreach ($orders as $key=> $item)
+                                                    @foreach ($orders as $key => $item)
                                                         @php
                                                             $orderItems = DB::table('order_items')
                                                                 ->where('order_id', $item->id)
@@ -285,10 +285,11 @@
                                                         @endphp
                                                         <div class="accordion-item">
                                                             <h2 class="accordion-header">
-                                                                <button class="accordion-button gap-4" type="button"
-                                                                    data-bs-toggle="collapse"
+                                                                <button
+                                                                    class="accordion-button gap-4 {{ $key !== 0 ? 'collapsed' : '' }}"
+                                                                    type="button" data-bs-toggle="collapse"
                                                                     data-bs-target="#collapse-{{ $item->id }}"
-                                                                    aria-expanded="true"
+                                                                    aria-expanded="{{ $key === 0 ? 'true' : 'false' }}"
                                                                     aria-controls="collapse-{{ $item->id }}">
                                                                     Order: #{{ $item->order_number }}
                                                                     <span class="">{{ $item->created_at }}</span>
@@ -540,12 +541,15 @@
                                                                                 aria-hidden="true"></i>
                                                                             Edit
                                                                         </a>
-                                                                        <a href="javascript:void(0)"
-                                                                            class="btn btn-sm btn-danger mt-2">
-                                                                            <i class="bi bi-x-circle me-1"
-                                                                                aria-hidden="true"></i>
-                                                                            Cancel
-                                                                        </a>
+                                                                        @if ($item->order_status == '1')
+                                                                            <a href="javascript:void(0)"
+                                                                                class="btn btn-sm btn-danger mt-2"
+                                                                                onclick="openCancelModal('{{ $item->id }}');">
+                                                                                <i class="bi bi-x-circle me-1"
+                                                                                    aria-hidden="true"></i>
+                                                                                Cancel
+                                                                            </a>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
