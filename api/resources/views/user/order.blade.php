@@ -81,7 +81,8 @@
             </div>
 
             <!-- =========== Customer Order Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100 border-2 border-top border-primary rounded pb-5">
                     <h6 class="text-secondary my-2 mb-3">Customer Order</h6>
                     <div class="row h-100 border-2 border-top border-primary rounded shadow"
@@ -97,14 +98,14 @@
                                 $bill_id = $ord->billing_address_id;
                                 $ship_id = $ord->shipping_address_id;
                                 
-                                $billingresult = DB::table('address')->where('id', $bill_id)->first();
-                                $shippingresult = DB::table('address')->where('id', $ship_id)->first();
+                                $billingresult = DB::table('order_address')->where('id', $bill_id)->first();
+                                $shippingresult = DB::table('order_address')->where('id', $ship_id)->first();
                                 
                                 $billingaddress = $billingresult->address1 . ', ' . $billingresult->city . ', ' . $billingresult->postcode . ', ' . $billingresult->state . ', ' . $billingresult->country;
                                 
                                 $shippingaddress = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
                                 
-                                $prdresult = DB::table('order_product')->where('order_id', $ord_id)->get();
+                                $prdresult = DB::table('order_items')->where('order_id', $ord_id)->get();
                                 $subtotal = 0;
                                 ?>
 

@@ -11,45 +11,6 @@ import { toast } from "react-hot-toast"
 import { AuthContext } from "@/context/AuthContext"
 
 
-// const initialAddresses = [
-//   {
-//     id: 1,
-//     name: "Home",
-//     street: "123 Innovation Boulevard",
-//     apartment: "Suite 400",
-//     city: "San Francisco",
-//     state: "CA",
-//     zip: "94102",
-//     country: "United States",
-//     phone: "+1 (555) 123-4567",
-//     isDefault: true,
-//   },
-//   {
-//     id: 2,
-//     name: "Work",
-//     street: "456 Tech Plaza",
-//     apartment: "Floor 10",
-//     city: "San Francisco",
-//     state: "CA",
-//     zip: "94103",
-//     country: "United States",
-//     phone: "+1 (555) 987-6543",
-//     isDefault: false,
-//   },
-//   {
-//     id: 3,
-//     name: "Parent's House",
-//     street: "789 Oak Street",
-//     apartment: "",
-//     city: "Los Angeles",
-//     state: "CA",
-//     zip: "90001",
-//     country: "United States",
-//     phone: "+1 (555) 555-5555",
-//     isDefault: false,
-//   },
-// ]
-
 function FormField({ label, children, className, required }) {
   return (
     <div className={cn("space-y-2", className)}>
@@ -497,7 +458,7 @@ export default function ManageAddressesPage() {
                 ))}
               </>
             ) : (
-              <div>Loading ...</div>
+              <div>No Address</div>
             )}
           </div>
         </div>

@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Products extends Model
 {
+    use SoftDeletes;
     protected $table = 'products';
     protected $fillable = [
-        'type',
         'name',
-        'sku',
         'slug',
+        'type',
+        'sku',
         'category_id',
         'sub_category_id',
         'description',
@@ -19,16 +21,27 @@ class Products extends Model
         'price',
         'sale_price',
         'featured_image',
-        'gallery_image',
+        'gallery_images',
         'stock',
         'is_feature',
-        'is_delete',
     ];
 
     protected $casts = [
         'features' => 'array',
-        'gallery_image' => 'array',
+        'gallery_images' => 'array',
+        'price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function sub_category()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
 
     public function variants()
     {

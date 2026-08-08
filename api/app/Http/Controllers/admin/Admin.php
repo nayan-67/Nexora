@@ -4,8 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Discount;
-use App\Models\Order;
+use App\Models\Coupon;
+use App\Models\Orders;
 use App\Models\Products;
 use App\Models\Subcategory;
 use App\Models\User;
@@ -23,8 +23,8 @@ class Admin extends Controller
         $catdata = count(Category::get());
         $subcatdata = count(Subcategory::get());
         $productdata = count(Products::get());
-        $discountdata = count(Discount::get());
-        $orderdata = count(Order::get());
+        $discountdata = count(Coupon::get());
+        $orderdata = count(Orders::get());
         $userdata = count(User::get());
         return view('index', compact('catdata', 'subcatdata', 'productdata', 'discountdata', 'orderdata', 'userdata'));
     }
@@ -34,8 +34,8 @@ class Admin extends Controller
     }
     public function logcheck(Request $request)
     {
-        $email = $request->post('email');
-        $password = $request->post('password');
+        $email = $request->email;
+        $password = $request->password;
 
         $result = DB::table('admin')->where('email', $email)->first();
         if ($result) {
@@ -45,11 +45,11 @@ class Admin extends Controller
                 return redirect()->route('dashboard');
             } else {
                 toast('Invalid Password', 'error');
-                return redirect()->route('admin.login');
+                return back()->withInput($request->only('email'));
             }
         } else {
             toast('Invalid Email', 'error');
-            return redirect()->route('admin.login');
+            return back()->withInput($request->only('email'));
         }
     }
     public function logout()

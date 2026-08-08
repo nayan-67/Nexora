@@ -49,8 +49,8 @@ export function Header() {
   return (
     <>
       <div className="fixed h-5 w-full bg-[#fbfcfd] top-0 z-49"></div>
-      <header className="sticky top-5 z-50 w-7xl mx-auto -mb-18.75 rounded-[40px] border border-border/40 bg-[#e7ebf2c9] backdrop-blur-xl shadow-xl">
-        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-5 z-50 w-[94%] mx-auto -mb-18.75 rounded-[40px] border border-border/40 bg-[#e7ebf2c9] backdrop-blur-xl shadow-xl">
+        <div className="mx-auto flex h-18 max-w-[98%] items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img src={logo} alt="Nexora Logo" className="w-25 h-auto drop-shadow-[0_0_5px_rgba(0,0,0,0.2)]" />

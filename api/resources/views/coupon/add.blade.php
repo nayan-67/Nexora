@@ -1,7 +1,7 @@
 @extends('layout.layout')
 
 @section('title', 'Coupon')
-@section('disactive', 'active')
+@section('discactive', 'active')
 @section('disaddactive', 'active')
 @section('dismenuopen', 'menu-open')
 
@@ -21,7 +21,7 @@
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.discount') }}">Coupon</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.coupon') }}">Coupon</a></li>
                             <li class="breadcrumb-item active page-head" aria-current="page">Add Coupon</li>
                         </ol>
                     </div>
@@ -36,28 +36,30 @@
             <!--begin::Container-->
 
             <!-- =========== Add Coupon Section ============== -->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body h-100 add-section" style="margin:0 10px;">
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     {{-- <h5 class="text-secondary my-2">Add Coupon</h5>
                     <hr class="my-1"> --}}
-                    <form action="{{ route('discount.store') }}" method="post">
+                    <form action="{{ route('coupon.store') }}" method="post">
                         @csrf
-                        <div class="row h-100">
-                            <div class="col-xl-10">
+                        <div class="row py-3">
+                            <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Name<span class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Coupon Code<span class="text-danger ps-1">*</span>
+                                            </h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control fs-7 coupon-name text-uppercase"
-                                                name="name" placeholder="Coupon Name.." value="{{ old('name') }}"
+                                            <input type="text" class="form-control fs-7 coupon-code text-uppercase"
+                                                name="coupon_code" placeholder="COUPON2026" value="{{ old('coupon_code') }}"
                                                 required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Valid From<span class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Valid From<span class="text-danger ps-1">*</span>
+                                            </h6>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="date" class="form-control fs-7 valid-from" name="valid-from"
@@ -90,11 +92,77 @@
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Amount<span class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Discount Value<span
+                                                    class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="number" class="form-control fs-7" name="amount"
-                                                placeholder="Enter Amount ..." value="{{ old('amount') }}" />
+                                            <input type="number" step="0.01" class="form-control fs-7"
+                                                name="discount_value" placeholder="Enter discount amount or percentage"
+                                                value="{{ old('discount_value') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Max Discount</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" step="0.01" class="form-control fs-7"
+                                                name="max_discount" placeholder="Maximum discount amount (optional)"
+                                                value="{{ old('max_discount') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Minimum Order</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" step="0.01" class="form-control fs-7"
+                                                name="minimum_order" placeholder="Minimum order value to apply coupon"
+                                                value="{{ old('minimum_order') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Usage Limit</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" class="form-control fs-7" name="usage_limit"
+                                                placeholder="Total usage limit (optional)"
+                                                value="{{ old('usage_limit') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Usage Per User</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" class="form-control fs-7" name="usage_per_user"
+                                                placeholder="Usage limit per user (optional)"
+                                                value="{{ old('usage_per_user') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">First Order Only</h6>
+                                        </div>
+                                        <div class="col-md-9 d-flex align-items-center">
+                                            <input type="checkbox" name="first_order_only" value="1"
+                                                {{ old('first_order_only') ? 'checked' : '' }} />
+                                            <span class="ms-2 fs-7 text-muted">Only for customer's first order</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Description</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <textarea name="description" class="form-control fs-7" rows="3" placeholder="Optional description">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
 
@@ -134,54 +202,9 @@
 @endsection
 
 @section('script')
-
     <script>
         let validFrom = document.querySelector(".valid-from");
         const date = new Date();
         validFrom.value = date.toISOString().slice(0, 10);
-
-        // let addBtn = document.querySelector(".add-btn");
-        // let pageSection = document.querySelector(".page-section");
-        // let addSection = document.querySelector(".add-section");
-
-        // addBtn.addEventListener("click", () => {
-        //     pageSection.style.display = "none";
-        //     addSection.style.display = "block";
-        // });
-
-        // const searchInput = document.getElementById('search');
-        // const resultsDiv = document.querySelector('.results');
-
-        // searchInput.addEventListener('input', () => {
-        //     const query = searchInput.value != "" ? searchInput.value : '0';
-        //     fetch(`discount/search/${query}`)
-        //         .then(response => response.text())
-        //         .then(data => {
-        //             resultsDiv.innerHTML = data;
-        //         })
-        //         .catch(error => console.error('Error:', error));
-        // });
-
-        // const sBtn = document.querySelectorAll(".s-btn");
-
-        // sBtn.forEach(btn => {
-        //     btn.style.background = "#198754";
-        //     btn.style.color = "#fff";
-        //     btn.addEventListener("click", () => {
-        //         searchInput.value = "";
-        //         sBtn.forEach(button => {
-        //             button.style.background = "#198754";
-        //         });
-        //         const btnVal = btn.value != "" ? btn.value : '0';
-        //         fetch(`discount/search/${btnVal}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
-
-        //         btn.style.background = "#196d54";
-        //     });
-        // });
     </script>
 @endsection

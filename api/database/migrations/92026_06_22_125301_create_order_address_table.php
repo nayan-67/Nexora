@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('order_address', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('order_no')->nullable();
-            $table->enum('type', ['shipping', 'billing']);
-            $table->string('f_name', 100);
-            $table->string('l_name', 100);
+            $table->string('order_number')->nullable();
+            $table->tinyInteger('type')->comment('1: Shipping, 2: Billing, 3: Shipping and Billing');
+            $table->string('first_name', 100);
+            $table->string('last_name', 100);
             $table->string('phone', 13);
             $table->string('address1');
             $table->string('address2')->nullable();

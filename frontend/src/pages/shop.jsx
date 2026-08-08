@@ -41,7 +41,7 @@ function ProductCard({ product, category }) {
         }
       })
       .catch((err) => {
-        console.error("Error:", err.response?.data?.message || err.message);
+        // console.error("Error:", err.response?.data?.message || err.message);
       })
     return () => {
       active = false
@@ -130,11 +130,11 @@ function ProductCard({ product, category }) {
         <div className="mt-2 flex items-center gap-2">
           {product.sale_price ? (
             <>
-              <span className="text-lg font-semibold text-foreground">${product.sale_price}</span>
-              <span className="text-sm text-muted-foreground line-through">${product.price}</span>
+              <span className="text-lg font-semibold text-foreground">₹ {product.sale_price}</span>
+              <span className="text-sm text-muted-foreground line-through">₹ {product.price}</span>
             </>
           ) : (
-            <span className="text-lg font-semibold text-foreground">${product.price}</span>
+            <span className="text-lg font-semibold text-foreground">₹ {product.price}</span>
           )}
         </div>
       </div>

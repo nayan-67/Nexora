@@ -260,8 +260,8 @@
                                 <div class="px-2">
                                     <div class="d-flex border-top py-2 px-1">
                                         <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
+                                            <img src="{{ asset('adminlte/dist/assets/img/default-150x150.png') }}"
+                                                alt="Product Image" class="img-size-50" />
                                         </div>
                                         <div class="col-10">
                                             <a href="javascript:void(0)" class="fw-bold">
@@ -274,8 +274,8 @@
                                     <!-- /.item -->
                                     <div class="d-flex border-top py-2 px-1">
                                         <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
+                                            <img src="{{ asset('adminlte/dist/assets/img/default-150x150.png') }}"
+                                                alt="Product Image" class="img-size-50" />
                                         </div>
                                         <div class="col-10">
                                             <a href="javascript:void(0)" class="fw-bold">
@@ -290,8 +290,8 @@
                                     <!-- /.item -->
                                     <div class="d-flex border-top py-2 px-1">
                                         <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
+                                            <img src="{{ asset('adminlte/dist/assets/img/default-150x150.png') }}"
+                                                alt="Product Image" class="img-size-50" />
                                         </div>
                                         <div class="col-10">
                                             <a href="javascript:void(0)" class="fw-bold">
@@ -306,8 +306,8 @@
                                     <!-- /.item -->
                                     <div class="d-flex border-top py-2 px-1">
                                         <div class="col-2">
-                                            <img src="./assets/img/default-150x150.png" alt="Product Image"
-                                                class="img-size-50" />
+                                            <img src="{{ asset('adminlte/dist/assets/img/default-150x150.png') }}"
+                                                alt="Product Image" class="img-size-50" />
                                         </div>
                                         <div class="col-10">
                                             <a href="javascript:void(0)" class="fw-bold">
@@ -350,7 +350,7 @@
                             <div class="card-body p-0">
                                 <div class="row text-center m-1">
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user1-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Alexander Pierce
@@ -358,7 +358,7 @@
                                         <div class="fs-8">Today</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user1-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user1-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Norman
@@ -366,7 +366,7 @@
                                         <div class="fs-8">Yesterday</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user7-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user7-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Jane
@@ -374,7 +374,7 @@
                                         <div class="fs-8">12 Jan</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user6-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user6-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             John
@@ -382,7 +382,7 @@
                                         <div class="fs-8">12 Jan</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user2-160x160.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user2-160x160.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Alexander
@@ -390,7 +390,7 @@
                                         <div class="fs-8">13 Jan</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user5-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user3-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Sarah
@@ -398,7 +398,7 @@
                                         <div class="fs-8">14 Jan</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user4-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user4-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Nora
@@ -406,7 +406,7 @@
                                         <div class="fs-8">15 Jan</div>
                                     </div>
                                     <div class="col-3 p-2">
-                                        <img class="img-fluid rounded-circle" src="./assets/img/user3-128x128.jpg"
+                                        <img class="img-fluid rounded-circle" src="{{asset('adminlte/dist/assets/img/user5-128x128.jpg')}}"
                                             alt="User Image" />
                                         <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
                                             Nadia
@@ -561,9 +561,6 @@
 @endsection
 
 @section('script')
-    <!-- apexcharts -->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
-        integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
     <script>
         // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
         // IT'S ALL JUST JUNK FOR DEMO

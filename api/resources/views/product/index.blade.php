@@ -5,50 +5,41 @@
 @section('pactive', 'active')
 @section('pmenuopen', 'menu-open')
 
+@section('modal-head', 'Product')
+@section('delete-route', route('product.destroy'))
 
 
 @section('css')
     <style>
-        .imginput::-webkit-file-upload-button {
-            visibility: hidden;
+        .p-name {
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .imginput::before {
-            content: 'Choose Image Above 600 x 600 px';
+        .dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
             display: inline-block;
-            background: #eeeeeee0;
-            padding: 0.45rem;
-            margin-right: -4rem;
+            margin-right: 5px;
         }
 
-        .form-check-input:checked {
-            background-color: #495057 !important;
-            border-color: #495057 !important;
+        .product-detail-panel {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            z-index: 1050;
         }
 
-        input:active {
-            outline: none !important;
-        }
-
-        .gimage {
-            position: relative;
-
-            & img {
-                height: 80px;
-                filter: drop-shadow(0 0 2px #000000d3);
-            }
-        }
-
-        .fa-xmark {
-            color: #862828;
-            position: absolute;
-            top: 0;
-            right: 0;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
+        .product-detail-panel.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
     </style>
-
 @endsection
 
 @section('content')
@@ -60,14 +51,14 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Product</h3>
+                        <h3 class="mb-0 page-head fs-4">Products</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
                     <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-end">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active page-head" aria-current="page">Product</li>
+                            <li class="breadcrumb-item active page-head" aria-current="page">Products</li>
                         </ol>
                     </div>
                 </div>
@@ -80,156 +71,107 @@
         <div class="app-content" style="min-height:88%;">
             <!--begin::Container-->
 
-            <!-- =========== Modal ============ -->
-
-            <div class="delete-modal" id="del-modal">
-                <div class="delete-modal-dialog rounded-3">
-
-                    <!-- Modal content-->
-                    <div class="row modal-top d-flex align-items-center px-4 py-3">
-                        <div class="col-sm-3 fs-1">
-                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
-                        </div>
-                        <div class=" col-sm-9 m-content">
-                            <h5 class="p-0 m-0 fw-bold">DELETE PRODUCT</h5>
-                            <p class="p-0 m-0">This action cannot be undone.</p>
-                        </div>
-                    </div>
-                    <hr class="m-0 text-secondery opacity-10">
-                    <div class="row modal-btn d-flex align-items-center justify-content-space-between px-4 py-3">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm del-close"
-                                name="">CANCEL</button>
-                        </div>
-                        <form action="{{ route('product.destroy') }}" method="POST" class=" col-sm-6 m-content">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" id="modal-id" value="" name="id">
-                            <input type="submit" class="btn btn-danger btn-md w-100 shadow-sm" value="DELETE">
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-
-
             <!-- ====== Product Section ======= -->
 
-            <section class="bg-white h-100 page-section" style="margin:0 10px;">
-                <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    {{-- <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
-                        <button type="button" class="btn s-btn fs-8" value="">ALL</button>
-                        <button type="button" class="btn s-btn fs-8" value="A">A</button>
-                        <button type="button" class="btn s-btn fs-8" value="B">B</button>
-                        <button type="button" class="btn s-btn fs-8" value="C">C</button>
-                        <button type="button" class="btn s-btn fs-8" value="D">D</button>
-                        <button type="button" class="btn s-btn fs-8" value="E">E</button>
-                        <button type="button" class="btn s-btn fs-8" value="F">F</button>
-                        <button type="button" class="btn s-btn fs-8" value="G">G</button>
-                        <button type="button" class="btn s-btn fs-8" value="H">H</button>
-                        <button type="button" class="btn s-btn fs-8" value="I">I</button>
-                        <button type="button" class="btn s-btn fs-8" value="J">J</button>
-                        <button type="button" class="btn s-btn fs-8" value="K">K</button>
-                        <button type="button" class="btn s-btn fs-8" value="L">L</button>
-                        <button type="button" class="btn s-btn fs-8" value="M">M</button>
-                        <button type="button" class="btn s-btn fs-8" value="N">N</button>
-                        <button type="button" class="btn s-btn fs-8" value="O">O</button>
-                        <button type="button" class="btn s-btn fs-8" value="P">P</button>
-                        <button type="button" class="btn s-btn fs-8" value="Q">Q</button>
-                        <button type="button" class="btn s-btn fs-8" value="R">R</button>
-                        <button type="button" class="btn s-btn fs-8" value="S">S</button>
-                        <button type="button" class="btn s-btn fs-8" value="T">T</button>
-                        <button type="button" class="btn s-btn fs-8" value="U">U</button>
-                        <button type="button" class="btn s-btn fs-8" value="V">V</button>
-                        <button type="button" class="btn s-btn fs-8" value="W">W</button>
-                        <button type="button" class="btn s-btn fs-8" value="X">X</button>
-                        <button type="button" class="btn s-btn fs-8" value="Y">Y</button>
-                        <button type="button" class="btn s-btn fs-8" value="Z">Z</button>
-                    </div>
-                    <hr class="m-0"> --}}
-                    <div class="row mx-1 py-3">
-                        <div class="col-sm-2 d-flex align-items-center">
-                            <h6 class="page-head fs-7 fw-bold">Product Name</h6>
-                        </div>
-                        <div class="col-sm-8">
-                            <form class="d-flex" role="search" action="javascript:void(0)">
-                                <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
-                                    aria-label="Search" id="search" value="" autocomplete="off" />
-                                {{-- <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
-                            </form>
-                        </div>
-                    </div>
-                    <div class="container w-auto border-2 border-top border-primary mx-2 py-2">
-                        {{-- <div class="btn-section d-flex justify-content-end">
-                            <a href="{{ route('product.add') }}" class="btn btn-success add-btn fs-7">
-                                <i class="fa-solid fa-plus fs-8"></i>
-                                Add New
-                            </a>
-                        </div> --}}
-                        <div class="page-deatails pt-2">
-                            {{-- <hr class="m-2 text-secondery opacity-10"> --}}
-                            <div class="header row fs-7">
-                                <div class="col-sm-3 text-center fw-bold">Product Name</div>
-                                <div class="col-sm-2 text-center fw-bold">Category Name</div>
-                                <div class="col-sm-2 text-center fw-bold">Sub Category Name</div>
-                                <div class="col-sm-1 text-center fw-bold">($)Price</div>
-                                <div class="col-sm-1 text-center fw-bold">Type</div>
-                                <div class="col-sm-1 text-center fw-bold">Total Stock</div>
-                                <div class="col-sm-2 text-center fw-bold">Action</div>
-                            </div>
-                            <div class="results">
-                                <?php if (count($data) > 0):
-                                        foreach ($data as $row):
-                                        $cat=DB::table('category')->where('id',$row->category_id)->first();
-                                        $subcat=DB::table('sub_category')->where('id',$row->sub_category_id)->first();
-                                        if ($row->type==2) {
-                                            $stock=DB::table('variants')->where('product_id',$row->id)->sum('stock');
-                                        }else{
-                                            $stock=$row->stock;
-                                        }
-                                        ?>
-                                <hr class='m-2 text-body-tertiary opacity-10'>
-                                <div class='row fs-7'>
-                                    <div class='col-sm-3 text-center d-flex align-items-center justify-content-center'>
-                                        {{ $row->name }}</div>
-                                    <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                        {{ $cat->name }}</div>
-                                    <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                        {{ $subcat->name }}</div>
-                                    <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
-                                        {{ $row->sale_price ?? $row->price }}</div>
-                                    <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
-                                        {{ $row->type == '1' ? 'Simple' : 'Variable' }}</div>
-                                    <div
-                                        class='col-sm-1 text-center d-flex align-items-center justify-content-center {{ $stock > 0 ? 'text-success' : 'text-danger' }}'>
-                                        {{ $stock }}
+            <div class="container-fluid">
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-12">
+                        <!--begin::Card-->
+                        <div class="card mb-4">
+                            <!--begin::Card Header-->
+                            <div class="card-header">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-12 col-md-6 d-flex gap-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label>Show Data</label>
+                                            <select id="show-data" class="form-select form-select-sm w-auto">
+                                                <option value="10" selected>10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button id="export-csv" type="button" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-filetype-csv me-1" aria-hidden="true"></i>
+                                                Export CSV
+                                            </button>
+                                            <button id="print-table" type="button" class="btn btn-sm btn-success">
+                                                <i class="bi bi-printer me-1" aria-hidden="true"></i>
+                                                Print
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                                        <a href='{{ route('product.edit', encrypt($row->id)) }}'
-                                            class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                            style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                                        <button type='button'
-                                            class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                            style='height: 25px;' onclick="openModal('{{ $row->id }}');"><i
-                                                class='fa-regular fa-trash-can'></i>DELETE</button>
+                                    <div class="col-12 col-md-6">
+                                        <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                                            <div class="input-group input-group-sm w-auto">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                                </span>
+                                                <input type="search" id="search" class="form-control"
+                                                    placeholder="Search products" aria-label="Search products"
+                                                    style="width: 180px" />
+                                            </div>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                                                    New Product
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item fs-7"
+                                                            href="{{ route('admin.simple-product') }}">
+                                                            <i class="nav-icon bi bi-node-plus me-1"></i>
+                                                            Simple Product
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider" />
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item fs-7"
+                                                            href="{{ route('admin.variable-product') }}">
+                                                            <i class="nav-icon bi bi-node-plus me-1"></i>
+                                                            Variant Product
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <?php endforeach;
-                                    else: ?>
-                                <hr class='m-2 text-body-tertiary opacity-10'>
-                                <div class='row fs-7'>
-                                    <div class='col-sm-12 text-center'>No Product Found</div>
-                                </div>
-                                <?php endif; ?>
                             </div>
-
+                            <!--end::Card Header-->
+                            <div id="product-table-content">
+                                @include('product.table')
+                            </div>
                         </div>
+                        <!--end::Card-->
                     </div>
+                    <!-- /.col -->
                 </div>
-            </section>
+                <!--end::Row-->
+            </div>
 
             <!--end::Container-->
+        </div>
+        <!--end::App Content-->
+
+        <!-- Product detail slide panel -->
+        <div id="product-detail-panel"
+            class="product-detail-panel position-fixed end-0 w-50 bg-opacity-50 d-flex justify-content-end p-4 card"
+            style="top: 57px;transition: opacity 0.25s ease, visibility 0.25s ease;height: calc(100% - 57px);">
+            <div class="product-detail-inner bg-body shadow-sm overflow-auto position-relative mw-50">
+                <div class="d-flex align-items-center justify-content-end">
+                    {{-- <h5 class="mb-0">Product Details</h5> --}}
+                    <button type="button" id="product-detail-close" class="btn-close" aria-label="Close"></button>
+                </div>
+                <div id="product-detail-content" class="product-detail-content min-vh-25">
+                    <div class="text-center py-5 text-muted">Select a product row to view details.</div>
+                </div>
+            </div>
         </div>
         <!--end::App Content-->
     </main>
@@ -240,50 +182,175 @@
 @section('script')
 
     <script>
-        // let addBtn = document.querySelector(".add-btn");
-        // let pageSection = document.querySelector(".page-section");
-        // let addSection = document.querySelector(".add-section");
-
-        // addBtn.addEventListener("click", () => {
-        //     pageSection.style.display = "none";
-        //     addSection.style.display = "block";
-        // });
-        const appURL = <?= json_encode(url('/')) ?>;
+        const appURL = @php echo json_encode(url('/')) @endphp;
 
         const searchInput = document.getElementById('search');
-        const resultsDiv = document.querySelector('.results');
+        const showDataSelect = document.getElementById('show-data');
+        const detailPanel = document.getElementById('product-detail-panel');
+        const detailCloseBtn = document.getElementById('product-detail-close');
+        const detailContent = document.getElementById('product-detail-content');
+        let searchTimeout;
 
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value != "" ? searchInput.value : '0';
-            fetch(`${appURL}/product/search/${encodeURIComponent(query)}`)
-                .then(response => response.text())
-                .then(data => {
-                    resultsDiv.innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
+        function reloadProductTable() {
+            const query = encodeURIComponent(searchInput.value.trim());
+            const perPage = encodeURIComponent(showDataSelect.value);
+            loadData(`${appURL}/product?search=${query}&per_page=${perPage}`, '#product-table-content',
+                attachProductHandlers);
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(reloadProductTable, 500);
         });
 
-        const sBtn = document.querySelectorAll(".s-btn");
+        showDataSelect.addEventListener('change', () => {
+            reloadProductTable();
+        });
 
-        sBtn.forEach(btn => {
-            btn.style.background = "#198754";
-            btn.style.color = "#fff";
-            btn.addEventListener("click", () => {
-                searchInput.value = "";
-                sBtn.forEach(button => {
-                    button.style.background = "#198754";
+        function attachProductHandlers() {
+            document.querySelectorAll('.product-row').forEach((row) => {
+                row.addEventListener('click', async (event) => {
+                    if (event.target.closest('a') || event.target.closest('button')) {
+                        return;
+                    }
+                    const productId = row.dataset.productId;
+                    if (!productId) return;
+                    await showProductDetails(productId);
                 });
-                const btnVal = btn.value != "" ? btn.value : '0';
-                fetch(`${appURL}/product/search/${btnVal}`)
-                    .then(response => response.text())
-                    .then(data => {
-                        resultsDiv.innerHTML = data;
-                    })
-                    .catch(error => console.error('Error:', error));
-
-                btn.style.background = "#196d54";
             });
-        });
+        }
+
+        async function showProductDetails(productId) {
+            try {
+                const response = await fetch(`${appURL}/product/details/${productId}`);
+                if (!response.ok) {
+                    throw new Error('Unable to load product details');
+                }
+                const payload = await response.json();
+                renderProductDetails(payload);
+                openDetailPanel();
+            } catch (error) {
+                detailContent.innerHTML = `<div class="text-danger p-4">${error.message}</div>`;
+                openDetailPanel();
+            }
+        }
+
+        function openDetailPanel() {
+            detailPanel.classList.add('open');
+        }
+
+        function closeDetailPanel() {
+            detailPanel.classList.remove('open');
+        }
+
+        function renderProductDetails(product) {
+            const typeLabel = product.type == 2 ? 'Variant Product' : 'Simple Product';
+            const featuredImage = product.featured_image ?
+                `${appURL}/uploads/${product.type == 2 ? 'var_md_' + product.featured_image : 'prd_md_' + product.featured_image}` :
+                null;
+            const priceLabel = product.type == 2 ?
+                product.variant_price_range || '₹ ' + product.price :
+                product.sale_price ? `₹ ${product.sale_price} <del class='ms-2 fs-6 text-muted'>₹ ${product.price}</del>` : '₹ ' + product.price;
+            const categoryLabel = product.category?.name || '-';
+            const subCategoryLabel = product.sub_category?.name || '-';
+            const featuresHtml = Array.isArray(product.features) && product.features.length ?
+                `<ul class="list-unstyled mb-0 fs-7">${product.features.map(item => `<li>• ${item}</li>`).join('')}</ul>` :
+                '<span class="text-muted">No features available</span>';
+            const descriptionHtml = product.description ?
+                `<p class="mb-0 fs-7">${product.description}</p>` :
+                '<span class="text-muted">No description available</span>';
+
+            let variantHtml = '';
+            if (product.type == 2 && Array.isArray(product.variants) && product.variants.length) {
+                variantHtml = `
+                    <div class="product-variant-section mt-4">
+                        <h6 class="mb-3">Variants (${product.variants.length})</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle">
+                                <thead>
+                                    <tr class="text-center fs-7">
+                                        <th>Image</th>
+                                        <th>SKU</th>
+                                        <th>Price</th>
+                                        <th>Sale Price</th>
+                                        <th>Stock</th>
+                                        <th>Attributes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${product.variants.map(function(variant) {
+                                        const attrText = Array.isArray(variant.attributes)
+                                            ? variant.attributes.map(function(attr){
+                                                if (attr && typeof attr.value === 'object' && attr.value !== null) {
+                                                    return (attr.name || '') + ': ' + (attr.value.name || JSON.stringify(attr.value));
+                                                }
+                                                return (attr.name || '') + ': ' + (attr.value ?? '');
+                                            }).join(', ')
+                                            : '-';
+                                            let img=`${appURL}/uploads/var_sm_${variant.featured_image}`;
+                                        return `
+                                            <tr class="text-center fs-7">
+                                                <td>
+                                                    <img src="${img}" alt="${product.name}" class="img-fluid rounded" style="max-height: 80px;" />
+                                                </td>
+                                                <td>${variant.sku || '-'}</td>
+                                                <td>₹ ${variant.price ?? '-'}</td>
+                                                <td>₹ ${variant.sale_price ?? '-'}</td>
+                                                <td><span class='dot bg-${variant.stock >= 20 ? 'success' : variant.stock >= 10 ? 'primary' : variant.stock >= 5 ? 'warning' : 'danger'}'></span>${variant.stock ?? '-'}</td>
+                                                <td>${attrText}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+
+            detailContent.innerHTML = `
+                <div class="product-detail-image mb-3 text-center">
+                    ${featuredImage ? `<img src="${featuredImage}" alt="${product.name}" class="img-fluid rounded" style="max-height: 180px;" />` : '<div class="text-muted">No image available</div>'}
+                </div>
+                <div class="product-detail-summary mb-3">
+                    <h5 class="mb-1">${product.name}</h5>
+                    <h5>${priceLabel}</h5>
+                    <div class="fs-7 text-secondary mb-2">${typeLabel}</div>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <span class="list-badge bg-success">Category: ${categoryLabel}</span>
+                        <span class="list-badge bg-success">Sub Category: ${subCategoryLabel}</span>
+                    </div>
+                    <span class="list-badge bg-primary">SKU: ${product.sku}</span>
+                    <div class="d-flex gap-2 my-2">
+                        <span class="list-badge ${product.stock >= 20 ? 'bg-success' : product.stock >= 10 ? 'bg-primary' : product.stock >= 5 ? 'bg-warning text-black' : 'bg-danger'}">Stock: ${product.stock ?? '—'}</span>
+                        ${product.type == 2 ? `<span class="list-badge bg-info-subtle">Variants: ${product.variants.length}</span>` : ''}
+                    </div>
+                </div>
+                <div class="product-detail-section mb-3">
+                    <h6 class="mb-2">Description</h6>
+                    ${descriptionHtml}
+                </div>
+                <div class="product-detail-section mb-3">
+                    <h6 class="mb-2">Features</h6>
+                    ${featuresHtml}
+                </div>
+                ${variantHtml}
+            `;
+        }
+
+        function handleClickOutside(event) {
+            if (!detailPanel.classList.contains('open')) return;
+            const isInsidePanel = event.target.closest('.product-detail-panel');
+            const isRow = event.target.closest('.product-row');
+            if (!isInsidePanel && !isRow) {
+                closeDetailPanel();
+            }
+        }
+
+        detailCloseBtn.addEventListener('click', closeDetailPanel);
+        document.addEventListener('click', handleClickOutside);
+
+        attachProductHandlers();
     </script>
 
 @endsection

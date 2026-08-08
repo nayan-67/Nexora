@@ -5,6 +5,9 @@
 @section('scatlactive', 'active')
 @section('scatmenuopen', 'menu-open')
 
+@section('modal-head', 'SUB-CATEGORY')
+@section('delete-route', route('subcategory.destroy'))
+
 @section('content')
     <main class="app-main">
         <!--begin::App Content Header-->
@@ -34,145 +37,57 @@
         <div class="app-content" style="min-height:88%;">
             <!--begin::Container-->
 
-            <!-- ========= Modal ============ -->
-
-            <div class="delete-modal" id="del-modal">
-                <div class="delete-modal-dialog rounded-3">
-
-                    <!-- Modal content-->
-                    <div class="row modal-top d-flex align-items-center px-4 py-3">
-                        <div class="col-sm-3 fs-1">
-                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
-                        </div>
-                        <div class=" col-sm-9 m-content">
-                            <h5 class="p-0 m-0 fw-bold">DELETE SUB-CATEGORY</h5>
-                            <p class="p-0 m-0">This action cannot be undone.</p>
-                        </div>
-                    </div>
-                    <hr class="m-0 text-secondery opacity-10">
-                    <div class="row modal-btn d-flex align-items-center justify-content-space-between px-4 py-3">
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm del-close"
-                                name="">CANCEL</button>
-                        </div>
-                        <form action="{{ route('subcategory.destroy') }}" method="POST" class=" col-sm-6 m-content">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" id="modal-id" value="" name="id">
-                            <input type="submit" class="btn btn-danger btn-md w-100 shadow-sm" value="DELETE">
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-
-
             <!-- ====== Sub Category Section ======= -->
 
-            <section class="bg-white h-100 page-section" style="margin:0 10px;">
-                <div class="container h-100  border-2 border-top border-primary p-0 rounded">
-                    {{-- <div class="d-flex align-items-center justify-content-center py-2" style="gap:1px;">
-                        <button type="button" class="btn s-btn fs-8" value="">ALL</button>
-                        <button type="button" class="btn s-btn fs-8" value="A">A</button>
-                        <button type="button" class="btn s-btn fs-8" value="B">B</button>
-                        <button type="button" class="btn s-btn fs-8" value="C">C</button>
-                        <button type="button" class="btn s-btn fs-8" value="D">D</button>
-                        <button type="button" class="btn s-btn fs-8" value="E">E</button>
-                        <button type="button" class="btn s-btn fs-8" value="F">F</button>
-                        <button type="button" class="btn s-btn fs-8" value="G">G</button>
-                        <button type="button" class="btn s-btn fs-8" value="H">H</button>
-                        <button type="button" class="btn s-btn fs-8" value="I">I</button>
-                        <button type="button" class="btn s-btn fs-8" value="J">J</button>
-                        <button type="button" class="btn s-btn fs-8" value="K">K</button>
-                        <button type="button" class="btn s-btn fs-8" value="L">L</button>
-                        <button type="button" class="btn s-btn fs-8" value="M">M</button>
-                        <button type="button" class="btn s-btn fs-8" value="N">N</button>
-                        <button type="button" class="btn s-btn fs-8" value="O">O</button>
-                        <button type="button" class="btn s-btn fs-8" value="P">P</button>
-                        <button type="button" class="btn s-btn fs-8" value="Q">Q</button>
-                        <button type="button" class="btn s-btn fs-8" value="R">R</button>
-                        <button type="button" class="btn s-btn fs-8" value="S">S</button>
-                        <button type="button" class="btn s-btn fs-8" value="T">T</button>
-                        <button type="button" class="btn s-btn fs-8" value="U">U</button>
-                        <button type="button" class="btn s-btn fs-8" value="V">V</button>
-                        <button type="button" class="btn s-btn fs-8" value="W">W</button>
-                        <button type="button" class="btn s-btn fs-8" value="X">X</button>
-                        <button type="button" class="btn s-btn fs-8" value="Y">Y</button>
-                        <button type="button" class="btn s-btn fs-8" value="Z">Z</button>
-                    </div>
-                    <hr class="m-0"> --}}
-                    <div class="row mx-1 py-3">
-                        <div class="col-sm-2 d-flex align-items-center">
-                            <h6 class="page-head fs-7 fw-bold">Sub Category Name</h6>
-                        </div>
-                        <div class="col-sm-8">
-                            <form class="d-flex" role="search" action="javascript:void(0)">
-                                <input class="form-control me-2 fs-7" type="search" placeholder="Search.."
-                                    aria-label="Search" id="search" value="" autocomplete="off" />
-                                {{-- <button class="btn btn-success fs-7" type="submit"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button> --}}
-                            </form>
-                        </div>
-                    </div>
-                    <div class="container w-auto border-2 border-top border-primary mx-2 py-2">
-                        <div class="page-deatails pt-2">
-                            <div class="header row fs-7">
-                                <div class="col-sm-3 text-center fw-bold">Sub Category Name</div>
-                                <div class="col-sm-2 text-center fw-bold">Slug</div>
-                                <div class="col-sm-1 text-center fw-bold">Order</div>
-                                <div class="col-sm-2 text-center fw-bold">Parent Category</div>
-                                <div class="col-sm-2 text-center fw-bold">Status</div>
-                                <div class="col-sm-2 text-center fw-bold">Action</div>
-                            </div>
-                            <div class="results">
-                                @if (count($data) > 0)
-                                    @foreach ($data as $row)
-                                    @php
-                                        $cat=DB::table('category')->where('id',$row->category_id)->get();
-                                    @endphp
-                                        <hr class='m-2 text-body-tertiary opacity-10'>
-                                        <div class='row fs-7'>
-                                            <div
-                                                class='col-sm-3 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->name }}</div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->slug }}</div>
-                                            <div
-                                                class='col-sm-1 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $row->order_number }}</div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                {{ $cat[0]->name ?? 'N/A' }}</div>
-                                            <div
-                                                class='col-sm-2 text-center d-flex align-items-center justify-content-center'>
-                                                <span
-                                                    class='list-badge {{ $row->status == '1' ? 'active' : 'inactive' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
-                                            </div>
-                                            <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                                                <a href='{{ route('subcategory.edit', encrypt($row->id)) }}'
-                                                    class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                                    style='height: 25px;'><i
-                                                        class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                                                <button type='button'
-                                                    class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1'
-                                                    style='height: 25px;' onclick="openModal('{{ $row->id }}');"><i
-                                                        class='fa-regular fa-trash-can'></i>DELETE</button>
-                                            </div>
+            <div class="container-fluid">
+                <!--begin::Row-->
+                <div class="row">
+                    <div class="col-12">
+                        <!--begin::Card-->
+                        <div id="subcat-table-container" class="card mb-4">
+                            <!--begin::Card Header-->
+                            <div class="card-header">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-12 col-md-4 d-flex gap-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label>Show Data</label>
+                                            <select id="show-data" class="form-select form-select-sm w-auto">
+                                                <option value="10" selected>10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
                                         </div>
-                                    @endforeach
-                                @else
-                                    <hr class='m-2 text-body-tertiary opacity-10'>
-                                    <div class='row fs-7'>
-                                        <div class='col-sm-12 text-center'>No Sub Category Found</div>
                                     </div>
-                                @endif
+                                    <div class="col-12 col-md-8">
+                                        <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                                            <div class="input-group input-group-sm w-auto">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                                </span>
+                                                <input type="search" id="search" class="form-control"
+                                                    placeholder="Search sub category" aria-label="Search sub category"
+                                                    style="width: 180px" />
+                                            </div>
+                                            <a href="{{ route('subcategory.add') }}" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+                                                New Sub category
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
+                            <!--end::Card Header-->
+                            <div id="subcat-table-content">
+                                @include('sub_category.table')
+                            </div>
                         </div>
+                        <!--end::Card-->
                     </div>
+                    <!-- /.col -->
                 </div>
-            </section>
+                <!--end::Row-->
+            </div>
 
             <!--end::Container-->
         </div>
@@ -182,53 +97,41 @@
 @endsection
 
 @section('script')
-
     <script>
-        let appURL = <?= json_encode(url('/')) ?>;
+        let appURL = @php echo json_encode(url('/')) @endphp;
 
-        // let addBtn = document.querySelector(".add-btn");
-        // let pageSection = document.querySelector(".page-section");
-        // let addSection = document.querySelector(".add-section");
-
-        // addBtn.addEventListener("click", () => {
-        //     pageSection.style.display = "none";
-        //     addSection.style.display = "block";
-        // });
-
-        const searchInput = document.getElementById('search');
-        const resultsDiv = document.querySelector('.results');
-
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.trim() != "" ? searchInput.value.trim() : '0';
-            fetch(`${appURL}/subcategory/search/${encodeURIComponent(query)}`)
-                .then(response => response.text())
-                .then(data => {
-                    resultsDiv.innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('subcat-st')) {
+                fetch(`${appURL}/subcategory/status/${e.target.id}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data == 'success') {
+                            swalToast('success', 'Status Updated Successfully');
+                        } else {
+                            swalToast('error', 'Status Update Failed');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
         });
 
-        // const sBtn = document.querySelectorAll(".s-btn");
+        const searchInput = document.getElementById('search');
+        const showDataSelect = document.getElementById('show-data');
+        let searchTimeout;
 
-        // sBtn.forEach(btn => {
-        //     btn.style.background = "#198754";
-        //     btn.style.color = "#fff";
-        //     btn.addEventListener("click", () => {
-        //         searchInput.value = "";
-        //         sBtn.forEach(button => {
-        //             button.style.background = "#198754";
-        //         });
-        //         const btnVal = btn.value != "" ? btn.value : '0';
-        //         fetch(`${appURL}/subcategory/search/${btnVal}`)
-        //             .then(response => response.text())
-        //             .then(data => {
-        //                 resultsDiv.innerHTML = data;
-        //             })
-        //             .catch(error => console.error('Error:', error));
+        function reloadSubcategoryTable() {
+            const query = encodeURIComponent(searchInput.value.trim());
+            const perPage = encodeURIComponent(showDataSelect.value);
+            loadData(`${appURL}/subcategory?search=${query}&per_page=${perPage}`, '#subcat-table-content');
+        }
 
-        //         btn.style.background = "#196d54";
-        //     });
-        // });
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(reloadSubcategoryTable, 500);
+        });
 
+        showDataSelect.addEventListener('change', () => {
+            reloadSubcategoryTable();
+        });
     </script>
 @endsection

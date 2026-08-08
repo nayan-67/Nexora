@@ -8,10 +8,10 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils"
 import api from "@/lib/api"
 import { toast } from "react-hot-toast";
-import { CartContext } from "../context/CartContext"
+import { CartContext } from "@/context/CartContext"
+import { AuthContext } from "@/context/AuthContext"
 
 const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "")
-
 
 function ImageZoom({ src, alt }) {
   const containerRef = useRef(null)
@@ -94,6 +94,7 @@ export default function ProductPage() {
   const hasInitializedVariantRef = useRef(false)
 
   const { cartData, setCartData } = useContext(CartContext)
+  const { userData } = useContext(AuthContext)
 
   const prdCategory = sortCategory.find(c => Number(c.id) === Number(product?.category_id))
   const variants = product?.type == 2 ? productVariants?.filter(prd => Number(prd.product_id) === Number(product?.id)) : null
@@ -216,7 +217,7 @@ export default function ProductPage() {
       toast.success("Product URL copied to clipboard")
       setTimeout(() => { setCopiedShareLink(false) }, 2000)
     } catch (error) {
-      console.error("Copy failed:", error)
+      // console.error("Copy failed:", error)
       toast.error("Unable to copy link")
     }
   }
@@ -260,7 +261,7 @@ export default function ProductPage() {
         setIsLiked(wishlistItems.some((item) => item.sku === skuToCheck))
       })
       .catch((err) => {
-        console.error("Error:", err.response?.data?.message || err.message)
+        // console.error("Error:", err.response?.data?.message || err.message)
       })
 
     return () => {
@@ -305,8 +306,12 @@ export default function ProductPage() {
         toast.success("Added to cart");
       })
       .catch((err) => {
-        console.error("Error:", err.response?.data?.message || err.message);
-        toast.error("Failed to add cart")
+        // console.error("Error:", err.response?.data?.message || err.message);
+        if (err.response?.status === 401) {
+          toast.error("Please login to add cart")
+        } else {
+          toast.error("Failed to add cart")
+        }
       })
       .finally(() => { setIsLoading(false), setTimeout(() => setAddedToCart(false), 2000) })
   }
@@ -323,12 +328,15 @@ export default function ProductPage() {
         setIsLiked(res.data.like)
       })
       .catch((err) => {
-        console.error("Error:", err.response?.data?.message || err.message);
-        toast.error("Something went wrong!")
+        // console.error("Error:", err.response?.data?.message || err.message);
+        if (err.response?.status === 401) {
+          toast.error("Please login to add Wishlist")
+        } else {
+          toast.error("Failed to add Wishlist")
+        }
       })
 
   }
-
   return (
     <div className="flex min-h-screen flex-col bg-background pt-22">
       {/* <Header /> */}
@@ -435,7 +443,7 @@ export default function ProductPage() {
                   <ImageZoom src={`${apiBase}/uploads/${product.type == 2 ? 'var' : 'prd'}_lg_${displayImage}`} alt={product.name} />
                 )}
                 {selectedImage != -1 && (
-                  <ImageZoom src={`${apiBase}/uploads/${product.type == 2 ? (selectedVariant?.gallery_image ? 'var_glr' : 'glr') : 'glr'}_lg_${selectedVariant?.gallery_image?.[selectedImage] ?? product.gallery_image?.[selectedImage] ?? ''}`} alt={product.name} />
+                  <ImageZoom src={`${apiBase}/uploads/${product.type == 2 ? (selectedVariant?.gallery_images ? 'var_glr' : 'glr') : 'glr'}_lg_${selectedVariant?.gallery_images?.[selectedImage] ?? product.gallery_images?.[selectedImage] ?? ''}`} alt={product.name} />
                 )}
                 {product.isNew && (
                   <span className="absolute left-4 top-4 z-10 rounded-full bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">
@@ -459,27 +467,52 @@ export default function ProductPage() {
                       : "opacity-60 hover:opacity-100"
                   )}
                 >
-                  <img src={`${apiBase}/uploads/${product.type == 2 ? 'var' : 'prd'}_md_${displayImage}`} alt="" className="h-full w-full object-cover" />
+                  <img src={`${apiBase}/uploads/${product.type == 2 ? 'var' : 'prd'}_sm_${displayImage}`} alt="" className="h-full w-full object-cover" />
                 </button>
                 {/* Show variant gallery if selected, otherwise show product gallery */}
-                {selectedVariant?.gallery_image && selectedVariant.gallery_image.length > 0 ? (
+                {product.type == 1 ? (
                   <>
-                    {selectedVariant.gallery_image.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={cn(
-                          "relative aspect-square w-20 overflow-hidden rounded-xl transition-all",
-                          selectedImage === index
-                            ? "ring-2 ring-primary ring-offset-2"
-                            : "opacity-60 hover:opacity-100"
-                        )}
-                      >
-                        <img src={`${apiBase}/uploads/var_glr_md_${image}`} alt="" className="h-full w-full object-cover" />
-                      </button>
-                    ))}
+                    {product?.gallery_images && product.gallery_images.length > 0 ? (
+                      <>
+                        {product?.gallery_images.map((image, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setSelectedImage(index)}
+                            className={cn(
+                              "relative aspect-square w-20 overflow-hidden rounded-xl transition-all",
+                              selectedImage === index
+                                ? "ring-2 ring-primary ring-offset-2"
+                                : "opacity-60 hover:opacity-100"
+                            )}
+                          >
+                            <img src={`${apiBase}/uploads/glr_sm_${image}`} alt="" className="h-full w-full object-cover" />
+                          </button>
+                        ))}
+                      </>
+                    ) : null}
                   </>
-                ) : null}
+                ) : (
+                  <>
+                    {selectedVariant?.gallery_images && selectedVariant.gallery_images.length > 0 ? (
+                      <>
+                        {selectedVariant?.gallery_images.map((image, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setSelectedImage(index)}
+                            className={cn(
+                              "relative aspect-square w-20 overflow-hidden rounded-xl transition-all",
+                              selectedImage === index
+                                ? "ring-2 ring-primary ring-offset-2"
+                                : "opacity-60 hover:opacity-100"
+                            )}
+                          >
+                            <img src={`${apiBase}/uploads/var_glr_sm_${image}`} alt="" className="h-full w-full object-cover" />
+                          </button>
+                        ))}
+                      </>
+                    ) : null}
+                  </>
+                )}
               </div>
             </div>
 
@@ -515,19 +548,19 @@ export default function ProductPage() {
                 {displaySaleBadge && (
                   <>
                     <span className="text-3xl font-bold text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
-                      ${selectedVariant?.sale_price || product.sale_price}
+                      ₹{selectedVariant?.sale_price || product.sale_price}
                     </span>
                     <span className="text-xl text-muted-foreground line-through">
-                      ${selectedVariant?.price || product.price}
+                      ₹{selectedVariant?.price || product.price}
                     </span>
                     <span className="rounded-full bg-destructive/10 px-2.5 py-1 text-sm font-medium text-destructive">
-                      Save ${(selectedVariant?.price || product.price) - (selectedVariant?.sale_price || product.sale_price)}
+                      Save ₹{(selectedVariant?.price || product.price) - (selectedVariant?.sale_price || product.sale_price)}
                     </span>
                   </>
                 )}
                 {!displaySaleBadge && (
                   <span className="text-3xl font-bold text-foreground" style={{ fontFamily: 'var(--font-heading)' }}>
-                    ${displayPrice}
+                    ₹{displayPrice}
                   </span>
                 )}
               </div>
@@ -707,7 +740,7 @@ export default function ProductPage() {
                 </button>
               </div>
               {/* Buy Now & Add to Cart */}
-              {displayStock == 0 || (product.type == 2 && variantAttributes && variantAttributes.length > 0 && !selectedVariant) ? (
+              {displayStock == 0 || !displayStock ? (
                 <div className="mt-5 flex gap-4 sm:w-fit sm:min-w-[60%]">
                   <Button
                     variant='custom'
@@ -757,8 +790,17 @@ export default function ProductPage() {
                             </>
                           ) : (
                             <>
-                              <Check className="h-5 w-5" />
-                              Added to Cart
+                              {userData ? (
+                                <>
+                                  <Check className="h-5 w-5" />
+                                  Added to Cart
+                                </>
+                              ) : (
+                                <>
+                                  <ShoppingBag className="h-5 w-5" />
+                                  Add to Cart
+                                </>
+                              )}
                             </>
                           )}
                         </>
@@ -789,7 +831,7 @@ export default function ProductPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">Free Shipping</p>
-                    <p className="text-xs text-muted-foreground">On orders over $50</p>
+                    <p className="text-xs text-muted-foreground">On orders over ₹499</p>
                   </div>
                 </div>
                 {/* <div className="flex items-center gap-3">

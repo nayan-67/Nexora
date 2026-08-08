@@ -15,19 +15,19 @@ class Variant extends Model
         'sale_price',
         'stock',
         'attributes',
-        'images',
         'featured_image',
-        'gallery_image',
+        'gallery_images',
         'is_active',
         'is_default',
     ];
 
     protected $casts = [
         'attributes' => 'array',
-        'gallery_image' => 'array',
+        'gallery_images' => 'array',
         'is_active' => 'boolean',
         'is_default' => 'boolean',
         'is_sale' => 'boolean',
+        'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
     ];
 

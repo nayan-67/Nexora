@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $table='address';
+    protected $table = 'address';
     protected $fillable = [
         'user_id',
-        'f_name',
-        'l_name',
+        'addr_name',
+        'first_name',
+        'last_name',
         'phone',
         'address1',
         'address2',
@@ -20,4 +21,15 @@ class Address extends Model
         'state',
         'is_default',
     ];
+
+    protected $casts = [
+        'is_default' => 'boolean',
+        'postcode' => 'numeric',
+        'phone' => 'numeric'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -5,20 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Category;
-use App\Models\Discount;
-use App\Models\Order;
-use App\Models\Order_address;
-use App\Models\Order_product;
+use App\Models\Coupon;
+use App\Models\Orders;
+use App\Models\OrderAddress;
+use App\Models\OrderItems;
 use App\Models\Products;
+use App\Models\UsedCoupon;
 use App\Models\User;
 use App\Models\Variant;
 use App\Models\VariantAttribute;
 use App\Models\Wishlist;
 use App\Traits\ResizeImage;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller
 {
@@ -39,7 +42,7 @@ class ApiController extends Controller
             'user' => $user,
             'defaultaddress' => $address,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -47,7 +50,7 @@ class ApiController extends Controller
 
     public function categories()
     {
-        $categories = Category::orderBy('id', 'ASC')->get();
+        $categories = Category::where('status', 1)->orderBy('id', 'ASC')->get();
         return response()->json($categories, 200);
     }
 
@@ -65,7 +68,7 @@ class ApiController extends Controller
 
     public function productDetails(int $id)
     {
-        $products = Products::where('id', $id)->first();
+        $products = Products::find($id);
         return response()->json($products, 200);
     }
 
@@ -299,7 +302,7 @@ class ApiController extends Controller
             'defaultaddress' => $addr,
             'addresses' => $updateAddr,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -335,7 +338,7 @@ class ApiController extends Controller
             'defaultaddress' => $defaultAddr,
             'addresses' => $updateAddr,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -350,7 +353,7 @@ class ApiController extends Controller
                 'message' => 'Unauthenticated',
             ], 401);
         }
-
+        DB::beginTransaction();
         try {
             $orderData = $request->orderData;
             $firstName = $request->firstName;
@@ -377,6 +380,7 @@ class ApiController extends Controller
             if (empty($checkAddress)) {
                 Address::create([
                     'user_id' => $user->id,
+                    'addr_name' => 'Home',
                     'f_name' => $firstName,
                     'l_name' => $lastName,
                     'phone' => $phone,
@@ -388,7 +392,7 @@ class ApiController extends Controller
                     'state' => $state,
                     'is_default' => true,
                 ]);
-                $shippingAddress = Order_address::create([
+                $shippingAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => $request->sameAsShipping ? 3 : 1,
                     'f_name' => $firstName,
@@ -405,6 +409,7 @@ class ApiController extends Controller
             if (!$request->sameAsShipping && empty($checkAddress)) {
                 Address::create([
                     'user_id' => $user->id,
+                    'addr_name' => 'Work',
                     'f_name' => $billingFirstName,
                     'l_name' => $billingLastName,
                     'phone' => $billingPhone,
@@ -416,7 +421,7 @@ class ApiController extends Controller
                     'state' => $billingState,
                     'is_default' => true,
                 ]);
-                $billAddress = Order_address::create([
+                $billAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => '2',
                     'f_name' => $billingFirstName,
@@ -434,7 +439,7 @@ class ApiController extends Controller
             if ($shipId) {
                 $userAddr = Address::where(['id' => $shipId, 'user_id' => $user->id])->first();
 
-                $shippingAddress = Order_address::create([
+                $shippingAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => ($request->sameAsShipping || $billId == $shipId) ? '3' : '1',
                     'f_name' => $userAddr->f_name,
@@ -453,7 +458,7 @@ class ApiController extends Controller
                 if (!$request->sameAsShipping && $billId != $shipId) {
                     $billAddr = Address::where(['id' => $billId, 'user_id' => $user->id])->first();
 
-                    $billAddress = Order_address::create([
+                    $billAddress = OrderAddress::create([
                         'user_id' => $user->id,
                         'type' => '2',
                         'f_name' => $billAddr->f_name,
@@ -471,17 +476,18 @@ class ApiController extends Controller
                 }
             }
 
-            $order = Order::create([
+            $order = Orders::create([
                 'user_id' => $user->id,
                 'order_status' => '1',
                 'payment_status' => '1',
-                'payment_mode' => 'card',
+                'payment_mode' => '2',
                 'billing_address_id' => $request->sameAsShipping ? $shippingAddress->id : $billAddress->id,
                 'shipping_address_id' => $shippingAddress->id,
                 'sub_total' => $orderData['subtotal'],
                 'total_price' => $orderData['total'],
                 'eco_tax' => $orderData['tax'],
                 'discount' => $orderData['discount'],
+                'used_coupon' => $orderData['coupon']['name'] ?? null,
                 'shipping' => $orderData['shipping'],
             ]);
 
@@ -495,7 +501,7 @@ class ApiController extends Controller
                 }
                 $prd->stock -= $value['quantity'];
                 $prd->save();
-                Order_product::create([
+                OrderItems::create([
                     'user_id' => $user->id,
                     'order_id' => $order->id,
                     'product_id' => $value['prd_id'],
@@ -503,28 +509,41 @@ class ApiController extends Controller
                     'sku' => $value['sku'],
                     'quantity' => $value['quantity'],
                     'price' => $prd->sale_price ?? $prd->price,
+                    'status' => '1',
                 ]);
             }
             $order->order_number = "ORD-NX" . rand(100, 999) . $order_id;
             $order->save();
 
+            if ($orderData['coupon']) {
+                UsedCoupon::create([
+                    'user_id' => $user->id,
+                    'order_number' => $order->order_number,
+                    'coupon_name' => $orderData['coupon']['name'],
+                    'amount_type' => $orderData['coupon']['type'],
+                    'amount' => $orderData['coupon']['amount'],
+                ]);
+            }
+
             $shippingAddress->order_number = $order->order_number;
             $shippingAddress->save();
-            if ($billAddress) {
+            if (!empty($billAddress)) {
                 $billAddress->order_number = $order->order_number;
                 $billAddress->save();
             }
             Cart::where('u_id', $user->id)->delete();
-
+            DB::commit();
             return response($order_id, 201);
         } catch (Exception $e) {
-            // return response($e->getMessage());
+            DB::rollBack();
+            Log::error($e);
+            return response($e->getMessage());
         }
     }
 
     public function orderData(int $id)
     {
-        $data = Order::find($id);
+        $data = Orders::find($id);
         return response($data->order_number, 200);
     }
 
@@ -578,7 +597,7 @@ class ApiController extends Controller
             'user' => $userData,
             'address' => $address,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => Wishlist::where('u_id', $user->id)->count(),
             ],
         ], 200);
@@ -594,7 +613,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $data = Discount::where('name', $coupon)->first();
+        $data = Coupon::where('name', $coupon)->first();
 
         if ($data) {
             if ($data->status == '0') {
@@ -622,7 +641,7 @@ class ApiController extends Controller
         }
 
         $uid = $user->id;
-        $data = Order::where('user_id', $uid)->orderBy('id', 'DESC')->get();
+        $data = Orders::where('user_id', $uid)->orderBy('id', 'DESC')->get();
         return response()->json($data, 200);
     }
 
@@ -636,7 +655,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $items = Order_product::where("order_id", $id)->get();
+        $items = OrderItems::where("order_id", $id)->get();
         return response()->json($items, 200);
     }
 
@@ -650,7 +669,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $items = Order_product::where("user_id", $user->id)->orderBy('id', 'DESC')->get();
+        $items = OrderItems::where("user_id", $user->id)->orderBy('id', 'DESC')->get();
         return response()->json($items, 200);
     }
 }

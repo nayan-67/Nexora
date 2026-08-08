@@ -1,8 +1,8 @@
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
     <!--begin::Sidebar Brand-->
-    <div class="sidebar-brand">
+    <div class="sidebar-brand" style="height: 3.56rem !important;">
         <!--begin::Brand Link-->
-        <a href="#" class="brand-link">
+        <a href="javascript:void(0)" class="brand-link">
             <!--begin::Brand Image-->
             <img src="{{ asset('adminlte/dist/assets/img/nexora-logo2.svg') }}" alt="Nexora Logo"
                 class="brand-image opacity-75 shadow" />
@@ -82,7 +82,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item sub-nav-item @yield('addpmenuopen')">
-                            <a href="#" class="nav-link @yield('addpactive')">
+                            <a href="javascript:void(0)" class="nav-link @yield('addpactive')">
                                 <i class="nav-icon bi bi-plus-square"></i>
                                 <p>
                                     Add Product
@@ -121,13 +121,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item sub-nav-item">
-                            <a href="{{ route('discount.add') }}" class="nav-link @yield('disaddactive')">
+                            <a href="{{ route('coupon.add') }}" class="nav-link @yield('disaddactive')">
                                 <i class="nav-icon bi bi-plus-square"></i>
                                 <p>Add Coupon</p>
                             </a>
                         </li>
                         <li class="nav-item sub-nav-item">
-                            <a href="{{ route('admin.discount') }}" class="nav-link @yield('dislactive')">
+                            <a href="{{ route('admin.coupon') }}" class="nav-link @yield('dislactive')">
                                 <i class="nav-icon bi-list-task"></i>
                                 <p>Coupon List</p>
                             </a>

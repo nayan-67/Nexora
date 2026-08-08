@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\Category;
-use App\Http\Controllers\admin\Discount;
+use App\Http\Controllers\admin\Coupon;
 use App\Http\Controllers\admin\Admin;
 use App\Http\Controllers\admin\Customer;
 use App\Http\Controllers\admin\Order;
@@ -29,7 +29,7 @@ Route::controller(Category::class)->group(function () {
     Route::post('/category/store', 'store')->name('category.store');
     Route::put('/category/update/{id}', 'update')->name('category.update');
     Route::delete('/category/destroy', 'destroy')->name('category.destroy');
-    Route::get('/category/search/{name}', 'search')->name('category.search');
+    Route::get('/category/status/{id}', 'updateStatus');
 });
 
 // ==================== Sub_category ====================
@@ -41,7 +41,7 @@ Route::controller(Sub_category::class)->group(function () {
     Route::post('/subcategory/store', 'store')->name('subcategory.store');
     Route::put('/subcategory/update/{id}', 'update')->name('subcategory.update');
     Route::delete('/subcategory/destroy', 'destroy')->name('subcategory.destroy');
-    Route::get('/subcategory/search/{name}', 'search')->name('subcategory.search');
+    Route::get('/subcategory/status/{id}', 'updateStatus');
 });
 
 // ==================== Product ====================
@@ -56,21 +56,20 @@ Route::controller(Product::class)->group(function () {
     Route::put('/product/update/simple/{id}', 'update')->name('product.simpleupdate');
     Route::put('/product/update/variable/{id}', 'variableupdate')->name('product.variableupdate');
     Route::delete('/product/destroy', 'destroy')->name('product.destroy');
-    Route::get('/product/search/{name}', 'search')->name('product.search');
+    Route::get('/product/details/{id}', 'details')->name('product.details');
     Route::get('/product/subcat/{name}', 'searchsubcat')->name('product.subcat');
 });
 
 
-// ==================== Discount ====================
+// ==================== Coupon ====================
 
-Route::controller(Discount::class)->group(function () {
-    Route::get('/discount', 'index')->name('admin.discount');
-    Route::get('/discount/add', 'add')->name('discount.add');
-    Route::get('/discount/edit/{id}', 'edit')->name('discount.edit');
-    Route::post('/discount/store', 'store')->name('discount.store');
-    Route::put('/discount/update/{id}', 'update')->name('discount.update');
-    Route::delete('/discount/destroy', 'destroy')->name('discount.destroy');
-    Route::get('/discount/search/{name}', 'search')->name('discount.search');
+Route::controller(Coupon::class)->group(function () {
+    Route::get('/coupon', 'index')->name('admin.coupon');
+    Route::get('/coupon/add', 'add')->name('coupon.add');
+    Route::get('/coupon/edit/{id}', 'edit')->name('coupon.edit');
+    Route::post('/coupon/store', 'store')->name('coupon.store');
+    Route::put('/coupon/update/{id}', 'update')->name('coupon.update');
+    Route::delete('/coupon/destroy', 'destroy')->name('coupon.destroy');
 });
 
 // ==================== Order ====================
@@ -80,18 +79,20 @@ Route::controller(Order::class)->group(function () {
     Route::get('/order/edit/{id}', 'edit')->name('order.edit');
     Route::post('/order/store', 'store')->name('order.store');
     Route::put('/order/update/{id}', 'update')->name('order.update');
-    Route::delete('/order/destroy', 'destroy')->name('order.destroy');
-    Route::get('/order/search/{name}', 'search')->name('order.search');
+    Route::delete('/order/cancel', 'cancel')->name('order.cancel');
 });
 
 // ==================== Customer ====================
 
 Route::controller(Customer::class)->group(function () {
     Route::get('/customer', 'index')->name('admin.user');
-    Route::get('/customer/edit/{id}', 'edit')->name('user.edit');
+    Route::get('/customer/view/{id}', 'view')->name('user.view');
     Route::put('/customer/update/{id}', 'update')->name('user.update');
     Route::delete('/customer/destroy', 'destroy')->name('user.destroy');
-    Route::get('/customer/search/{name}', 'search')->name('user.search');
     Route::get('/customer/order/{id}', 'userOrder')->name('user.order');
     Route::delete('/customer/order/destroy', 'delorder')->name('order.delete');
 });
+
+// Route::get('/loader', function () {
+//     return view('loader');
+// });

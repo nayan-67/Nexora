@@ -3,27 +3,37 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Address;
-use App\Models\Order as ModelsOrder;
-use App\Models\Order_address;
+use App\Models\Orders;
+use App\Models\OrderItems;
+use App\Models\Products;
+use App\Models\Variant;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!session('admin_id')) {
             return redirect()->route('admin.login');
         }
-        $data = ModelsOrder::orderBy('id', 'DESC')->get();
+        $perPage = $request->input('per_page', 10);
+        $query = Orders::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('order_number', 'like', '%' . $request->search . '%');
+        }
+        $data = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
+        if ($request->ajax()) {
+            return view('order.table', compact('data'))->render();
+        }
         return view('order.index', compact('data'));
     }
 
     public function store(Request $request)
     {
         try {
-            $data = ModelsOrder::create([
+            $data = Orders::create([
                 'name' => $request->post('name'),
                 'valid_from' => $request->post('valid-from'),
                 'valid_till' => $request->post('valid-till'),
@@ -47,85 +57,74 @@ class Order extends Controller
             return redirect()->route('admin.login');
         }
         $id = decrypt($id);
-        $data = ModelsOrder::find($id);
+        $data = Orders::find($id);
         return view('order.edit', compact('data'));
     }
 
     public function update(Request $request, string $id)
     {
+        DB::beginTransaction();
         try {
-            $data = [
-                'order_status' => $request->order_status,
-                'payment_status' => $request->payment_status
-            ];
-            if (ModelsOrder::where('id', $id)->update($data)) {
-                toast('order Updated Successfully', 'success');
-                return redirect()->route('admin.order');
+            $order_items = OrderItems::where('order_id', $id)->get();
+            foreach ($order_items as $item) {
+                $item->status = $request->post('item_status_' . $item->id);
+                if ($request->post('item_status_' . $item->id) == 3) {
+                    $item->delivery_date = now();
+                }
+                $item->save();
             }
+            $order = Orders::find($id);
+            $order->payment_status = $request->payment_status;
+            $order->save();
+            $flag = 0;
+            foreach ($order_items as $item) {
+                if ($item->status == 3) {
+                    $flag += 1;
+                }
+            }
+            if ($flag == count($order_items)) {
+                $order->order_status = 2;
+                $order->save();
+            }
+            DB::commit();
+            toast('Order Status Updated Successfully', 'success');
+            return back();
         } catch (Exception $e) {
+            DB::rollBack();
             toast($e->getMessage(), 'error');
-            return redirect()->route('admin.order');
+            return back();
         }
     }
 
-    public function destroy(Request $request)
+    public function cancel(Request $request)
     {
         $id = $request->id;
-        if (ModelsOrder::destroy($id)) {
-            toast('order Deleted Successfully', 'success');
-            return redirect()->route('admin.order');
-        }
-    }
-
-    public function search(string $value)
-    {
-        $data = $value ? ModelsOrder::where('id', 'LIKE', $value . '%')->orderBy('id', 'DESC')->get() : ModelsOrder::orderBy('id', 'DESC')->get();
-
-        if (count($data) > 0) {
-            foreach ($data as $row) {
-                $bill_id = $row->billing_address_id;
-                $ship_id = $row->shipping_address_id;
-                $billingresult = Order_address::find($bill_id);
-                $shippingresult = Order_address::find($ship_id);
-                $create = $row->created_at;
-                $date = substr($create, 0, 10);
-                $name = $billingresult->f_name . ' ' . $billingresult->l_name;
-                $address = $shippingresult->address1 . ', ' . $shippingresult->city . ', ' . $shippingresult->postcode . ', ' . $shippingresult->state . ', ' . $shippingresult->country;
-
-                if ($row->order_status == 0) {
-                    $class = 'cancelled';
-                    $order_status = 'Cancelled';
-                } else if ($row->order_status == 1) {
-                    $class = 'processing';
-                    $order_status = 'Processing';
-                } else if ($row->order_status == 2) {
-                    $class = 'shipped';
-                    $order_status = 'Shipped';
+        DB::beginTransaction();
+        try {
+            $order_items = OrderItems::where('order_id', $id)->get();
+            foreach ($order_items as $item) {
+                $item->status = '0';
+                $item->save();
+                if ($item->product->type == 1) {
+                    $product = Products::find($item->product_id);
+                    $product->stock += $item->quantity;
+                    $product->save();
                 } else {
-                    $class = 'delivered';
-                    $order_status = 'Delivered';
+                    $product = Variant::where('sku', $item->sku)->first();
+                    $product->stock += $item->quantity;
+                    $product->save();
                 }
-
-                echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                    <div class='row fs-7'>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . $row->id . "</div>
-                        <div class='col-sm-3 text-center d-flex align-items-center justify-content-center text-wrap'>" . $address . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center'>" . date('j-M-y', strtotime($date)) . "</div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>$ " . $row->total_price . "</div>
-                        <div class='col-sm-1 text-center d-flex align-items-center justify-content-center
-                        '><span class='list-badge " . $class . "'>" . $order_status . "</span></div>
-                        <div class='col-sm-2 text-center d-flex align-items-center justify-content-center'>" . $name . "</div>
-                        <div class='col-sm-2 text-center d-flex gap-2 justify-content-center'>
-                            <a href='" . route('order.edit', encrypt($row->id)) . "' class='btn btn-info fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;'><i class='fa-regular fa-pen-to-square'></i>EDIT</a>
-                            <button type='button' class='btn btn-danger fs-8 px-2 py-0 text-white d-flex align-items-center gap-1' style='height: 25px;' onclick=\"openModal('" . $row->id . "');\"><i class='fa-regular fa-trash-can'></i>DELETE</button>
-                        </div>
-                    </div>";
             }
-        } else {
-            echo "  <hr class='m-2 text-body-tertiary opacity-10'>
-                <div class='row fs-7'>
-                    <div class='col-sm-12 text-center'>No Order Found</div>
-                </div>";
+            $order = Orders::find($id);
+            $order->order_status = '3';
+            $order->save();
+            DB::commit();
+            toast('Order Cancelled Successfully', 'success');
+            return redirect()->route('admin.order');
+        } catch (Exception $e) {
+            DB::rollBack();
+            toast($e->getMessage(), 'error');
+            return redirect()->route('admin.order');
         }
     }
 }

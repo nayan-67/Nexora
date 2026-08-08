@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Cart;
-use App\Models\Order;
+use App\Models\Orders;
 use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -86,7 +86,7 @@ class AuthController extends Controller
             'address' => $address,
             'cartdata' => $cartItems,
             'stats' => [
-                'orders' => Order::where('user_id', $user->id)->count(),
+                'orders' => Orders::where('user_id', $user->id)->count(),
                 'wishlist' => Wishlist::where('u_id', $user->id)->count(),
             ],
         ], 200);

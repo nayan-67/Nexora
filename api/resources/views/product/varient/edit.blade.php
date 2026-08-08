@@ -52,21 +52,27 @@
 
         .img-remove-icon {
             position: absolute;
-            right: 1px;
-            top: 1px;
-            background: #fff;
+            right: 0;
+            top: 0;
+            border-left: 1px solid;
+            border-bottom: 1px solid;
             border-top-right-radius: 5px;
-            opacity: 0;
             transition: all 0.3s ease;
             cursor: pointer;
+            padding: 2px;
         }
 
-        .glr-image:hover .img-remove-icon {
-            opacity: 1;
+        /* .glr-image:hover .img-remove-icon {
+                opacity: 1;
+            } */
+
+        .glr-image {
+            border: 1px solid;
+            padding: 3px;
+            border-radius: 6px;
         }
 
         .attribute-section {
-            background: #f8f9fa;
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
@@ -80,7 +86,7 @@
             background: #f8f9fa;
             padding: 15px;
             border-radius: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             border-left: 4px solid #0d6efd;
         }
 
@@ -108,10 +114,10 @@
         }
 
         .color-input {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 43px;
             border-radius: 100%;
-            border: 2px solid #ddd;
+            border: 1px solid transparent;
             cursor: pointer;
             background-color: transparent;
             -webkit-appearance: none;
@@ -161,7 +167,7 @@
                 <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-4 align-items-center d-flex">
-                        <h3 class="mb-0 page-head fs-4">Product</h3>
+                        <h3 class="mb-0 page-head fs-4">Edit Variant Product</h3>
                     </div>
                     <div class="col-sm-4 d-flex align-items-center justify-content-center">
                     </div>
@@ -182,16 +188,16 @@
         <!--begin::App Content-->
         <div class="app-content" style="min-height:88%;">
             <!--begin::Container-->
-            <section class="bg-white add-section" style="margin:0 10px;">
+            <section class="bg-body add-section" style="margin:0 10px;">
                 <div class="container h-100 border-2 border-top border-primary rounded">
-                    <h5 class="text-secondary my-2">Edit Variable Product</h5>
-                    <hr class="my-1">
+                    {{-- <h5 class="text-secondary my-2">Edit Variable Product</h5>
+                    <hr class="my-1"> --}}
                     <form action="{{ route('product.variableupdate', $item->id) }}" method="post"
                         onsubmit="return handleFormSubmit(event)" enctype="multipart/form-data" id="variant-product-form">
                         @csrf
                         @method('PUT')
 
-                        <div class="row h-100">
+                        <div class="row h-100 py-3">
                             <div class="col-xl-10 mx-auto">
                                 <div class="card-body">
                                     <!-- Basic Product Info -->
@@ -305,7 +311,8 @@
                                     <!-- Display Existing Attributes with Add Value Option -->
                                     <div id="added-attributes" class="mb-4">
                                         @foreach ($attributes as $attr)
-                                            <div class="attribute-section" data-attr-index="{{ $loop->index }}"
+                                            <div class="attribute-section bg-body-tertiary"
+                                                data-attr-index="{{ $loop->index }}"
                                                 data-attr-name="{{ $attr->attribute_name }}">
                                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                                     <div style="flex: 1;">
@@ -370,9 +377,16 @@
                                         {{-- <div class="col-md-3"></div> --}}
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="add-product">Update Product</button>
+                                                class="btn btn-primary btn-md d-flex align-items-center" name="update_product" id="update_product">
+                                                <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
+                                                Update Product
+                                            </button>
                                             <a href="{{ route('admin.product') }}"
-                                                class="btn btn-warning btn-md">Back</a>
+                                                class="btn btn-warning btn-md d-flex align-items-center" id="back_button">
+                                                {{-- <i class="bi bi-arrow-left me-1"></i> --}}
+                                                <i class="bi bi-arrow-left-short"></i>
+                                                Back
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -430,7 +444,8 @@
 
 @section('script')
     <script>
-        let appURL = <?= json_encode(url('/')) ?>;
+        let appURL = @php echo json_encode(url('/')) @endphp;
+        
         let productId = {{ $item->id }};
         let attributes = [];
         let variants = [];
@@ -565,11 +580,11 @@
                 valuesHtml = `
                     <div class="color-picker-row">
                         ${attr.values.map(color => `
-                                                                                    <div>
-                                                                                        <input type="color" class="color-input" value="${typeof color === 'object' ? color.code : '#000000'}" disabled />
-                                                                                        <small>${typeof color === 'object' ? color.name : color}</small>
-                                                                                        </div>
-                                                                                    `).join('')}
+                                <div>
+                                    <input type="color" class="color-input" value="${typeof color === 'object' ? color.code : '#000000'}" disabled />
+                                    <small>${typeof color === 'object' ? color.name : color}</small>
+                                    </div>
+                                `).join('')}
                     </div>
                 `;
             } else {
@@ -603,7 +618,7 @@
                     ];
                 }
             @endphp
-            attributes = <?= json_encode($attributesData) ?>;
+            attributes = @php echo json_encode($attributesData) @endphp;
         }
 
         function loadExistingVariants() {
@@ -618,7 +633,7 @@
                 is_sale: v.is_sale,
                 sale_price: v.sale_price,
                 featured_image: v.featured_image,
-                gallery_image: v.gallery_image,
+                gallery_image: v.gallery_images,
                 is_active: v.is_active,
                 attributes: v.attributes ? (typeof v.attributes === 'string' ? JSON.parse(v.attributes) : v
                     .attributes) : [],
@@ -844,12 +859,11 @@
                 }).join(', ');
                 const sku = variant.sku || `SKU-${variant.id}`;
                 const isExisting = variant.id && !variant.is_new;
-                console.log(variant);
 
                 const variantDiv = document.createElement('div');
-                variantDiv.className = 'variant-row position-relative';
+                variantDiv.className = 'variant-row position-relative bg-body-tertiary';
                 variantDiv.innerHTML = `
-                    <button type="button" class="btn-remove-variant" data-remove-variant="${idx}">✕</button>
+                    <button type="button" class="btn-remove-variant bg-body" data-remove-variant="${idx}">✕</button>
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
                             <h6 class="mb-2"><strong>${attrString}</strong></h6>
@@ -907,7 +921,7 @@
                             </div>
                             <div class="">
                                 <div class="variant-gallery-preview d-flex gap-2 flex-wrap mt-1" id="gallery-preview-${idx}"></div>
-                                <div class="variant-gallery-preview d-flex gap-2 flex-wrap mt-1" id="new-gallery-preview-${idx}"></div>
+                                <div class="variant-gallery-preview d-flex gap-2 flex-wrap mt-2" id="new-gallery-preview-${idx}"></div>
                             </div>
                         </div>
                     </div>
@@ -1023,11 +1037,11 @@
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const item = document.createElement('div');
-                    item.className = 'text-center';
+                    item.className = 'glr-image';
                     item.innerHTML = `
-                        <div class="glr-image position-relative">
+                        <div class="position-relative">
                             <img src="${event.target.result}" class="img-fluid rounded variant-preview-img" alt="Variant gallery preview" />
-                            <i class="fa-solid fa-xmark img-remove-icon" onclick="removeVariantGalleryImage(${idx}, ${fileIndex})"></i>
+                            <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeVariantGalleryImage(${idx}, ${fileIndex})"></i>
                         </div>
                     `;
                     preview.appendChild(item);
@@ -1052,12 +1066,12 @@
             const galleryImages = variant.gallery_image;
             galleryImages.forEach((img, gIdx) => {
                 const item = document.createElement('div');
-                item.className = 'text-center';
+                item.className = 'glr-image';
                 const imagePath = `{{ asset('uploads') }}/var_glr_lg_${img}`;
                 item.innerHTML = `
-                    <div class="glr-image position-relative">
+                    <div class="position-relative">
                         <img src="${imagePath}" class="img-fluid rounded variant-preview-img" alt="Variant gallery preview" />
-                        <i class="fa-solid fa-xmark img-remove-icon" onclick="removeOldVariantGalleryImage(${idx}, ${gIdx})" style="cursor: pointer;"></i>
+                        <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeOldVariantGalleryImage(${idx}, ${gIdx})" style="cursor: pointer;"></i>
                     </div>
                 `;
                 galleryPreview.appendChild(item);
@@ -1104,12 +1118,12 @@
                 const galleryPreview = document.getElementById(`gallery-preview-${idx}`);
                 galleryImages.forEach((img, gIdx) => {
                     const item = document.createElement('div');
-                    item.className = 'text-center';
+                    item.className = 'glr-image';
                     const imagePath = `{{ asset('uploads') }}/var_glr_lg_${img}`;
                     item.innerHTML = `
-                        <div class="glr-image position-relative">
+                        <div class="position-relative">
                             <img src="${imagePath}" class="img-fluid rounded variant-preview-img" alt="Variant gallery preview" />
-                            <i class="fa-solid fa-xmark img-remove-icon" onclick="removeOldVariantGalleryImage(${idx}, ${gIdx})" style="cursor: pointer;"></i>
+                            <i class="fa-solid fa-xmark img-remove-icon bg-body" onclick="removeOldVariantGalleryImage(${idx}, ${gIdx})" style="cursor: pointer;"></i>
                         </div>
                     `;
                     galleryPreview.appendChild(item);
@@ -1235,6 +1249,16 @@
 
         pNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(pNameInput.value);
+        });
+
+        let button = document.querySelector("#update_product");
+        let backButton = document.querySelector("#back_button");
+        let icon = document.querySelector("#arrow_repeat");
+        button.addEventListener("click", async function() {
+            icon.style.animation = "spin 1s linear infinite";
+            await new Promise(resolve => setTimeout(resolve, 500));
+            this.disabled = true;
+            backButton.disabled = true;
         });
     </script>
 @endsection
