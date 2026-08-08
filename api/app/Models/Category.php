@@ -13,9 +13,18 @@ class Category extends Model
         'name',
         'slug',
         'description',
-        'order_number',
         'image',
         'total_products',
         'status',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Products::class, 'category_id');
+    }
+
+    public function sub_categories()
+    {
+        return $this->hasMany(SubCategory::class, 'category_id');
+    }
 }

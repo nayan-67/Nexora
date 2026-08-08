@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('addr_name',100)->default('Home');
-            $table->string('f_name',100);
-            $table->string('l_name',100);
+            $table->string('first_name',100);
+            $table->string('last_name',100);
             $table->string('phone',13);
             $table->string('address1');
             $table->string('address2')->nullable();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('billing_address');
+        Schema::dropIfExists('address');
     }
 };

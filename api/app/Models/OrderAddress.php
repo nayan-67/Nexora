@@ -9,10 +9,10 @@ class OrderAddress extends Model
     protected $table = "order_address";
     protected $fillable = [
         'user_id',
-        'order_no',
+        'order_number',
         'type',
-        'f_name',
-        'l_name',
+        'first_name',
+        'last_name',
         'phone',
         'address1',
         'address2',

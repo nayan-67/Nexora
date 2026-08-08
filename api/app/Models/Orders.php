@@ -17,10 +17,18 @@ class Orders extends Model
         'shipping_address_id',
         'sub_total',
         'total_price',
-        'eco_tax',
-        'discount',
-        'shipping',
+        'tax',
+        'discount_value',
         'used_coupon',
+        'shipping_fee',
+    ];
+
+    protected $casts = [
+        'sub_total' => 'decimal:2',
+        'total_price' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'discount_value' => 'decimal:2',
+        'shipping_fee' => 'decimal:2',
     ];
 
     public function order()

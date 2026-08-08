@@ -29,6 +29,8 @@ class Products extends Model
     protected $casts = [
         'features' => 'array',
         'gallery_images' => 'array',
+        'price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
     ];
 
     public function category()

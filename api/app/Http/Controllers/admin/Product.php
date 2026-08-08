@@ -23,7 +23,7 @@ class Product extends Controller
             return redirect()->route('admin.login');
         }
         $perPage = $request->input('per_page', 10);
-        $query = Products::query()->where('is_delete', '0');
+        $query = Products::query();
         if ($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')

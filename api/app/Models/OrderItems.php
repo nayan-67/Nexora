@@ -16,8 +16,18 @@ class OrderItems extends Model
         'quantity',
         'price',
         'delivery_date',
+        'request_date',
         'rr_date',
+        'refund_date',
         'status',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'delivery_date' => 'datetime',
+        'request_date' => 'datetime',
+        'rr_date' => 'datetime',
+        'refund_date' => 'datetime',
     ];
 
     public function order()

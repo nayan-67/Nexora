@@ -15,21 +15,21 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('order_number', 100)->unique()->nullable();
-            $table->enum('order_status', ['1', '2', '3'])->nullable()->default('1')->comment('1: Pending, 2: Complete, 3:Canceled');
-            $table->enum('payment_status', ['1', '2','3'])->nullable()->default('1')->comment('1: Pending, 2: Paid, 3: Refunded');
+            $table->tinyInteger('order_status')->nullable()->default(1)->comment('1: Pending, 2: Complete, 3:Canceled');
+            $table->tinyInteger('payment_status')->nullable()->default(1)->comment('1: Pending, 2: Paid, 3: Refunded');
             $table->string('payment_mode', 100);
             $table->foreignId('billing_address_id')->constrained('order_address');
             $table->foreignId('shipping_address_id')->constrained('order_address');
             $table->decimal('sub_total', 10, 2);
             $table->decimal('total_price', 10, 2);
-            $table->decimal('eco_tax', 10, 2);
-            $table->decimal('discount', 10, 2);
+            $table->decimal('tax', 10, 2);
+            $table->decimal('discount_value', 10, 2);
             $table->string('used_coupon', 100)->nullable();
-            $table->decimal('shipping', 10, 2);
-            
+            $table->decimal('shipping_fee', 10, 2);
+
             $table->timestamps();
 
-            $table->index('user_id', 'order_number');
+            $table->index(['user_id', 'order_number']);
         });
     }
 

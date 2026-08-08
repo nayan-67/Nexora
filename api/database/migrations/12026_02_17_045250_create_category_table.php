@@ -13,18 +13,17 @@ return new class extends Migration
     {
         Schema::create('category', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100)->unique();
-            $table->string('slug',100)->unique();
+            $table->string('name', 100)->unique();
+            $table->string('slug', 100)->unique();
             $table->text('description');
-            $table->integer('order_number')->default(0);
             $table->text('image');
             $table->integer('total_products')->default(0)->nullable();
             $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
-            
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('name', 'slug');
+            $table->index(['name', 'slug']);
         });
     }
 

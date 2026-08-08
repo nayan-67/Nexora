@@ -10,12 +10,18 @@ class Coupon extends Model
     use SoftDeletes;
     protected $table = 'coupons';
     protected $fillable = [
-        'name',
+        'coupon_code',
+        'description',
         'valid_from',
         'valid_till',
         'type',
-        'amount',
-        'uses_number',
+        'discount_value',
+        'max_discount',
+        'minimum_order',
+        'usage_number',
+        'usage_limit',
+        'usage_per_user',
+        'first_order_only',
         'status',
     ];
 }

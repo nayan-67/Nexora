@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('cart', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('u_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('prd_id')->constrained('products');
-            $table->tinyInteger('prd_type');
-            $table->string('sku',100);
+            $table->tinyInteger('prd_type')->comment('1: simple, 2: variant');
+            $table->string('sku', 100);
             $table->unsignedInteger('quantity');
 
             $table->timestamps();
-            $table->index('u_id', 'prd_id', 'sku');
+            $table->index(['user_id', 'prd_id', 'sku']);
         });
     }
 

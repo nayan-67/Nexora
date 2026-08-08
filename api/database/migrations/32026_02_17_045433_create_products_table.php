@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100);
             $table->string('slug', 100)->unique();
-            $table->enum('type', ['1', '2'])->default('1')->comment('1 => simple, 2 => variable');
+            $table->tinyInteger('type')->default(1)->comment('1: simple, 2: variable');
             $table->string('sku', 100)->unique()->nullable();
             $table->foreignId('category_id')->constrained('category')->onDelete('cascade');
             $table->foreignId('sub_category_id')->constrained('sub_category')->onDelete('cascade');
@@ -26,13 +26,13 @@ return new class extends Migration
             $table->text('featured_image')->nullable();
             $table->json('gallery_images')->nullable()->default(null);
             $table->unsignedInteger('stock')->nullable();
-            $table->boolean('is_feature')->default(false)->comment('0 => no, 1 => yes');
+            $table->boolean('is_feature')->default(false)->comment('0: no, 1: yes');
             // $table->boolean('is_delete')->default(false)->comment('0 => no, 1 => yes');
-            
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('name', 'slug', 'sku');
+            $table->index(['name', 'slug', 'sku']);
         });
     }
 

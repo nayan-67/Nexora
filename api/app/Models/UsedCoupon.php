@@ -10,8 +10,8 @@ class UsedCoupon extends Model
     protected $fillable = [
         'user_id',
         'order_number',
-        'coupon_name',
-        'amount_type',
+        'coupon_code',
+        'type',
         'amount',
     ];
 }

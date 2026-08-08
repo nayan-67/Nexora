@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('used_coupon', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('order_no',100);
-            $table->string('coupon_name',100);
-            $table->string('amount_type',100);
+            $table->string('order_number', 100);
+            $table->string('coupon_code', 100);
+            $table->tinyInteger('type')->comment('1: Percentage, 2: Fixed_Amount');
             $table->unsignedInteger('amount');
-            
+
             $table->timestamps();
 
-            $table->index('user_id', 'order_no', 'coupon_name');
+            $table->index(['user_id', 'order_number', 'coupon_code']);
         });
     }
 

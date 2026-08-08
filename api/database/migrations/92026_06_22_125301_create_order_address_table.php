@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('order_number')->nullable();
-            $table->enum('type', ['1', '2', '3'])->comment('1: Shipping, 2: Billing, 3: Shipping and Billing');
-            $table->string('f_name', 100);
-            $table->string('l_name', 100);
+            $table->tinyInteger('type')->comment('1: Shipping, 2: Billing, 3: Shipping and Billing');
+            $table->string('first_name', 100);
+            $table->string('last_name', 100);
             $table->string('phone', 13);
             $table->string('address1');
             $table->string('address2')->nullable();

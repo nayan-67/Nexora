@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->boolean('is_sale')->default(false);
             $table->decimal('sale_price', 10, 2)->nullable();
-            $table->integer('stock')->default(0);
+            $table->unsignedInteger('stock')->default(0);
             $table->json('attributes')->nullable(); // {color: "Red", size: "M"}
             $table->text('featured_image')->nullable();
             $table->json('gallery_images')->nullable()->default(null);
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('is_default')->default(false);
 
             $table->timestamps();
-            $table->index('product_id', 'sku', 'is_active');
+            $table->index(['product_id', 'sku', 'is_active']);
         });
     }
 
