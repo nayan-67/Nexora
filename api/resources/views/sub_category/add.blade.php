@@ -73,7 +73,7 @@
                                                 aria-label="Default select example" name="cat_id" required>
                                                 <option selected disabled value="">Select Category</option>
                                                 <?php
-                                                $result = DB::table('category')->orderBy('id', 'ASC')->get();
+                                                $result = DB::table('category')->where('status', 1)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
                                                 ?>
                                                 @foreach ($result as $catrow)
                                                     <option value="{{ $catrow->id }}"
@@ -85,16 +85,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row pt-3 pb-2">
-                                        <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Order Number</h6>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control fs-7" name="order_number"
-                                                placeholder="Enter Order Number" value="{{ old('order_number', 0) }}" />
-                                        </div>
-                                    </div>
-
                                     <div class="row py-2">
                                         <div class="col-md-3">
                                             <h6 class="mb-0 fs-7 fw-bold">Status</h6>
@@ -166,7 +156,7 @@
         let loader = document.getElementById("loader");
         let addBtn = document.getElementById("add_subcat");
         addBtn.addEventListener("click", () => {
-            if(validate()) {
+            if (validate()) {
                 loader.classList.replace("d-none", "d-flex");
             }
         });

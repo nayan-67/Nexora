@@ -35,19 +35,26 @@ class Coupon extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required',
+                'coupon_code' => 'required',
                 'valid-from' => 'required',
                 'valid-till' => 'nullable|date|after:valid-from',
                 'type' => 'required',
-                'amount' => 'required',
+                'discount_value' => 'required',
             ]);
             $data = ModelsCoupon::create([
-                'name' => $request->name,
+                'coupon_code' => $request->post('coupon_code'),
+                'description' => $request->post('description'),
                 'valid_from' => $request->post('valid-from'),
                 'valid_till' => $request->post('valid-till'),
-                'type' => $request->type,
-                'amount' => $request->amount,
-                'status' => $request->status,
+                'type' => $request->post('type'),
+                'discount_value' => $request->post('discount_value'),
+                'max_discount' => $request->post('max_discount'),
+                'minimum_order' => $request->post('minimum_order'),
+                'usage_number' => 0,
+                'usage_limit' => $request->post('usage_limit'),
+                'usage_per_user' => $request->post('usage_per_user'),
+                'first_order_only' => $request->has('first_order_only') ? 1 : 0,
+                'status' => $request->post('status'),
             ]);
             if ($data) {
                 toast('Coupon Added Successfully', 'success');
@@ -73,12 +80,18 @@ class Coupon extends Controller
     {
         try {
             $data = [
-                'name' => $request->name,
+                'coupon_code' => $request->post('coupon_code'),
+                'description' => $request->post('description'),
                 'valid_from' => $request->post('valid-from'),
                 'valid_till' => $request->post('valid-till'),
-                'type' => $request->type,
-                'amount' => $request->amount,
-                'status' => $request->status,
+                'type' => $request->post('type'),
+                'discount_value' => $request->post('discount_value'),
+                'max_discount' => $request->post('max_discount'),
+                'minimum_order' => $request->post('minimum_order'),
+                'usage_limit' => $request->post('usage_limit'),
+                'usage_per_user' => $request->post('usage_per_user'),
+                'first_order_only' => $request->has('first_order_only') ? 1 : 0,
+                'status' => $request->post('status'),
             ];
             if (ModelsCoupon::where('id', $id)->update($data)) {
                 toast('Coupon Updated Successfully', 'success');

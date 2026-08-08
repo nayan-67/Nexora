@@ -70,6 +70,7 @@ class Sub_category extends Controller
     public function update(Request $request, string $id)
     {
         try {
+            $subcategory = SubCategory::find($id);
             $request->validate([
                 'name' => 'required',
                 'slug' => 'required',
@@ -80,10 +81,9 @@ class Sub_category extends Controller
                 'slug' => $request->slug,
                 'order_number' => $request->order_number,
                 'category_id' => $request->cat_id,
-                // 'status' => $request->status,
             ];
 
-            if (SubCategory::where('id', $id)->update($crediantial)) {
+            if ($subcategory->update($crediantial)) {
                 toast('Sub Category Updated Successfully', 'success');
                 return back();
             }

@@ -39,7 +39,7 @@
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     <h5 class="text-secondary my-2">Edit Sub Category</h5>
                     <hr class="my-1">
-                    <form action="{{ route('subcategory.update', $data->id) }}" method="post">
+                    <form action="{{ route('subcategory.update', $data->id) }}" onsubmit="return validate()" method="post">
                         @csrf
                         @method('PUT')
                         <div class="row h-100">
@@ -84,36 +84,13 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row pt-3 pb-2">
-                                        <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Order Number</h6>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control fs-7" name="order_number"
-                                                placeholder="Enter Order Number" value="{{ $data->order_number }}" />
-                                        </div>
-                                    </div>
-
-                                    {{-- <div class="row py-2">
-                                        <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Status</h6>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <select class="form-control form-select fs-7"
-                                                aria-label="Default select example" name="status">
-                                                <option {{ $data->status == '1' ? 'selected' : '' }} value="1">
-                                                    ACTIVE</option>
-                                                <option {{ $data->status == '0' ? 'selected' : '' }} value="0">INACTIVE
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div> --}}
                                     <div class="row py-2">
                                         <div class="col-md-3">
                                         </div>
                                         <div class="col-md-9 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="edit-subcat">Update</button>
+                                                class="btn btn-primary btn-md" name="edit-subcat"
+                                                id="edit_subcat">Update</button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +124,31 @@
 
         subCatInput.addEventListener("input", () => {
             slugInput.value = generateSlug(subCatInput.value);
+        });
+
+        function validate() {
+            let subCatInput = document.querySelector(".sub_cat");
+            let slugInput = document.querySelector(".slug");
+
+            if (subCatInput.value.trim() === "") {
+                alert("Please enter a sub category name.");
+                return false;
+            }
+
+            if (slugInput.value.trim() === "") {
+                alert("Please enter a slug.");
+                return false;
+            }
+
+            return true;
+        }
+
+        let loader = document.getElementById("loader");
+        let editBtn = document.getElementById("edit_subcat");
+        editBtn.addEventListener("click", () => {
+            if (validate()) {
+                loader.classList.replace("d-none", "d-flex");
+            }
         });
     </script>
 @endsection

@@ -47,17 +47,19 @@
                                 <div class="card-body">
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Name<span class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Coupon Code<span class="text-danger ps-1">*</span>
+                                            </h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control fs-7 coupon-name text-uppercase"
-                                                name="name" placeholder="Coupon Name.." value="{{ old('name') }}"
+                                            <input type="text" class="form-control fs-7 coupon-code text-uppercase"
+                                                name="coupon_code" placeholder="COUPON2026" value="{{ old('coupon_code') }}"
                                                 required />
                                         </div>
                                     </div>
                                     <div class="row py-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Valid From<span class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Valid From<span class="text-danger ps-1">*</span>
+                                            </h6>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="date" class="form-control fs-7 valid-from" name="valid-from"
@@ -90,11 +92,77 @@
                                     </div>
                                     <div class="row pt-3 pb-2">
                                         <div class="col-md-3">
-                                            <h6 class="mb-0 fs-7 fw-bold">Amount<span class="text-danger ps-1">*</span></h6>
+                                            <h6 class="mb-0 fs-7 fw-bold">Discount Value<span
+                                                    class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="number" class="form-control fs-7" name="amount"
-                                                placeholder="Enter Amount ..." value="{{ old('amount') }}" />
+                                            <input type="number" step="0.01" class="form-control fs-7"
+                                                name="discount_value" placeholder="Enter discount amount or percentage"
+                                                value="{{ old('discount_value') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Max Discount</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" step="0.01" class="form-control fs-7"
+                                                name="max_discount" placeholder="Maximum discount amount (optional)"
+                                                value="{{ old('max_discount') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Minimum Order</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" step="0.01" class="form-control fs-7"
+                                                name="minimum_order" placeholder="Minimum order value to apply coupon"
+                                                value="{{ old('minimum_order') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Usage Limit</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" class="form-control fs-7" name="usage_limit"
+                                                placeholder="Total usage limit (optional)"
+                                                value="{{ old('usage_limit') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Usage Per User</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" class="form-control fs-7" name="usage_per_user"
+                                                placeholder="Usage limit per user (optional)"
+                                                value="{{ old('usage_per_user') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">First Order Only</h6>
+                                        </div>
+                                        <div class="col-md-9 d-flex align-items-center">
+                                            <input type="checkbox" name="first_order_only" value="1"
+                                                {{ old('first_order_only') ? 'checked' : '' }} />
+                                            <span class="ms-2 fs-7 text-muted">Only for customer's first order</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row py-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-0 fs-7 fw-bold">Description</h6>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <textarea name="description" class="form-control fs-7" rows="3" placeholder="Optional description">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
 

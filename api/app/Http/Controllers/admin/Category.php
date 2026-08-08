@@ -40,7 +40,7 @@ class Category extends Controller
                 'cat-name' => 'required',
                 'slug' => 'required|unique:category,slug',
                 'cat-desc' => 'required',
-                'cat-img' => 'required|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800',
+                'cat-img' => 'required|image|mimes:jpeg,png,jpg,gif,webp|dimensions:min_width=800',
             ]);
 
             $imageFile = $request->file('cat-img');
@@ -53,7 +53,6 @@ class Category extends Controller
                 'name' => $request->post('cat-name'),
                 'slug' => $request->slug,
                 'description' => $request->post('cat-desc'),
-                'order_number' => $request->order,
                 'image' => $filename,
                 'status' => $request->status,
             ];
@@ -91,7 +90,7 @@ class Category extends Controller
                 'cat-name' => 'required',
                 'slug' => 'required|unique:category,slug,' . $id,
                 'cat-desc' => 'required',
-                'cat-img' => 'nullable|image|mimes:jpeg,png,jpg,gif|dimensions:min_width=800',
+                'cat-img' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|dimensions:min_width=800',
             ]);
             $catdata->name = $request->post('cat-name');
             $catdata->slug = $request->slug;
@@ -126,7 +125,7 @@ class Category extends Controller
     public function updateStatus(string $id)
     {
         $catdata = ModelsCategory::find($id);
-        $catdata->status = $catdata->status == '1' ? '0' : '1';
+        $catdata->status = $catdata->status == 1 ? 0 : 1;
         if ($catdata->update()) {
             return 'success';
         } else {
@@ -137,15 +136,25 @@ class Category extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id;
-        $old = ModelsCategory::find($id);
-        if (ModelsCategory::destroy($id)) {
-            if (file_exists(public_path('uploads/cat_sm_' . $old->image))) {
-                unlink(public_path('uploads/cat_sm_' . $old->image));
+        try {
+            $old = ModelsCategory::find($id);
+            $isAssociated = $old->sub_categories()->exists() || $old->products()->exists();
+            if ($isAssociated) {
+                toast('Cannot delete category. It is associated with subcategories or products.', 'error');
+                return back();
             }
-            if (file_exists(public_path('uploads/cat_' . $old->image))) {
-                unlink(public_path('uploads/cat_' . $old->image));
+            if ($old->delete()) {
+                if (file_exists(public_path('uploads/cat_sm_' . $old->image))) {
+                    unlink(public_path('uploads/cat_sm_' . $old->image));
+                }
+                if (file_exists(public_path('uploads/cat_' . $old->image))) {
+                    unlink(public_path('uploads/cat_' . $old->image));
+                }
+                toast('Category Deleted Successfully', 'success');
+                return back();
             }
-            toast('Category Deleted Successfully', 'success');
+        } catch (Exception $e) {
+            toast($e->getMessage(), 'error');
             return back();
         }
     }
