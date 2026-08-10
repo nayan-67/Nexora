@@ -230,7 +230,7 @@
                 renderProductDetails(payload);
                 openDetailPanel();
             } catch (error) {
-                detailContent.innerHTML = `<div class="text-danger p-4">${error.message}</div>`;
+                detailContent.innerHTML = `<div class="text-danger text-center p-4">${error.message}</div>`;
                 openDetailPanel();
             }
         }
@@ -288,6 +288,7 @@
                                             }).join(', ')
                                             : '-';
                                             let img=`${appURL}/uploads/var_sm_${variant.featured_image}`;
+                                            let salePrice = variant.sale_price ? `₹ ${variant.sale_price}` : '---';
                                         return `
                                             <tr class="text-center fs-7">
                                                 <td>
@@ -295,7 +296,7 @@
                                                 </td>
                                                 <td>${variant.sku || '-'}</td>
                                                 <td>₹ ${variant.price ?? '-'}</td>
-                                                <td>₹ ${variant.sale_price ?? '-'}</td>
+                                                <td>${salePrice}</td>
                                                 <td><span class='dot bg-${variant.stock >= 20 ? 'success' : variant.stock >= 10 ? 'primary' : variant.stock >= 5 ? 'warning' : 'danger'}'></span>${variant.stock ?? '-'}</td>
                                                 <td>${attrText}</td>
                                             </tr>

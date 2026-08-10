@@ -168,7 +168,7 @@ export default function RegisterPage() {
 
               <div className="space-y-3 pt-2">
                 {[
-                  { icon: "🚚", title: "Free Shipping", desc: "On all orders over $50" },
+                  { icon: "🚚", title: "Free Shipping", desc: "On all orders over ₹ 499" },
                   { icon: "🎁", title: "Exclusive Offers", desc: "15% off your first order" },
                   { icon: "↩️", title: "Easy Returns", desc: "30-day hassle-free returns" },
                   { icon: "🔒", title: "Secure Checkout", desc: "100% secure payment processing" },

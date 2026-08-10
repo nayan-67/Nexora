@@ -12,7 +12,6 @@ use App\Traits\ResizeImage;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class Product extends Controller
 {
@@ -26,13 +25,13 @@ class Product extends Controller
         $query = Products::query();
         if ($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('sku', 'like', '%' . $request->search . '%')
+                $q->where('name', 'like', "%{$request->search}%")
+                    ->orWhere('sku', 'like', "%{$request->search}%")
                     ->orWhereHas('category', function ($q) use ($request) {
-                        $q->where('name', 'like', '%' . $request->search . '%');
+                        $q->where('name', 'like', "%{$request->search}%");
                     })
                     ->orWhereHas('sub_category', function ($q) use ($request) {
-                        $q->where('name', 'like', '%' . $request->search . '%');
+                        $q->where('name', 'like', "%{$request->search}%");
                     });
             });
         }
@@ -244,15 +243,14 @@ class Product extends Controller
             if (!$products) {
                 throw new Exception('Product not found');
             }
-            $products->is_delete = 1;
-            if ($products->save()) {
+            if ($products->delete()) {
                 $cat = Category::find($products->category_id);
                 if ($cat) {
                     $cat->total_products -= 1;
                     $cat->save();
                 }
                 if ($products->type == 2) {
-                    Variant::where('product_id', $id)->update(['is_active' => '0']);
+                    Variant::where('product_id', $id)->update(['is_active' => 0]);
                 }
                 DB::commit();
                 toast('Product Deleted Successfully', 'success');
@@ -271,7 +269,6 @@ class Product extends Controller
     {
         $product = Products::with(['category', 'sub_category', 'variants'])
             ->where('id', $id)
-            ->where('is_delete', '0')
             ->first();
 
         if (!$product) {
@@ -527,9 +524,9 @@ class Product extends Controller
                 if ($productFeatureImage !== null) {
                     $product->featured_image = $productFeatureImage;
                 }
-                if ($productGalleryImage !== null) {
-                    $product->gallery_images = $productGalleryImage;
-                }
+                // if ($productGalleryImage !== null) {
+                //     $product->gallery_images = $productGalleryImage;
+                // }
                 $product->save();
             }
 

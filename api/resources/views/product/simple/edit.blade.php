@@ -10,16 +10,16 @@
 @section('css')
     <style>
         /* .imginput::-webkit-file-upload-button {
-                                visibility: hidden;
-                            }
+                                    visibility: hidden;
+                                }
 
-                            .imginput::before {
-                                content: 'Choose Image Above 800 x 800 px';
-                                display: inline-block;
-                                background: #eeeeeee0;
-                                padding: 0.45rem;
-                                margin-right: -4rem;
-                            } */
+                                .imginput::before {
+                                    content: 'Choose Image Above 800 x 800 px';
+                                    display: inline-block;
+                                    background: #eeeeeee0;
+                                    padding: 0.45rem;
+                                    margin-right: -4rem;
+                                } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -43,13 +43,13 @@
         }
 
         /* .fa-xmark {
-                                color: #862828;
-                                position: absolute;
-                                top: 0;
-                                right: 0;
-                                cursor: pointer;
-                                backdrop-filter: blur(10px);
-                            } */
+                                    color: #862828;
+                                    position: absolute;
+                                    top: 0;
+                                    right: 0;
+                                    cursor: pointer;
+                                    backdrop-filter: blur(10px);
+                                } */
         .img-remove-icon {
             position: absolute;
             right: 0;
@@ -106,7 +106,7 @@
                     {{-- <h5 class="text-secondary my-2">Edit Product</h5>
                     <hr class="my-1"> --}}
                     <form action="{{ route('product.simpleupdate', $item->id) }}" method="post"
-                        onsubmit="return validate()" enctype="multipart/form-data">
+                        onsubmit="return validate()" novalidate enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row h-100 py-3">
@@ -117,8 +117,12 @@
                                             <h6 class="mb-0 fs-7 fw-bold">SKU<span class="text-danger ps-1">*</span></h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control fs-7" name="sku"
+                                            <input type="text" class="form-control fs-7 sku" name="sku"
                                                 placeholder="Enter SKU ..." value="{{ $item->sku }}" required />
+                                            <div class="sku-error text-danger fs-7 mt-1"></div>
+                                            @error('sku')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -137,6 +141,10 @@
                                                         value="{{ $catrow->id }}">{{ $catrow->name }}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="cat-error text-danger fs-7 mt-1"></div>
+                                            @error('cat_id')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -157,6 +165,10 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <div class="subcat-error text-danger fs-7 mt-1"></div>
+                                            @error('sub_cat_id')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -166,6 +178,10 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
                                                 placeholder="Enter Name ..." value="{{ $item->name }}" required />
+                                            <div class="name-error text-danger fs-7 mt-1"></div>
+                                            @error('name')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -175,6 +191,10 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-slug" name="slug"
                                                 placeholder="Enter Slug.." value="{{ $item->slug }}" required />
+                                            <div class="slug-error text-danger fs-7 mt-1"></div>
+                                            @error('slug')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -204,6 +224,9 @@
                                             <input type="text" class="form-control fs-7 price" name="price"
                                                 placeholder="Enter Price.." value="{{ $item->price }}" required />
                                             <div class="price-error text-danger fs-7 mt-1"></div>
+                                            @error('price')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -214,6 +237,9 @@
                                             <input type="text" class="form-control fs-7 sale-price" name="sale_price"
                                                 placeholder="Enter Sale Price.." value="{{ $item->sale_price }}" />
                                             <div class="sale-price-error text-danger fs-7 mt-1"></div>
+                                            @error('sale_price')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -232,6 +258,9 @@
                                             <div class="text-info fs-8 mt-n3">*** Choose new image above (800 x 800 px) if
                                                 want to change ***</div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
+                                            @error('p-img')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -241,8 +270,12 @@
                                             </h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="number" class="form-control fs-7" name="stock"
+                                            <input type="number" class="form-control fs-7 stock" name="stock"
                                                 placeholder="0" value="{{ $item->stock }}" min="0" />
+                                            <div class="stock-error text-danger fs-7 mt-1"></div>
+                                            @error('stock')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -434,27 +467,108 @@
 
         let price = document.querySelector(".price");
         let priceMessage = document.querySelector(".price-error");
+        let stockInput = document.querySelector(".stock");
+        let stockError = document.querySelector(".stock-error");
+        let skuInput = document.querySelector(".sku");
+        let skuError = document.querySelector(".sku-error");
+        let catError = document.querySelector(".cat-error");
+        let subcatError = document.querySelector(".subcat-error");
+        let productNameInput = document.querySelector(".p-name");
+        let nameError = document.querySelector(".name-error");
+        let slugInput = document.querySelector(".p-slug");
+        let slugError = document.querySelector(".slug-error");
         let val = price.value;
+
         price.addEventListener("input", () => {
             if (isNaN(price.value)) {
                 price.value = val;
                 priceMessage.innerHTML = "Please enter Valid Price";
             } else {
                 val = price.value;
+                priceMessage.innerHTML = "";
             }
         });
 
+        function clearFieldError(field) {
+            if (field) field.textContent = '';
+        }
+
+        function clearFieldValidation(field) {
+            if (field) {
+                field.classList.remove('is-invalid');
+                field.style.borderColor = '';
+                field.style.boxShadow = '';
+            }
+        }
+
+        function setInvalidField(input, errorField, message) {
+            if (errorField) errorField.textContent = message;
+            if (input) {
+                input.classList.add('is-invalid');
+                input.style.borderColor = '#dc3545';
+                // input.style.boxShadow = '0 0 0 .2rem rgba(220,53,69,.25)';
+            }
+        }
+
         function validate() {
-            if (ProductImage.naturalWidth < 800) {
-                imageError.innerHTML = "Please Select Image Above 800 x 800 px";
+            let isValid = true;
+
+            [priceMessage, stockError, skuError, catError, subcatError, nameError, slugError, imageError, gimageError]
+            .forEach(clearFieldError);
+            [price, stockInput, skuInput, catSelect, subcatSelect, productNameInput, slugInput, pimageInput, gimageInput]
+            .forEach(clearFieldValidation);
+
+            if (!skuInput.value.trim()) {
+                setInvalidField(skuInput, skuError, 'SKU is required.');
+                isValid = false;
+            }
+
+            if (!catSelect.value) {
+                setInvalidField(catSelect, catError, 'Category is required.');
+                isValid = false;
+            }
+
+            if (!subcatSelect.value || subcatSelect.value === '0') {
+                setInvalidField(subcatSelect, subcatError, 'Sub category is required.');
+                isValid = false;
+            }
+
+            if (!productNameInput.value.trim()) {
+                setInvalidField(productNameInput, nameError, 'Product name is required.');
+                isValid = false;
+            }
+
+            if (!slugInput.value.trim()) {
+                setInvalidField(slugInput, slugError, 'Slug is required.');
+                isValid = false;
+            }
+
+            if (!price.value.trim() || isNaN(price.value) || Number(price.value) <= 0) {
+                setInvalidField(price, priceMessage, 'Please enter a valid price greater than zero.');
+                isValid = false;
+            }
+
+            if (!stockInput.value.trim() || Number(stockInput.value) < 0) {
+                setInvalidField(stockInput, stockError, 'Please enter a valid stock amount.');
+                isValid = false;
+            }
+
+            if (pimageInput.files.length > 0 && ProductImage.naturalWidth < 800) {
+                setInvalidField(pimageInput, imageError, 'Please Select Image Above 800 x 800 px');
+                isValid = false;
+            }
+
+            for (const img of galleryImages) {
+                if (img.naturalWidth < 800) {
+                    setInvalidField(gimageInput, gimageError, 'Please select gallery images above 800 x 800 px');
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
                 return false;
             }
-            galleryImages.forEach(val => {
-                if (val.naturalWidth < 800) {
-                    gimageError.innerHTML = "Please Select Image Above 800 x 800 px";
-                    return false;
-                }
-            });
 
             price.value = Number(price.value).toFixed(2);
             return true;
@@ -477,12 +591,16 @@
             slugInput.value = generateSlug(pNameInput.value);
         });
 
-        let button = document.querySelector("#product_update");
-        let icon = document.querySelector("#arrow_repeat");
-        button.addEventListener("click", async function() {
-            icon.style.animation = "spin 1s linear infinite";
-            await new Promise(resolve => setTimeout(resolve, 500));
-            this.disabled = true;
+        let addBtn = document.getElementById("add_product");
+        let loader = document.getElementById("loader");
+        let productForm = document.querySelector("form");
+
+        productForm?.addEventListener("submit", (event) => {
+            if (!validate()) {
+                event.preventDefault();
+            } else{
+                loader.classList.replace("d-none", "d-flex");
+            }
         });
     </script>
 @endsection

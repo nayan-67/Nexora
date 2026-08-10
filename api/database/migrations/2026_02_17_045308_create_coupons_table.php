@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedInteger('usage_limit')->nullable();
             $table->unsignedInteger('usage_per_user')->nullable();
             $table->boolean('first_order_only')->default(false)->comment('0: No, 1: Yes');
-            $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active');
+            $table->boolean('status')->default(true)->comment('0: Inactive, 1: Active, 2: Expired');
 
             $table->timestamps();
             $table->softDeletes();

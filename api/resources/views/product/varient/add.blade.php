@@ -10,16 +10,16 @@
 @section('css')
     <style>
         /* .imginput::-webkit-file-upload-button {
-            visibility: hidden;
-        }
+                visibility: hidden;
+            }
 
-        .imginput::before {
-            content: 'Choose Image Above 800 x 800 px';
-            display: inline-block;
-            background: #eeeeeee0;
-            padding: 0.45rem;
-            margin-right: -4rem;
-        } */
+            .imginput::before {
+                content: 'Choose Image Above 800 x 800 px';
+                display: inline-block;
+                background: #eeeeeee0;
+                padding: 0.45rem;
+                margin-right: -4rem;
+            } */
 
         .form-check-input:checked {
             background-color: #495057 !important;
@@ -63,8 +63,8 @@
         }
 
         /* .glr-image:hover .img-remove-icon {
-                            opacity: 1;
-                        } */
+                                opacity: 1;
+                            } */
 
         .glr-image {
             border: 1px solid;
@@ -197,7 +197,7 @@
                                             <select name="cat_id" class="form-control form-select fs-7 cat" required>
                                                 <option selected disabled value="">-- SELECT CATEGORY --</option>
                                                 <?php
-                                                $result = DB::table('category')->where('status', 1)->orderBy('id', 'ASC')->get();
+                                                $result = DB::table('category')->whereNull('deleted_at')->where('status', 1)->orderBy('id', 'ASC')->get();
                                                 ?>
                                                 @foreach ($result as $catrow)
                                                     <option value="{{ $catrow->id }}"
@@ -330,7 +330,8 @@
                                         {{-- <div class="col-md-3"></div> --}}
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="add-product">Add Product</button>
+                                                class="btn btn-primary btn-md" name="add-product" id="add_product">Add
+                                                Product</button>
                                             <a href="{{ route('admin.product') }}"
                                                 class="btn btn-warning btn-md">Back</a>
                                         </div>
@@ -494,12 +495,12 @@
                             const colorName = typeof v === 'object' ? v.name : v;
                             const colorCode = typeof v === 'object' ? v.code : getColorValue(v);
                             return `
-                                        <div>
-                                            <input type="color" class="color-input" value="${colorCode}" 
-                                                data-attr="${idx}" data-val="${i}" />
-                                            <small>${colorName}</small>
-                                        </div>
-                                        `;
+                                            <div>
+                                                <input type="color" class="color-input" value="${colorCode}" 
+                                                    data-attr="${idx}" data-val="${i}" />
+                                                <small>${colorName}</small>
+                                            </div>
+                                            `;
                         }).join('')}
                     </div>`;
                     // Add event listeners to color pickers after rendering
@@ -1011,6 +1012,15 @@
 
         productNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(productNameInput.value);
+        });
+
+        let addBtn = document.getElementById("update_product");
+        let loader = document.getElementById("loader");
+
+        addBtn.addEventListener("click", () => {
+            if (validate() && loader) {
+                loader.classList.replace("d-none", "d-flex");
+            }
         });
     </script>
 @endsection

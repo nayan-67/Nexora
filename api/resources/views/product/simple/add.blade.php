@@ -9,18 +9,6 @@
 
 @section('css')
     <style>
-        /* .imginput::-webkit-file-upload-button {
-                        visibility: hidden;
-                    }
-
-                    .imginput::before {
-                        content: 'Choose Image Above 800 x 800 px';
-                        display: inline-block;
-                        background: #eeeeeee0;
-                        padding: 0.45rem;
-                        margin-right: -4rem;
-                    } */
-
         .form-check-input:checked {
             background-color: #495057 !important;
             border-color: #495057 !important;
@@ -42,14 +30,6 @@
             }
         }
 
-        /* .fa-xmark {
-                        color: #862828;
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        cursor: pointer;
-                        backdrop-filter: blur(10px);
-                    } */
         .img-remove-icon {
             position: absolute;
             right: 0;
@@ -99,7 +79,7 @@
                 <div class="container h-100  border-2 border-top border-primary rounded">
                     {{-- <h5 class="text-secondary my-2">Add Simple Product</h5>
                     <hr class="my-1"> --}}
-                    <form action="{{ route('product.store') }}" method="post" onsubmit="return validate()"
+                    <form action="{{ route('product.store') }}" method="post" onsubmit="return validate()" novalidate
                         enctype="multipart/form-data">
                         @csrf
                         @method('POST')
@@ -115,9 +95,13 @@
                                         <div class="col-md-9">
                                             <select name="cat_id" class="form-control form-select fs-7 cat" required>
                                                 <option selected disabled value="">-- SELECT CATEGORY --</option>
-                                                <?php
-                                                $result = DB::table('category')->orderBy('id', 'ASC')->where('status', 1)->get();
-                                                ?>
+                                                @php
+                                                    $result = DB::table('category')
+                                                        ->whereNull('deleted_at')
+                                                        ->where('status', 1)
+                                                        ->orderBy('id', 'ASC')
+                                                        ->get();
+                                                @endphp
                                                 @foreach ($result as $catrow)
                                                     <option value="{{ $catrow->id }}"
                                                         {{ $catrow->id == @old('cat_id') ? 'selected' : '' }}>
@@ -125,6 +109,10 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <div class="cat-error text-danger fs-7 mt-1"></div>
+                                            @error('cat_id')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row py-2">
@@ -139,6 +127,10 @@
                                                 <option selected disabled value="">-- SELECT SUB CATEGORY --
                                                 </option>
                                             </select>
+                                            <div class="subcat-error text-danger fs-7 mt-1"></div>
+                                            @error('sub_cat_id')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -148,6 +140,10 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-name" name="name"
                                                 placeholder="Enter Name.." value="{{ old('name') }}" required />
+                                            <div class="name-error text-danger fs-7 mt-1"></div>
+                                            @error('name')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -157,6 +153,10 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 p-slug" name="slug"
                                                 placeholder="Enter Slug.." value="{{ old('slug') }}" required />
+                                            <div class="slug-error text-danger fs-7 mt-1"></div>
+                                            @error('slug')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -165,8 +165,7 @@
                                             <h6 class="mb-0 fs-7 fw-bold">Description</h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Description ..."
-                                                value="{{ old('description') }}"></textarea>
+                                            <textarea class="form-control fs-7" rows="3" name="description" placeholder="Description ...">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
 
@@ -189,6 +188,9 @@
                                             <input type="text" class="form-control fs-7 price" name="price"
                                                 placeholder="0.00" value="{{ old('price') }}" required />
                                             <div class="price-error text-danger fs-7 mt-1"></div>
+                                            @error('price')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -200,6 +202,9 @@
                                             <input type="number" class="form-control fs-7 sale-price" name="sale_price"
                                                 placeholder="0.00" value="{{ old('sale_price') }}" />
                                             <div class="sale-price-error text-danger fs-7 mt-1"></div>
+                                            @error('sale_price')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -219,6 +224,9 @@
                                             <div class="text-info fs-8 mt-n3">*** Please choose image above (800px * 800px)
                                                 dimension ***</div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
+                                            @error('p-img')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -228,8 +236,12 @@
                                             </h6>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="number" class="form-control fs-7" name="stock"
+                                            <input type="number" class="form-control fs-7 stock" name="stock"
                                                 placeholder="0" value="{{ old('stock') }}" min="0" required />
+                                            <div class="stock-error text-danger fs-7 mt-1"></div>
+                                            @error('stock')
+                                                <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">
@@ -273,7 +285,8 @@
                                         </div>
                                         <div class="col-md-9 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md" name="add-product">Add Product</button>
+                                                class="btn btn-primary btn-md" name="add-product" id="add_product">Add
+                                                Product</button>
                                             <button type="reset" data-mdb-button-init data-mdb-ripple-init
                                                 class="btn btn-warning btn-md" name="reset">Reset</button>
                                         </div>
@@ -403,13 +416,22 @@
 
         let price = document.querySelector(".price");
         let priceMessage = document.querySelector(".price-error");
+        let stockInput = document.querySelector(".stock");
+        let stockError = document.querySelector(".stock-error");
+        let catError = document.querySelector(".cat-error");
+        let subcatError = document.querySelector(".subcat-error");
+        let productNameInput = document.querySelector(".p-name");
+        let slugInput = document.querySelector(".p-slug");
+        let skuInput = document.getElementById("sku");
         let val = "";
+
         price.addEventListener("input", () => {
             if (isNaN(price.value)) {
                 price.value = val;
                 priceMessage.innerHTML = "Please enter Valid Price";
             } else {
                 val = price.value;
+                priceMessage.innerHTML = "";
             }
         });
 
@@ -424,13 +446,73 @@
             return `NX-${prefix}-${suffix}`;
         }
 
-        function validate() {
-            if (ProductImage.naturalWidth < 800) {
-                imageError.innerHTML = "Please Select Image Above 800 x 800 px";
-                return false;
+        function clearFieldError(field) {
+            if (field) field.textContent = '';
+        }
+
+        function clearFieldValidation(field) {
+            if (field) {
+                field.classList.remove('is-invalid');
+                field.style.borderColor = '';
+                field.style.boxShadow = '';
             }
-            price.value = Number(price.value).toFixed(2);
-            return true;
+        }
+
+        function setInvalidField(input, errorField, message) {
+            if (errorField) errorField.textContent = message;
+            if (input) {
+                input.classList.add('is-invalid');
+                input.style.borderColor = '#dc3545';
+                // input.style.boxShadow = '0 0 0 .2rem rgba(220,53,69,.25)';
+            }
+        }
+
+        function validate() {
+            let isValid = true;
+
+            [priceMessage, stockError, imageError, gimageError, catError, subcatError].forEach(clearFieldError);
+            [price, stockInput, pimageInput, gimageInput, catSelect, subcatSelect, productNameInput, slugInput].forEach(
+                clearFieldValidation);
+
+            if (!catSelect.value) {
+                setInvalidField(catSelect, catError, 'Category is required.');
+                isValid = false;
+            }
+
+            if (!subcatSelect.value) {
+                setInvalidField(subcatSelect, subcatError, 'Sub category is required.');
+                isValid = false;
+            }
+
+            if (!productNameInput.value.trim()) {
+                setInvalidField(productNameInput, document.querySelector('.name-error'), 'Product name is required.');
+                isValid = false;
+            }
+
+            if (!slugInput.value.trim()) {
+                setInvalidField(slugInput, document.querySelector('.slug-error'), 'Slug is required.');
+                isValid = false;
+            }
+
+            if (!price.value.trim() || isNaN(price.value) || Number(price.value) <= 0) {
+                setInvalidField(price, priceMessage, 'Please enter a valid price greater than zero.');
+                isValid = false;
+            }
+
+            if (!stockInput.value.trim() || Number(stockInput.value) < 0) {
+                setInvalidField(stockInput, stockError, 'Please enter a valid stock amount.');
+                isValid = false;
+            }
+
+            if (!pimageInput.files.length) {
+                setInvalidField(pimageInput, imageError, 'Featured image is required.');
+                isValid = false;
+            } else if (ProductImage.naturalWidth < 800) {
+                setInvalidField(pimageInput, imageError, 'Please select image above 800 x 800 px');
+                isValid = false;
+            }
+
+            return isValid;
         }
 
         function generateSlug(text) {
@@ -443,10 +525,6 @@
                 .replace(/\-\-+/g, '-'); // Replace multiple - with single -
         }
 
-        let productNameInput = document.querySelector(".p-name");
-        let slugInput = document.querySelector(".p-slug");
-        let skuInput = document.getElementById("sku");
-
         productNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(productNameInput.value);
             skuInput.value = generateSku(productNameInput.value);
@@ -454,6 +532,18 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             skuInput.value = generateSku(productNameInput.value);
+        });
+
+        let addBtn = document.getElementById("add_product");
+        let loader = document.getElementById("loader");
+        let productForm = document.querySelector("form");
+
+        productForm?.addEventListener("submit", (event) => {
+            if (!validate()) {
+                event.preventDefault();
+            } else{
+                loader.classList.replace("d-none", "d-flex");
+            }
         });
     </script>
 

@@ -63,8 +63,8 @@
         }
 
         /* .glr-image:hover .img-remove-icon {
-                opacity: 1;
-            } */
+                        opacity: 1;
+                    } */
 
         .glr-image {
             border: 1px solid;
@@ -377,7 +377,8 @@
                                         {{-- <div class="col-md-3"></div> --}}
                                         <div class="col-md-12 justify-content-center d-flex gap-2">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-md d-flex align-items-center" name="update_product" id="update_product">
+                                                class="btn btn-primary btn-md d-flex align-items-center"
+                                                name="update_product" id="update_product">
                                                 <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
                                                 Update Product
                                             </button>
@@ -445,7 +446,7 @@
 @section('script')
     <script>
         let appURL = @php echo json_encode(url('/')) @endphp;
-        
+
         let productId = {{ $item->id }};
         let attributes = [];
         let variants = [];
@@ -580,11 +581,11 @@
                 valuesHtml = `
                     <div class="color-picker-row">
                         ${attr.values.map(color => `
-                                <div>
-                                    <input type="color" class="color-input" value="${typeof color === 'object' ? color.code : '#000000'}" disabled />
-                                    <small>${typeof color === 'object' ? color.name : color}</small>
-                                    </div>
-                                `).join('')}
+                                        <div>
+                                            <input type="color" class="color-input" value="${typeof color === 'object' ? color.code : '#000000'}" disabled />
+                                            <small>${typeof color === 'object' ? color.name : color}</small>
+                                            </div>
+                                        `).join('')}
                     </div>
                 `;
             } else {
@@ -1144,28 +1145,6 @@
                 return false;
             }
 
-            // const form = document.getElementById('variant-product-form');
-            // const formData = new FormData(form);
-
-            // Submit form using fetch
-            // fetch(form.action, {
-            //         method: 'POST',
-            //         body: formData
-            //     })
-            //     .then(response => {
-            //         if (response.ok) {
-            //             window.location.href = '{{ route('admin.product') }}';
-            //         } else {
-            //             return response.text().then(text => {
-            //                 throw new Error(text);
-            //             });
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error);
-            //         swalToast('error', 'An error occurred while saving the product');
-            //     });
-
             return true;
         }
 
@@ -1251,14 +1230,18 @@
             slugInput.value = generateSlug(pNameInput.value);
         });
 
-        let button = document.querySelector("#update_product");
-        let backButton = document.querySelector("#back_button");
-        let icon = document.querySelector("#arrow_repeat");
+        let button = document.getElementById("update_product");
+        // let backButton = document.getElementById("back_button");
+        // let icon = document.getElementById("arrow_repeat");
+        let loader = document.getElementById("loader");
         button.addEventListener("click", async function() {
-            icon.style.animation = "spin 1s linear infinite";
             await new Promise(resolve => setTimeout(resolve, 500));
-            this.disabled = true;
-            backButton.disabled = true;
+            // icon.style.animation = "spin 1s linear infinite";
+            // this.disabled = true;
+            // backButton.disabled = true;
+            if (validate() && loader) {
+                loader.classList.replace("d-none", "d-flex");
+            }
         });
     </script>
 @endsection

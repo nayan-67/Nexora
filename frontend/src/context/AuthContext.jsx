@@ -10,21 +10,25 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const fetchUserData = () => {
-        api.get("/user")
-            .then((res) => {
-                if (res.status === 200) {
-                    api.get("/profile")
-                        .then((response) => {
-                            setUserData(response.data)
-                        })
-                        .catch((e) => {
-                            console.error("Error fetching User data:", e)
-                        })
-                }
-            })
-            .catch((err) => {
-                setUserData(null);
-            });
+        if (localStorage.getItem("NXauthToken")) {
+            api.get("/user")
+                .then((res) => {
+                    if (res.status === 200) {
+                        api.get("/profile")
+                            .then((response) => {
+                                setUserData(response.data)
+                            })
+                            .catch((e) => {
+                                console.error("Error fetching User data:", e)
+                            })
+                    }
+                })
+                .catch((err) => {
+                    setUserData(null);
+                });
+        } else {
+            setUserData(null);
+        }
     };
     return (
         <AuthContext.Provider

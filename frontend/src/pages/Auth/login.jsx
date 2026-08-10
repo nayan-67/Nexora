@@ -30,7 +30,7 @@ export default function LoginPage() {
     api.post("/login", { email, password })
       .then(res => {
         const token = res.data.token;
-        localStorage.setItem("authToken", token);
+        localStorage.setItem("NXauthToken", token);
         setUserData(res.data)
         setCartData(res.data.cartdata)
         navigate(from, { state: { loginSuccess: true } });

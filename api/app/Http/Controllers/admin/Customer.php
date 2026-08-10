@@ -20,10 +20,10 @@ class Customer extends Controller
         $perPage = $request->input('per_page', 10);
         $query = User::query();
         if ($request->has('search') && $request->search != '') {
-            $query->where('first_name', 'like', '%' . $request->search . '%')
-                ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                ->orWhere('email', 'like', '%' . $request->search . '%')
-                ->orWhere('phone', 'like', '%' . $request->search . '%');
+            $query->where('first_name', 'like', "%{$request->search}%")
+                ->orWhere('last_name', 'like', "%{$request->search}%")
+                ->orWhere('email', 'like', "%{$request->search}%")
+                ->orWhere('phone', 'like', "%{$request->search}%");
         }
         $data = $query->orderBy('id', 'ASC')->paginate($perPage)->withQueryString();
         if ($request->ajax()) {

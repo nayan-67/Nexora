@@ -62,7 +62,7 @@ class ApiController extends Controller
 
     public function products()
     {
-        $products = Products::inRandomOrder()->where('is_delete', 0)->get();
+        $products = Products::inRandomOrder()->get();
         return response()->json($products, 200);
     }
 

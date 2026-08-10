@@ -3,7 +3,7 @@ import { AuthContext } from "@/context/AuthContext"
 // import { useContext } from "react";
 
 export default function Protected({ children }) {
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("NXauthToken");
   // const { userData } = useContext(AuthContext)
   const location = useLocation();
   if (!token) {

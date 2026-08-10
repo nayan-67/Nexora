@@ -17,7 +17,7 @@ class Sub_category extends Controller
         $perPage = $request->input('per_page', 10);
         $query = Subcategory::query();
         if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', "%{$request->search}%");
         }
         $data = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
         if ($request->ajax()) {
@@ -96,7 +96,7 @@ class Sub_category extends Controller
     public function updateStatus(string $id)
     {
         $subcatdata = SubCategory::find($id);
-        $subcatdata->status = $subcatdata->status == '1' ? '0' : '1';
+        $subcatdata->status = $subcatdata->status == 1 ? 0 : 1;
         if ($subcatdata->update()) {
             return 'success';
         } else {
@@ -107,9 +107,15 @@ class Sub_category extends Controller
     public function destroy(Request $request)
     {
         $id = $request->post('id');
-        if (SubCategory::destroy($id)) {
+        $subCategory = SubCategory::find($id);
+        $isAssociatedWithProducts = $subCategory->products()->exists();
+        if ($isAssociatedWithProducts) {
+            toast('Cannot delete subcategory. It is associated with products.', 'error');
+            return back();
+        }
+        if ($subCategory->delete()) {
             toast('Sub Category Deleted Successfully', 'success');
-            return redirect()->route('admin.subcategory');
+            return back();
         }
     }
 }

@@ -58,7 +58,7 @@ export default function ProfilePage() {
   const { setCartData } = useContext(CartContext)
 
   const logOut = () => {
-    localStorage.removeItem("authToken")
+    localStorage.removeItem("NXauthToken")
     setUserData(null)
     setCartData([])
     navigate(from, { state: { logout: true }, replace: true })

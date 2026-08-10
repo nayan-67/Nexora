@@ -21,7 +21,7 @@ class Order extends Controller
         $perPage = $request->input('per_page', 10);
         $query = Orders::query();
         if ($request->has('search') && $request->search != '') {
-            $query->where('order_number', 'like', '%' . $request->search . '%');
+            $query->where('order_number', 'like', "%{$request->search}%");
         }
         $data = $query->orderBy('id', 'DESC')->paginate($perPage)->withQueryString();
         if ($request->ajax()) {

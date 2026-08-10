@@ -19,18 +19,21 @@
                     @foreach ($data as $row)
                         @php
                             $date = substr($row->created_at, 0, 10);
+                            $maxUsage = $row->usage_limit ? '/' . $row->usage_limit : '';
                         @endphp
                         <tr align="center">
-                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->coupon_code }}</td>
                             <td>{{ date('M j, Y', strtotime($row->valid_from)) }}</td>
                             <td>{{ $row->valid_till ? date('M j, Y', strtotime($row->valid_till)) : 'Not Set' }}
                             </td>
-                            <td>{{ $row->type == '1' ? $row->amount . ' %' : '₹ ' . $row->amount }}
+                            <td>{{ $row->type == '1' ? $row->discount_value . ' %' : '₹ ' . $row->discount_value }}
                             </td>
-                            <td>{{ $row->uses_number }}</td>
+                            <td>{{ $row->usage_number }}{{$maxUsage}}</td>
                             <td>
                                 <span
-                                    class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                    class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>
+                                    {{ $row->status == '1' ? 'Active' : 'Inactive' }}
+                                </span>
                             </td>
                             <td>{{ date('M j, Y', strtotime($date)) }}</td>
                             <td>

@@ -10,7 +10,7 @@ export const CartProvider = ({ children }) => {
     }, []);
 
     const fetchCartData = () => {
-        if (localStorage.getItem("authToken")) {
+        if (localStorage.getItem("NXauthToken")) {
             api.get("/cart")
                 .then((res) => {
                     setCartData(res.data);
