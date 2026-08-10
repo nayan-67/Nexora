@@ -77,7 +77,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
         $address = Address::where(['user_id' => $user->id, 'is_default' => 1])->first();
-        $cartItems = Cart::where('u_id', $user->id)->get();
+        $cartItems = Cart::where('user_id', $user->id)->get();
 
         return response()->json([
             'status' => true,
@@ -87,7 +87,7 @@ class AuthController extends Controller
             'cartdata' => $cartItems,
             'stats' => [
                 'orders' => Orders::where('user_id', $user->id)->count(),
-                'wishlist' => Wishlist::where('u_id', $user->id)->count(),
+                'wishlist' => Wishlist::where('user_id', $user->id)->count(),
             ],
         ], 200);
     }

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useContext } from "react"
 import { Link, useParams } from "react-router-dom"
-import { Heart, ShoppingBag, Star, Truck, Shield, RotateCcw, ChevronLeft, Minus, Plus, Check, ZoomIn, LoaderCircle, Share2, Copy, HeartPlus, BellPlus, BellCheck, CopyCheck, CheckCheck } from "lucide-react"
+import { Heart, ShoppingBag, Star, Truck, Shield, RotateCcw, ChevronLeft, Minus, Plus, Check, ZoomIn, LoaderCircle, Share2, Copy, HeartPlus, BellPlus, BellCheck, CopyCheck, CheckCheck, MoveDown } from "lucide-react"
 // import { Button } from "@/components/ui/button"
 import { Button } from "@/components/lightswind/button"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/lightswind/dialog"
@@ -553,8 +553,9 @@ export default function ProductPage() {
                     <span className="text-xl text-muted-foreground line-through">
                       ₹{selectedVariant?.price || product.price}
                     </span>
-                    <span className="rounded-full bg-destructive/10 px-2.5 py-1 text-sm font-medium text-destructive">
-                      Save ₹{(selectedVariant?.price || product.price) - (selectedVariant?.sale_price || product.sale_price)}
+                    <span className="rounded-full bg-green-600/10 px-2.5 py-1 text-sm font-medium text-green-600 flex place-items-center">
+                      <MoveDown className="h-3" />
+                      Save {Math.round((((selectedVariant?.price || product.price) - (selectedVariant?.sale_price || product.sale_price)) / (selectedVariant?.price || product.price)) * 100)}%
                     </span>
                   </>
                 )}
