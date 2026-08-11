@@ -536,12 +536,9 @@
 
         let addBtn = document.getElementById("add_product");
         let loader = document.getElementById("loader");
-        let productForm = document.querySelector("form");
 
-        productForm?.addEventListener("submit", (event) => {
-            if (!validate()) {
-                event.preventDefault();
-            } else{
+        addBtn.addEventListener("click", () => {
+            if (validate()) {
                 loader.classList.replace("d-none", "d-flex");
             }
         });

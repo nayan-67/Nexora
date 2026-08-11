@@ -43,7 +43,7 @@ class ApiController extends Controller
             'defaultaddress' => $address,
             'stats' => [
                 'orders' => Orders::where('user_id', $user->id)->count(),
-                'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
+                'wishlist' => DB::table('wishlist')->where('user_id', $user->id)->count(),
             ],
         ], 200);
     }
@@ -63,6 +63,12 @@ class ApiController extends Controller
     public function products()
     {
         $products = Products::inRandomOrder()->get();
+        return response()->json($products, 200);
+    }
+
+    public function featuredProducts()
+    {
+        $products = Products::where('is_feature', 1)->get();
         return response()->json($products, 200);
     }
 
@@ -107,7 +113,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $cartItems = Cart::where('u_id', $user->id)->get();
+        $cartItems = Cart::where('user_id', $user->id)->get();
         return response()->json($cartItems, 200);
     }
 
@@ -122,13 +128,13 @@ class ApiController extends Controller
         }
 
         $cardData = [
-            "u_id" => $user->id,
+            "user_id" => $user->id,
             "prd_id" => $request->prdId,
             "prd_type" => $request->prdType,
             "sku" => $request->prdSku,
             "quantity" => $request->quantity,
         ];
-        $card = Cart::where('u_id', $user->id)
+        $card = Cart::where('user_id', $user->id)
             ->where('prd_id', $request->prdId)
             ->where('prd_type', $request->prdType)
             ->where('sku', $request->prdSku)
@@ -140,7 +146,7 @@ class ApiController extends Controller
         } else {
             Cart::create($cardData);
         }
-        $allData = Cart::where('u_id', $user->id)->get();
+        $allData = Cart::where('user_id', $user->id)->get();
         return response()->json(['status' => true, 'cartdata' => $allData], 201);
     }
 
@@ -154,11 +160,11 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $cartItem = Cart::where('u_id', $user->id)->where('id', $request->id)->first();
+        $cartItem = Cart::where('user_id', $user->id)->where('id', $request->id)->first();
         if ($cartItem) {
             $cartItem->quantity = $request->quantity;
             $cartItem->save();
-            $allData = Cart::where('u_id', $user->id)->get();
+            $allData = Cart::where('user_id', $user->id)->get();
             return response()->json(['status' => true, 'cartdata' => $allData], 200);
         } else {
             return response()->json(['status' => false, 'message' => 'Cart item not found'], 404);
@@ -175,10 +181,10 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $cartItem = Cart::where('u_id', $user->id)->where('id', $request->id)->first();
+        $cartItem = Cart::where('user_id', $user->id)->where('id', $request->id)->first();
         if ($cartItem) {
             $cartItem->delete();
-            $allData = Cart::where('u_id', $user->id)->get();
+            $allData = Cart::where('user_id', $user->id)->get();
             return response()->json(['status' => true, 'cartdata' => $allData], 200);
         } else {
             return response()->json(['status' => false, 'message' => 'Cart item not found'], 404);
@@ -195,7 +201,7 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $allData = Wishlist::where('u_id', $user->id)->get();
+        $allData = Wishlist::where('user_id', $user->id)->get();
         return response($allData, 200);
     }
 
@@ -210,12 +216,12 @@ class ApiController extends Controller
         }
 
         $cardData = [
-            "u_id" => $user->id,
+            "user_id" => $user->id,
             "prd_id" => $request->prdId,
             "prd_type" => $request->prdType,
             "sku" => $request->prdSku
         ];
-        $card = Wishlist::where('u_id', $user->id)
+        $card = Wishlist::where('user_id', $user->id)
             ->where('prd_id', $request->prdId)
             ->where('prd_type', $request->prdType)
             ->where('sku', $request->prdSku)
@@ -229,7 +235,7 @@ class ApiController extends Controller
             $msg = 'Item Added to wishlist';
             $like = true;
         }
-        $allData = Wishlist::where('u_id', $user->id)->get();
+        $allData = Wishlist::where('user_id', $user->id)->get();
         return response()->json(['msg' => $msg, 'wishdata' => $allData, 'like' => $like], 201);
     }
 
@@ -259,8 +265,8 @@ class ApiController extends Controller
 
         Address::create([
             'user_id' => $user->id,
-            'f_name' => $request->firstName,
-            'l_name' => $request->lastName,
+            'first_name' => $request->firstName,
+            'last_name' => $request->lastName,
             'phone' => $request->phone,
             'address1' => $request->address,
             'address2' => $request->locality,
@@ -303,7 +309,7 @@ class ApiController extends Controller
             'addresses' => $updateAddr,
             'stats' => [
                 'orders' => Orders::where('user_id', $user->id)->count(),
-                'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
+                'wishlist' => DB::table('wishlist')->where('user_id', $user->id)->count(),
             ],
         ], 200);
     }
@@ -320,8 +326,8 @@ class ApiController extends Controller
 
         $addr = Address::find($request->id);
         $addr->addr_name = $request->addr_name;
-        $addr->f_name = $request->f_name;
-        $addr->l_name = $request->l_name;
+        $addr->first_name = $request->first_name;
+        $addr->last_name = $request->last_name;
         $addr->phone = $request->phone;
         $addr->address1 = $request->address1;
         $addr->address2 = $request->address2;
@@ -339,7 +345,7 @@ class ApiController extends Controller
             'addresses' => $updateAddr,
             'stats' => [
                 'orders' => Orders::where('user_id', $user->id)->count(),
-                'wishlist' => DB::table('wishlist')->where('u_id', $user->id)->count(),
+                'wishlist' => DB::table('wishlist')->where('user_id', $user->id)->count(),
             ],
         ], 200);
     }
@@ -381,8 +387,8 @@ class ApiController extends Controller
                 Address::create([
                     'user_id' => $user->id,
                     'addr_name' => 'Home',
-                    'f_name' => $firstName,
-                    'l_name' => $lastName,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
                     'phone' => $phone,
                     'address1' => $address,
                     'address2' => $locality,
@@ -395,8 +401,8 @@ class ApiController extends Controller
                 $shippingAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => $request->sameAsShipping ? 3 : 1,
-                    'f_name' => $firstName,
-                    'l_name' => $lastName,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
                     'phone' => $phone,
                     'address1' => $address,
                     'address2' => $locality,
@@ -410,8 +416,8 @@ class ApiController extends Controller
                 Address::create([
                     'user_id' => $user->id,
                     'addr_name' => 'Work',
-                    'f_name' => $billingFirstName,
-                    'l_name' => $billingLastName,
+                    'first_name' => $billingFirstName,
+                    'last_name' => $billingLastName,
                     'phone' => $billingPhone,
                     'address1' => $billingAddress,
                     'address2' => $billingLocality,
@@ -424,8 +430,8 @@ class ApiController extends Controller
                 $billAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => '2',
-                    'f_name' => $billingFirstName,
-                    'l_name' => $billingLastName,
+                    'first_name' => $billingFirstName,
+                    'last_name' => $billingLastName,
                     'phone' => $billingPhone,
                     'address1' => $billingAddress,
                     'address2' => $billingLocality,
@@ -442,8 +448,8 @@ class ApiController extends Controller
                 $shippingAddress = OrderAddress::create([
                     'user_id' => $user->id,
                     'type' => ($request->sameAsShipping || $billId == $shipId) ? '3' : '1',
-                    'f_name' => $userAddr->f_name,
-                    'l_name' => $userAddr->l_name,
+                    'first_name' => $userAddr->first_name,
+                    'last_name' => $userAddr->last_name,
                     'phone' => $userAddr->phone,
                     'address1' => $userAddr->address1,
                     'address2' => $userAddr->address2,
@@ -461,8 +467,8 @@ class ApiController extends Controller
                     $billAddress = OrderAddress::create([
                         'user_id' => $user->id,
                         'type' => '2',
-                        'f_name' => $billAddr->f_name,
-                        'l_name' => $billAddr->l_name,
+                        'first_name' => $billAddr->first_name,
+                        'last_name' => $billAddr->last_name,
                         'phone' => $billAddr->phone,
                         'address1' => $billAddr->address1,
                         'address2' => $billAddr->address2,
@@ -531,7 +537,7 @@ class ApiController extends Controller
                 $billAddress->order_number = $order->order_number;
                 $billAddress->save();
             }
-            Cart::where('u_id', $user->id)->delete();
+            Cart::where('user_id', $user->id)->delete();
             DB::commit();
             return response($order_id, 201);
         } catch (Exception $e) {
@@ -598,7 +604,7 @@ class ApiController extends Controller
             'address' => $address,
             'stats' => [
                 'orders' => Orders::where('user_id', $user->id)->count(),
-                'wishlist' => Wishlist::where('u_id', $user->id)->count(),
+                'wishlist' => Wishlist::where('user_id', $user->id)->count(),
             ],
         ], 200);
     }
@@ -612,21 +618,32 @@ class ApiController extends Controller
                 'message' => 'Unauthenticated',
             ], 401);
         }
+        try {
+            $data = Coupon::where('coupon_code', $coupon)->first();
+            $orderData = Orders::where('user_id', $user->id)->first();
 
-        $data = Coupon::where('name', $coupon)->first();
-
-        if ($data) {
-            if ($data->status == '0') {
-                return response()->json(['msg' => 'Invalid Coupon'], 201);
-            } else if ((strtotime($data->valid_from)) > strtotime(date("Y/m/d"))) {
-                return response()->json(['msg' => 'Invalid Coupon'], 201);
-            } else if ($data->valid_till != null && (strtotime(date("Y/m/d")) > strtotime($data->valid_till))) {
-                return response()->json(['msg' => 'Coupon Expired'], 201);
+            if ($data) {
+                $usedCoupon = UsedCoupon::where('user_id', $user->id)->where('coupon_code', $data->coupon_code)->first();
+                if ($data->status == 0) {
+                    return response()->json(['msg' => 'Invalid Coupon'], 201);
+                } else if ($data->first_order_only && $orderData) {
+                    return response()->json(['msg' => 'Coupon valid only for first order'], 201);
+                } else if ((strtotime($data->valid_from)) > strtotime(date("Y/m/d"))) {
+                    return response()->json(['msg' => 'Invalid Coupon'], 201);
+                } else if ($data->valid_till != null && (strtotime(date("Y/m/d")) > strtotime($data->valid_till))) {
+                    return response()->json(['msg' => 'Coupon Expired'], 201);
+                } else if ($data->usage_limit && ($data->usage_number === $data->usage_limit)) {
+                    return response()->json(['msg' => 'Coupon Limit Reached'], 201);
+                } else if ($data->usage_per_user && $usedCoupon) {
+                    return response()->json(['msg' => 'Coupon Alredy Used'], 201);
+                } else {
+                    return response()->json($data, 200);
+                }
             } else {
-                return response()->json($data, 200);
+                return response()->json(['msg' => 'Invalid Coupon'], 201);
             }
-        } else {
-            return response()->json(['msg' => 'Invalid Coupon'], 201);
+        } catch (Exception $e) {
+            //throw $th;
         }
     }
 

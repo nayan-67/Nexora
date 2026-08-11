@@ -6,7 +6,7 @@
 @section('css')
     <style>
         .pass-box {
-            padding: 0.3rem 0.75rem !important;
+            padding: 0.1rem 0.75rem !important;
             display: flex;
             align-items: center;
             justify-content: space-between;

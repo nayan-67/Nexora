@@ -19,10 +19,10 @@ const sortOptions = [
 
 const priceRanges = [
   { label: "All Prices", min: 0, max: Infinity },
-  { label: "Under $50", min: 0, max: 50 },
-  { label: "$50 - $100", min: 50, max: 100 },
-  { label: "$100 - $200", min: 100, max: 200 },
-  { label: "$200+", min: 200, max: Infinity },
+  { label: "Under ₹ 500", min: 0, max: 50 },
+  { label: "₹ 500 - ₹ 1000", min: 500, max: 1000 },
+  { label: "₹ 1000 - ₹ 2000", min: 1000, max: 2000 },
+  { label: "₹ 2000+", min: 2000, max: Infinity },
 ]
 
 function ProductCard({ product, category }) {
@@ -37,7 +37,6 @@ function ProductCard({ product, category }) {
           wish.map(item => {
             setIsLiked(item.prd_id == product.id);
           })
-          // setIsLiked(res.data.like)
         }
       })
       .catch((err) => {
@@ -65,6 +64,13 @@ function ProductCard({ product, category }) {
       })
   }
 
+  const listingDate = new Date(product.created_at)
+  const today = new Date();
+
+  const checkDate = new Date();
+  checkDate.setDate(today.getDate() - 7);
+  const isNew = listingDate > checkDate
+
   return (
     <div className="group relative flex flex-col">
       <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
@@ -77,7 +83,7 @@ function ProductCard({ product, category }) {
         </Link>
 
         <div className="absolute left-3 top-3 flex flex-col gap-2">
-          {product.isNew && (
+          {isNew && (
             <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground">
               New
             </span>
@@ -194,7 +200,7 @@ export default function ShopPage() {
 
     // Price filter
     const priceRange = priceRanges[selectedPriceRange]
-    filtered = filtered.filter(p => p.sale_price || p.price >= priceRange.min && p.sale_price || p.price < priceRange.max)
+    filtered = filtered.filter(p => (p.sale_price || p.price) >= priceRange.min && (p.sale_price || p.price) < priceRange.max)
 
     // Sort
     switch (selectedSort) {
@@ -220,7 +226,6 @@ export default function ShopPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/*  <Header /> */}
 
       <main className="flex-1">
         {/* Hero Banner */}
@@ -482,7 +487,6 @@ export default function ShopPage() {
         </div>
       </main>
 
-      {/* <Footer /> */}
     </div>
   )
 }

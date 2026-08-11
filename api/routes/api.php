@@ -15,6 +15,7 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('/categories', 'categories');
     Route::get('/sortcategories', 'sortcategories');
     Route::get('/products', 'products');
+    Route::get('/featured-products', 'featuredProducts');
     Route::get('/products/{id}', 'productDetails');
     Route::get('/products/category/{slug}', 'productsByCategory');
     Route::get('/attr', 'attr');

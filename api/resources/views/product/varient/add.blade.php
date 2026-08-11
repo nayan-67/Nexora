@@ -1014,7 +1014,7 @@
             slugInput.value = generateSlug(productNameInput.value);
         });
 
-        let addBtn = document.getElementById("update_product");
+        let addBtn = document.getElementById("add_product");
         let loader = document.getElementById("loader");
 
         addBtn.addEventListener("click", () => {

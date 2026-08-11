@@ -353,8 +353,8 @@ class Product extends Controller
                 'sub_cat_id' => 'required',
                 'name' => 'required',
                 'slug' => 'required|unique:products,slug',
-                'variant_featured_images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:8192',
-                'variant_gallery_images.*.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8192',
+                'variant_featured_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
+                'variant_gallery_images.*.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
                 'variants-data' => 'required',
             ]);
 

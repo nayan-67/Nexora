@@ -31,11 +31,11 @@ function CartItem({ item, prd, variants, cat, onUpdateQuantity, onRemove }) {
   return (
     <div key={item.id} className="flex gap-4 border-b border-border/40 py-6 first:pt-0 last:border-0">
       <Link to={`/products/${item.prd_id}`} className="shrink-0">
-        <div className="h-24 w-24 overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-32">
+        <div className="h-24 w-24 overflow-hidden rounded-xl sm:h-32 sm:w-32">
           <img
             src={`${apiBase}/uploads/${imageType}_md_${displayData?.featured_image}`}
             alt={prdDetails?.name}
-            className="h-full w-full object-cover transition-transform hover:scale-105"
+            className="h-full w-auto mx-auto object-cover mix-blend-multiply transition-transform hover:scale-105"
           />
         </div>
       </Link>
@@ -122,7 +122,7 @@ export default function CartPage() {
           setPromoApplied(true)
           const couponData = JSON.parse(sessionStorage.getItem("coupon"))
           setCouponData(couponData)
-          setPromoCode(couponData.name)
+          setPromoCode(couponData.coupon_code)
         }
       } catch (error) {
         if (!active) return
@@ -141,6 +141,24 @@ export default function CartPage() {
     };
   }, []);
 
+  const subtotal = cartData.reduce((sum, item) => {
+    const isVariant = item.prd_type == 2
+    const prdDetails = products?.find((p) => Number(p.id) === Number(item.prd_id))
+    const variantDetails = isVariant && variants?.find((v) => v.sku == item.sku)
+    const displayData = isVariant ? variantDetails : prdDetails
+    return sum + ((displayData?.sale_price || displayData?.price) * item.quantity || 0)
+  }, 0)
+  let discount = promoApplied ? (couponData.type == 2 ? Number(couponData.discount_value) : subtotal * (couponData.discount_value / 100)) : 0
+  if (promoApplied && couponData.max_discount) {
+    if (couponData.max_discount && discount > couponData.max_discount) {
+      discount = couponData.max_discount
+    } else {
+      discount = discount.toFixed(2)
+    }
+  }
+  const shipping = subtotal > 500 ? 0 : 40
+  const total = subtotal - discount + shipping
+
   const updateQuantity = (id, quantity) => {
     setCartData(items =>
       items.map(item =>
@@ -154,10 +172,12 @@ export default function CartPage() {
       .catch((err) => {
         console.error("Error updating cart item:", err)
       })
+    validCoupon()
   }
 
   const removeItem = (id) => {
     setCartData(items => items.filter(item => item.id !== id))
+    validCoupon()
     api.post("/card/remove", { id })
       .then((res) => {
         setCartData(res.data.cartdata)
@@ -169,25 +189,12 @@ export default function CartPage() {
       })
   }
 
-  const subtotal = cartData.reduce((sum, item) => {
-    const isVariant = item.prd_type == 2
-    const prdDetails = products?.find((p) => Number(p.id) === Number(item.prd_id))
-    const variantDetails = isVariant && variants?.find((v) => v.sku == item.sku)
-    const displayData = isVariant ? variantDetails : prdDetails
-    return sum + ((displayData?.sale_price || displayData?.price) * item.quantity || 0)
-  }, 0)
-  const discount = promoApplied ? (couponData.type == 2 ? Number(couponData.amount) : subtotal * (couponData.amount / 100)) : 0
-  const shipping = subtotal > 500 ? 0 : 40
-  const total = subtotal - discount + shipping
-
   const applyPromoCode = () => {
     api.get(`/applydiscount/${promoCode}`)
       .then((res) => {
         if (res.status == 200) {
           setCouponData(res.data)
-          setPromoApplied(true)
-          sessionStorage.setItem("coupon", JSON.stringify(res.data));
-          setmsg("")
+          validCoupon()
         } else {
           setmsg(res.data.msg)
           toast.error(res.data.msg)
@@ -203,6 +210,25 @@ export default function CartPage() {
     setCouponData(null)
     setPromoApplied(false)
     setPromoCode("")
+  }
+
+  const validCoupon = () => {
+    if (couponData) {
+      if (couponData.minimum_order && subtotal < couponData.minimum_order) {
+        setPromoApplied(false)
+        setmsg(`Minimum ₹ ${couponData.minimum_order} cart value require for use this coupon`)
+      } else {
+        setPromoApplied(true)
+        setmsg("")
+      }
+      if (promoApplied) {
+        if (!sessionStorage.getItem("coupon")) {
+          sessionStorage.setItem("coupon", JSON.stringify(couponData))
+        }
+      } else {
+        sessionStorage.removeItem("coupon")
+      }
+    }
   }
 
   if (cartData.length === 0) {
@@ -319,7 +345,7 @@ export default function CartPage() {
                   </div>
                   {promoApplied && (
                     <p className="mt-2 text-sm text-green-600">
-                      Promo code applied! You save {couponData.type == 2 ? `$${couponData.amount}` : `${couponData.amount}%`}
+                      Promo code applied! You save {couponData.type == 2 ? `$${couponData.discount_value}` : `${couponData.discount_value}%`}
                     </p>
                   )}
                   {msg && (
@@ -328,7 +354,7 @@ export default function CartPage() {
                     </p>
                   )}
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Try &quot;NEXORA10&quot; for 10% off
+                    Try &quot;NEXORA10&quot; for 10% off on first order
                   </p>
                 </div>
 
@@ -340,8 +366,8 @@ export default function CartPage() {
                   </div>
                   {promoApplied && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-600">Discount ({couponData.type == 2 ? `₹ ${couponData.amount}` : `${couponData.amount}%`})</span>
-                      <span className="text-green-600">-₹ {discount.toFixed(2)}</span>
+                      <span className="text-green-600">Discount ({couponData.type == 2 ? `₹ ${couponData.discount_value}` : `${couponData.discount_value}%`})</span>
+                      <span className="text-green-600">-₹ {discount}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
