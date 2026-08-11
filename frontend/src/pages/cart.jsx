@@ -99,7 +99,7 @@ export default function CartPage() {
   const [sortCategory, setSortCategory] = useState([])
   const { cartData, setCartData } = useContext(CartContext)
 
-  const checkCoupon = sessionStorage.getItem("coupon")
+  const checkCoupon = Boolean(sessionStorage.getItem("coupon") || promoApplied)
 
   useEffect(() => {
     let active = true;
@@ -148,12 +148,12 @@ export default function CartPage() {
     const displayData = isVariant ? variantDetails : prdDetails
     return sum + ((displayData?.sale_price || displayData?.price) * item.quantity || 0)
   }, 0)
-  let discount = promoApplied ? (couponData.type == 2 ? Number(couponData.discount_value) : subtotal * (couponData.discount_value / 100)) : 0
-  if (promoApplied && couponData.max_discount) {
-    if (couponData.max_discount && discount > couponData.max_discount) {
+  let discount = promoApplied && couponData ? (couponData.type == 2 ? Number(couponData.discount_value) : subtotal * (couponData.discount_value / 100)) : 0
+  if (promoApplied && couponData?.max_discount) {
+    if (discount > couponData.max_discount) {
       discount = couponData.max_discount
     } else {
-      discount = discount.toFixed(2)
+      discount = Number(discount.toFixed(2))
     }
   }
   const shipping = subtotal > 500 ? 0 : 40
@@ -172,12 +172,10 @@ export default function CartPage() {
       .catch((err) => {
         console.error("Error updating cart item:", err)
       })
-    validCoupon()
   }
 
   const removeItem = (id) => {
     setCartData(items => items.filter(item => item.id !== id))
-    validCoupon()
     api.post("/card/remove", { id })
       .then((res) => {
         setCartData(res.data.cartdata)
@@ -190,46 +188,55 @@ export default function CartPage() {
   }
 
   const applyPromoCode = () => {
-    api.get(`/applydiscount/${promoCode}`)
+    const code = promoCode.trim()
+    if (!code) {
+      setmsg("Please enter a promo code.")
+      return
+    }
+
+    api.get(`/applydiscount/${code}`)
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200 && res.data) {
           setCouponData(res.data)
-          validCoupon()
+          setPromoCode(res.data.coupon_code || code)
+          setmsg("")
         } else {
-          setmsg(res.data.msg)
-          toast.error(res.data.msg)
+          setmsg(res.data.msg || "Invalid coupon")
+          toast.error(res.data.msg || "Invalid coupon")
           setPromoApplied(false)
+          setCouponData(null)
+          sessionStorage.removeItem("coupon")
         }
       })
       .catch((err) => {
         console.error(err)
       })
   }
+
   const removePromoCode = () => {
     sessionStorage.removeItem("coupon")
     setCouponData(null)
     setPromoApplied(false)
     setPromoCode("")
+    setmsg("")
   }
 
-  const validCoupon = () => {
-    if (couponData) {
-      if (couponData.minimum_order && subtotal < couponData.minimum_order) {
-        setPromoApplied(false)
-        setmsg(`Minimum ₹ ${couponData.minimum_order} cart value require for use this coupon`)
-      } else {
-        setPromoApplied(true)
-        setmsg("")
-      }
-      if (promoApplied) {
-        if (!sessionStorage.getItem("coupon")) {
-          sessionStorage.setItem("coupon", JSON.stringify(couponData))
-        }
-      } else {
-        sessionStorage.removeItem("coupon")
-      }
+  useEffect(() => {
+    if (!couponData) {
+      return
     }
-  }
+
+    if (couponData.minimum_order && subtotal < couponData.minimum_order) {
+      setPromoApplied(false)
+      setmsg(`Minimum ₹ ${couponData.minimum_order} cart value require for use this coupon`)
+      sessionStorage.removeItem("coupon")
+      return
+    }
+
+    setPromoApplied(true)
+    setmsg("")
+    sessionStorage.setItem("coupon", JSON.stringify(couponData))
+  }, [couponData, subtotal])
 
   if (cartData.length === 0) {
     return (
