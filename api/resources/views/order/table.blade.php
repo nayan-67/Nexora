@@ -22,7 +22,7 @@
                             $billingresult = DB::table('order_address')->where('id', $bill_id)->first();
                             $shippingresult = DB::table('order_address')->where('id', $ship_id)->first();
                             $date = substr($row->created_at, 0, 10);
-                            $name = $billingresult->f_name . ' ' . $billingresult->l_name;
+                            $name = $billingresult->first_name . ' ' . $billingresult->last_name;
                             $address =
                                 $shippingresult->address1 .
                                 ', ' .
@@ -66,7 +66,7 @@
                                         <i class="bi bi-cart3 d-flex" aria-hidden="true">
                                         </i>
                                     </a> --}}
-                                    @if ($row->order_status === '1')
+                                    @if ($row->order_status === 1)
                                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip"
                                             data-bs-title="Cancel Order"
                                             onclick="openCancelModal('{{ $row->id }}');">

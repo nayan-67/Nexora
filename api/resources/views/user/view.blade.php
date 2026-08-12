@@ -3,6 +3,20 @@
 @section('title', 'Customer')
 @section('uactive', 'active')
 
+@section('css')
+    <style>
+        .block-switch:checked {
+            background-color: #d31616 !important;
+            border-color: #d31616 !important;
+        }
+
+        .inactive-switch:checked {
+            background-color: #ffbb00 !important;
+            border-color: #ffbb00 !important;
+        }
+    </style>
+@endsection
+
 @section('content')
     <main class="app-main">
         <!--begin::App Content Header-->
@@ -49,12 +63,12 @@
                             <div class="card-body text-center">
                                 @php
                                     $codeName = Str::upper(
-                                        substr($item->first_name, 0, 1) . substr($item->last_name, 0, 1),
+                                        substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1),
                                     );
-                                    if ($item->profile_image) {
+                                    if ($user->profile_image) {
                                         $element =
                                             "<img src='" .
-                                            asset('uploads/' . $item->profile_image) .
+                                            asset('uploads/' . $user->profile_image) .
                                             "' alt='Profile Image' class='rounded-circle mb-3' style='width: 96px; height: 96px; object-fit: cover;' />";
                                     } else {
                                         $element =
@@ -65,7 +79,7 @@
                                     }
                                 @endphp
                                 {!! $element !!}
-                                <h3 class="h5 mb-0">{{ $item->first_name }} {{ $item->last_name }}</h3>
+                                <h3 class="h5 mb-0">{{ $user->first_name }} {{ $user->last_name }}</h3>
                                 <ul class="list-group list-group-flush text-start small">
                                     <li class="list-group-item d-flex justify-content-between px-0">
                                         <span class="text-secondary">Total Orders</span>
@@ -129,19 +143,19 @@
                                         <form class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label" for="profile-first"> First name </label>
-                                                <span class="form-control">{{ $item->first_name }}</span>
+                                                <span class="form-control">{{ $user->first_name }}</span>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="profile-last"> Last name </label>
-                                                <span class="form-control">{{ $item->last_name }}</span>
+                                                <span class="form-control">{{ $user->last_name }}</span>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="profile-email"> Email </label>
-                                                <span class="form-control">{{ $item->email }}</span>
+                                                <span class="form-control">{{ $user->email }}</span>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="profile-phone"> Phone </label>
-                                                <span class="form-control">{{ $item->phone }}</span>
+                                                <span class="form-control">{{ $user->phone }}</span>
                                             </div>
                                         </form>
                                     </div>
@@ -162,8 +176,8 @@
                                                             <div class="col-md-6">
                                                                 <label class="form-label" for="settings-name"> Full name
                                                                 </label>
-                                                                <span class="form-control">{{ $add->f_name }}
-                                                                    {{ $add->l_name }}</span>
+                                                                <span class="form-control">{{ $add->first_name }}
+                                                                    {{ $add->last_name }}</span>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label class="form-label" for="settings-email"> Phone
@@ -249,31 +263,31 @@
                                                                     ', ' .
                                                                     $billingAddress->country
                                                                 : '';
-                                                            if ($item->order_status == '1') {
+                                                            if ($item->order_status === 1) {
                                                                 $statusClass = 'text-bg-warning';
                                                                 $statusText = 'Processing';
-                                                            } elseif ($item->order_status == '2') {
+                                                            } elseif ($item->order_status === 2) {
                                                                 $statusClass = 'text-bg-success';
                                                                 $statusText = 'Completed';
                                                             } else {
                                                                 $statusClass = 'text-bg-danger';
                                                                 $statusText = 'Cancelled';
                                                             }
-                                                            if ($item->payment_status == '1') {
+                                                            if ($item->payment_status === 1) {
                                                                 $paymentStatusClass = 'text-bg-warning';
                                                                 $paymentStatusText = 'Pending';
-                                                            } elseif ($item->payment_status == '2') {
+                                                            } elseif ($item->payment_status === 2) {
                                                                 $paymentStatusClass = 'text-bg-success';
                                                                 $paymentStatusText = 'Paid';
                                                             } else {
                                                                 $paymentStatusClass = 'text-bg-danger';
                                                                 $paymentStatusText = 'Refunded';
                                                             }
-                                                            if ($item->payment_mode == '1') {
+                                                            if ($item->payment_mode === 1) {
                                                                 $method = 'Cash on Delivery';
                                                                 $icon =
                                                                     '<i class="bi bi-cash-coin me-1" aria-hidden="true"></i>';
-                                                            } elseif ($item->payment_mode == '2') {
+                                                            } elseif ($item->payment_mode === 2) {
                                                                 $method = 'Razorpay';
                                                                 $icon =
                                                                     '<i class="bi bi-credit-card me-1" aria-hidden="true"></i>';
@@ -342,19 +356,15 @@
                                                                                             $varProduct->featured_image
                                                                                         : 'uploads/prd_sm_' .
                                                                                             $product->featured_image;
-                                                                                    if ($orderItem->status == '1') {
+                                                                                    if ($orderItem->status == 1) {
                                                                                         $statusClass =
                                                                                             'text-bg-warning';
                                                                                         $statusText = 'Processing';
-                                                                                    } elseif (
-                                                                                        $orderItem->status == '2'
-                                                                                    ) {
+                                                                                    } elseif ($orderItem->status == 2) {
                                                                                         $statusClass =
                                                                                             'text-bg-primary';
                                                                                         $statusText = 'Shipped';
-                                                                                    } elseif (
-                                                                                        $orderItem->status == '3'
-                                                                                    ) {
+                                                                                    } elseif ($orderItem->status == 3) {
                                                                                         $statusClass =
                                                                                             'text-bg-success';
                                                                                         $statusText = 'Delivered';
@@ -446,19 +456,19 @@
                                                                                                 class="d-flex justify-content-between">
                                                                                                 <span>Discount :</span>
                                                                                                 <span>- ₹
-                                                                                                    {{ $item->discount }}</span>
+                                                                                                    {{ $item->discount_value }}</span>
                                                                                             </div>
                                                                                             <div
                                                                                                 class="d-flex justify-content-between">
                                                                                                 <span>Shipping :</span>
                                                                                                 <span>₹
-                                                                                                    {{ $item->shipping }}</span>
+                                                                                                    {{ $item->shipping_fee }}</span>
                                                                                             </div>
                                                                                             <div
                                                                                                 class="d-flex justify-content-between">
                                                                                                 <span>GST(8%) :</span>
                                                                                                 <span>₹
-                                                                                                    {{ $item->eco_tax }}</span>
+                                                                                                    {{ $item->tax }}</span>
                                                                                             </div>
                                                                                             <hr>
                                                                                             <div
@@ -541,7 +551,7 @@
                                                                                 aria-hidden="true"></i>
                                                                             Edit
                                                                         </a>
-                                                                        @if ($item->order_status == '1')
+                                                                        @if ($item->order_status == 1)
                                                                             <a href="javascript:void(0)"
                                                                                 class="btn btn-sm btn-danger mt-2"
                                                                                 onclick="openCancelModal('{{ $item->id }}');">
@@ -566,40 +576,58 @@
                                     <!-- Status tab -->
                                     <div class="tab-pane fade" id="status" role="tabpanel"
                                         aria-labelledby="status-tab">
-                                        <form class="row g-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="profile-first"> First name </label>
-                                                <input type="text" class="form-control" id="profile-first"
-                                                    value="Jane" />
+                                        <div class="row pb-2">
+                                            <div class="col-md-3 d-flex align-items-center gap-3">
+                                                <label for="active" class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-person-check bg-success fs-5 px-1 rounded-3"></i>
+                                                    Active
+                                                </label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input class="form-check-input" type="radio" role="switch"
+                                                        id="active" name="user_status" value="1"
+                                                        {{ $user->status === 1 ? 'checked' : '' }} />
+                                                    <label class="visually-hidden" for="active">
+                                                        Toggle User Status
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="profile-last"> Last name </label>
-                                                <input type="text" class="form-control" id="profile-last"
-                                                    value="Doe" />
+                                            <div class="col-md-3 d-flex align-items-center gap-3">
+                                                <label for="inactive" class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-person-x text-black bg-warning fs-5 px-1 rounded-3"></i>
+                                                    Inactive
+                                                </label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input class="form-check-input inactive-switch" type="radio"
+                                                        role="switch" id="inactive" name="user_status" value="2"
+                                                        {{ $user->status === 2 ? 'checked' : '' }} />
+                                                    <label class="visually-hidden" for="inactive">
+                                                        Toggle User Status
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="profile-email"> Email </label>
-                                                <input type="email" class="form-control" id="profile-email"
-                                                    value="jane@example.com" />
+                                            <div class="col-md-3 d-flex align-items-center gap-3">
+                                                <label for="block" class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-person-slash bg-danger fs-5 px-1 rounded-3"></i>
+                                                    Block
+                                                </label>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input class="form-check-input block-switch" type="radio"
+                                                        role="switch" id="block" name="user_status" value="3"
+                                                        {{ $user->status === 3 ? 'checked' : '' }} />
+                                                    <label class="visually-hidden" for="block">
+                                                        Toggle User Status
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="profile-role"> Role </label>
-                                                <input type="text" class="form-control" id="profile-role"
-                                                    value="Product Designer" />
-                                            </div>
-                                            <div class="col-12">
-                                                <label class="form-label" for="profile-bio">Bio</label>
-                                                <textarea class="form-control" id="profile-bio" rows="4">
-                                                    Designer with a soft spot for design tokens and accessibility.
-                                                </textarea>
-                                            </div>
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                                <button type="reset" class="btn btn-outline-secondary ms-1">
-                                                    Cancel
+                                            <div class="col-md-3">
+                                                <button data-mdb-button-init data-mdb-ripple-init
+                                                    class="btn btn-primary btn-sm d-flex align-items-center float-end"
+                                                    name="status_update" id="update_status">
+                                                    <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
+                                                    Update Status
                                                 </button>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
 
                                     <!-- Activity tab -->
@@ -674,4 +702,51 @@
         </div>
         <!--end::App Content-->
     </main>
+@endsection
+
+@section('script')
+    <script>
+        let appURL = @json(url('/'));
+
+        const button = document.getElementById('update_status');
+        const arrowIcon = document.getElementById('arrow_repeat');
+
+        button.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const status = document.querySelector("input[name='user_status']:checked").value;
+            const userId = {{ $user->id }};
+
+            arrowIcon.style.animation = 'spin 1s linear infinite';
+
+            try {
+                const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+                const token = tokenMeta ? tokenMeta.getAttribute('content') : '';
+
+                const res = await fetch(`${appURL}/update/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        id: userId,
+                        status
+                    })
+                });
+
+                const data = await res.json();
+                if (data.status === 'success') {
+                    swalToast('success', 'Status Updated Successfully');
+                } else {
+                    swalToast('error', data.message || 'Status Update Failed');
+                }
+            } catch (err) {
+                console.error(err);
+                swalToast('error', 'Status Update Failed');
+            } finally {
+                arrowIcon.style.animation = '';
+            }
+        });
+    </script>
 @endsection

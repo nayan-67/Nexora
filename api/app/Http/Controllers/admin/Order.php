@@ -75,17 +75,18 @@ class Order extends Controller
             }
             $order = Orders::find($id);
             $order->payment_status = $request->payment_status;
-            $order->save();
             $flag = 0;
             foreach ($order_items as $item) {
-                if ($item->status == 3) {
+                if ($item->status == 4) {
                     $flag += 1;
                 }
             }
             if ($flag == count($order_items)) {
+                $order->order_status = 3;
+            } else if ($flag > 0) {
                 $order->order_status = 2;
-                $order->save();
             }
+            $order->save();
             DB::commit();
             toast('Order Status Updated Successfully', 'success');
             return back();

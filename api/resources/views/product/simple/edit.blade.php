@@ -9,18 +9,6 @@
 
 @section('css')
     <style>
-        /* .imginput::-webkit-file-upload-button {
-                                    visibility: hidden;
-                                }
-
-                                .imginput::before {
-                                    content: 'Choose Image Above 800 x 800 px';
-                                    display: inline-block;
-                                    background: #eeeeeee0;
-                                    padding: 0.45rem;
-                                    margin-right: -4rem;
-                                } */
-
         .form-check-input:checked {
             background-color: #495057 !important;
             border-color: #495057 !important;
@@ -42,14 +30,6 @@
             }
         }
 
-        /* .fa-xmark {
-                                    color: #862828;
-                                    position: absolute;
-                                    top: 0;
-                                    right: 0;
-                                    cursor: pointer;
-                                    backdrop-filter: blur(10px);
-                                } */
         .img-remove-icon {
             position: absolute;
             right: 0;
@@ -66,7 +46,7 @@
 
 @section('content')
     <?php
-    $subcatresult = DB::table('sub_category')->where('category_id', $item->category_id)->where('is_delete', '0')->orderBy('id', 'ASC')->get();
+    $subcatresult = DB::table('sub_category')->where('category_id', $item->category_id)->whereNull('deleted_at')->orderBy('id', 'ASC')->get();
     $oldImg = $item->gallery_images;
     $features = $item->features ? implode(' | ', $item->features) : '';
     ?>
@@ -255,8 +235,9 @@
                                                 <input class="form-control fs-7 p-imginput imginput" type="file"
                                                     id="formFile" name="p-img" accept="image/*">
                                             </div>
-                                            <div class="text-info fs-8 mt-n3">*** Choose new image above (800 x 800 px) if
-                                                want to change ***</div>
+                                            <div class="text-info fs-8 mt-n3">
+                                                *** Choose new image above (800 x 800 px) if want to change ***
+                                            </div>
                                             <div class="img-error text-danger fs-7 mt-1"></div>
                                             @error('p-img')
                                                 <div class="err text-danger fs-7 mt-1">{{ $message }}</div>
@@ -326,6 +307,13 @@
                                                 <i class="bi bi-arrow-repeat me-1 d-flex" id="arrow_repeat"></i>
                                                 Update
                                             </button>
+                                            <a href="{{ route('admin.product') }}" class="text-decoration-none">
+                                                <button type="button"
+                                                    class="btn btn-warning btn-md d-flex align-items-center">
+                                                    <i class="bi bi-arrow-left-short me-1 d-flex" aria-hidden="true"></i>
+                                                    Back
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -585,7 +573,6 @@
         }
 
         let pNameInput = document.querySelector(".p-name");
-        let slugInput = document.querySelector(".p-slug");
 
         pNameInput.addEventListener("input", () => {
             slugInput.value = generateSlug(pNameInput.value);

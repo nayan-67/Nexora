@@ -35,29 +35,32 @@
 
         $prdresult = DB::table('order_items')->where('order_id', $data->id)->get();
 
-        if ($data->order_status == '1') {
+        if ($data->order_status === 1) {
             $statusClass = 'text-bg-warning';
             $statusText = 'Processing';
-        } elseif ($data->order_status == '2') {
+        } elseif ($data->order_status === 2) {
+            $statusClass = 'text-bg-info';
+            $statusText = 'Partially Shipped';
+        } elseif ($data->order_status === 3) {
             $statusClass = 'text-bg-success';
             $statusText = 'Completed';
         } else {
             $statusClass = 'text-bg-danger';
             $statusText = 'Cancelled';
         }
-        if ($data->payment_mode == '1') {
+        if ($data->payment_mode === 1) {
             $method = 'Cash on Delivery';
             $icon = '<i class="bi bi-cash-coin me-1" aria-hidden="true"></i>';
-        } elseif ($data->payment_mode == '2') {
+        } elseif ($data->payment_mode === 2) {
             $method = 'Razorpay';
             $icon = '<i class="bi bi-credit-card me-1" aria-hidden="true"></i>';
         } else {
             $method = 'Wallet';
             $icon = '<i class="bi bi-wallet2 me-1" aria-hidden="true"></i>';
         }
-        if ($data->payment_status == '1') {
+        if ($data->payment_status === 1) {
             $paymentStatusClass = 'border border-warning-subtle';
-        } elseif ($data->payment_status == '2') {
+        } elseif ($data->payment_status === 2) {
             $paymentStatusClass = 'border border-success';
         } else {
             $paymentStatusClass = 'border border-danger-subtle';
@@ -127,7 +130,7 @@
                                                     $product = DB::table('products')
                                                         ->where('id', $orderItem->product_id)
                                                         ->first();
-                                                    $isVariableProduct = $product->type == 2;
+                                                    $isVariableProduct = $product->type === 2;
                                                     if ($isVariableProduct) {
                                                         $varProduct = DB::table('variants')
                                                             ->where('sku', $orderItem->sku)
@@ -139,11 +142,11 @@
                                                     $img = $isVariableProduct
                                                         ? 'uploads/var_sm_' . $varProduct->featured_image
                                                         : 'uploads/prd_sm_' . $product->featured_image;
-                                                    if ($orderItem->status == '1') {
+                                                    if ($orderItem->status === 1) {
                                                         $statusClass = 'border border-warning-subtle';
-                                                    } elseif ($orderItem->status == '2') {
+                                                    } elseif ($orderItem->status === 2) {
                                                         $statusClass = 'border border-primary-subtle';
-                                                    } elseif ($orderItem->status == '3') {
+                                                    } elseif ($orderItem->status === 3) {
                                                         $statusClass = 'border border-success';
                                                     } else {
                                                         $statusClass = 'border border-danger-subtle';
@@ -178,17 +181,17 @@
                                                         <select class="form-control form-select fs-7 {{ $statusClass }}"
                                                             aria-label="Default select example"
                                                             name="item_status_{{ $orderItem->id }}">
-                                                            <option {{ $orderItem->status == 1 ? 'selected' : '' }}
+                                                            <option {{ $orderItem->status === 1 ? 'selected' : '' }}
                                                                 value="1">
                                                                 Processing</option>
-                                                            <option {{ $orderItem->status == 2 ? 'selected' : '' }}
+                                                            <option {{ $orderItem->status === 2 ? 'selected' : '' }}
                                                                 value="2">
                                                                 Shipped</option>
-                                                            <option {{ $orderItem->status == 3 ? 'selected' : '' }}
+                                                            <option {{ $orderItem->status === 3 ? 'selected' : '' }}
                                                                 value="3">
                                                                 Delivered</option>
                                                             @if ($orderItem->status != 3)
-                                                                <option {{ $orderItem->status == 0 ? 'selected' : '' }}
+                                                                <option {{ $orderItem->status === 0 ? 'selected' : '' }}
                                                                     value="0">
                                                                     Canceled</option>
                                                             @endif
@@ -234,11 +237,11 @@
                                                             class="form-control form-select fs-7 {{ $paymentStatusClass }}"
                                                             aria-label="Default select example" name="payment_status">
                                                             @if ($data->payment_status != 2)
-                                                                <option {{ $data->payment_status == 1 ? 'selected' : '' }}
+                                                                <option {{ $data->payment_status === 1 ? 'selected' : '' }}
                                                                     value="1">
                                                                     Pending</option>
                                                             @endif
-                                                            <option {{ $data->payment_status == 2 ? 'selected' : '' }}
+                                                            <option {{ $data->payment_status === 2 ? 'selected' : '' }}
                                                                 value="2">
                                                                 Paid</option>
                                                             <option {{ $data->payment_status == 3 ? 'selected' : '' }}
@@ -269,17 +272,17 @@
                                                     <div class="d-flex justify-content-between">
                                                         <span>Discount :</span>
                                                         <span>- ₹
-                                                            {{ $data->discount }}</span>
+                                                            {{ $data->discount_value }}</span>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <span>Shipping :</span>
                                                         <span>₹
-                                                            {{ $data->shipping }}</span>
+                                                            {{ $data->shipping_fee }}</span>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <span>GST(8%) :</span>
                                                         <span>₹
-                                                            {{ $data->eco_tax }}</span>
+                                                            {{ $data->tax }}</span>
                                                     </div>
                                                     <hr>
                                                     <div class="d-flex justify-content-between">

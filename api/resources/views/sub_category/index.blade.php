@@ -98,7 +98,7 @@
 
 @section('script')
     <script>
-        let appURL = @php echo json_encode(url('/')) @endphp;
+        let appURL = @json(url('/'));
 
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('subcat-st')) {

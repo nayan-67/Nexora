@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control fs-7 sub_cat" name="name"
-                                                placeholder="Enter Name.." value="{{ $data->name }}" required />
+                                                placeholder="Enter Name.." value="{{ $data->name }}" required autocomplete="cc-given-name" />
                                         </div>
                                     </div>
                                     <div class="row pt-3 pb-2">

@@ -51,7 +51,7 @@
                                 <div class="row g-2 align-items-center">
                                     <div class="col-12 col-md-4 d-flex gap-4">
                                         <div class="d-flex align-items-center gap-3">
-                                            <label>Show Data</label>
+                                            <label for="show-data">Show Data</label>
                                             <select id="show-data" class="form-select form-select-sm w-auto">
                                                 <option value="10" selected>10</option>
                                                 <option value="25">25</option>
@@ -97,7 +97,7 @@
 
 @section('script')
     <script>
-        let appURL = @php echo json_encode(url('/')) @endphp;
+        let appURL = @json(url('/'));
 
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('cat-st')) {

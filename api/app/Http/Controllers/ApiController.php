@@ -484,17 +484,17 @@ class ApiController extends Controller
 
             $order = Orders::create([
                 'user_id' => $user->id,
-                'order_status' => '1',
-                'payment_status' => '1',
-                'payment_mode' => '2',
+                'order_status' => 1,
+                'payment_status' => 1,
+                'payment_mode' => 2,
                 'billing_address_id' => $request->sameAsShipping ? $shippingAddress->id : $billAddress->id,
                 'shipping_address_id' => $shippingAddress->id,
                 'sub_total' => $orderData['subtotal'],
                 'total_price' => $orderData['total'],
-                'eco_tax' => $orderData['tax'],
-                'discount' => $orderData['discount'],
-                'used_coupon' => $orderData['coupon']['name'] ?? null,
-                'shipping' => $orderData['shipping'],
+                'tax' => $orderData['tax'],
+                'discount_value' => $orderData['discount'],
+                'used_coupon' => $orderData['coupon']['coupon_code'] ?? null,
+                'shipping_fee' => $orderData['shipping'],
             ]);
 
             $order_id = $order->id;
@@ -515,7 +515,7 @@ class ApiController extends Controller
                     'sku' => $value['sku'],
                     'quantity' => $value['quantity'],
                     'price' => $prd->sale_price ?? $prd->price,
-                    'status' => '1',
+                    'status' => 1,
                 ]);
             }
             $order->order_number = "ORD-NX" . rand(100, 999) . $order_id;
@@ -525,10 +525,13 @@ class ApiController extends Controller
                 UsedCoupon::create([
                     'user_id' => $user->id,
                     'order_number' => $order->order_number,
-                    'coupon_name' => $orderData['coupon']['name'],
-                    'amount_type' => $orderData['coupon']['type'],
-                    'amount' => $orderData['coupon']['amount'],
+                    'coupon_code' => $orderData['coupon']['coupon_code'],
+                    'type' => $orderData['coupon']['type'],
+                    'amount' => $orderData['coupon']['discount_value'],
                 ]);
+                $couponData = Coupon::find($orderData['coupon']['id']);
+                $couponData->usage_number += 1;
+                $couponData->save();
             }
 
             $shippingAddress->order_number = $order->order_number;

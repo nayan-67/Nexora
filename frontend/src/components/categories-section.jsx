@@ -1,38 +1,9 @@
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
-import { useState } from "react";
+import { useState } from "react"
+import { toast } from "react-hot-toast"
 import api from "@/lib/api"
-
-// const categories = [
-//   {
-//     name: "Fashion",
-//     description: "Trending styles",
-//     image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&h=400&fit=crop&q=80",
-//     to: "/categories/fashion",
-//     itemCount: 150,
-//   },
-//   {
-//     name: "Electronics",
-//     description: "Latest gadgets",
-//     image: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=600&h=400&fit=crop&q=80",
-//     to: "/categories/electronics",
-//     itemCount: 89,
-//   },
-//   {
-//     name: "Accessories",
-//     description: "Complete your look",
-//     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=400&fit=crop&q=80",
-//     to: "/categories/accessories",
-//     itemCount: 210,
-//   },
-//   {
-//     name: "Home",
-//     description: "Elevate your space",
-//     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=400&fit=crop&q=80",
-//     to: "/categories/home",
-//     itemCount: 175,
-//   },
-// ]
+const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "");
 
 export function CategoriesSection() {
 
@@ -55,8 +26,7 @@ export function CategoriesSection() {
       active = false;
     };
   });
-  const apiBase = api.defaults.baseURL.replace(/\/api\/?$/, "");
-  
+
   return (
     <section className="bg-background py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

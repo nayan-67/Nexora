@@ -445,7 +445,7 @@
 
 @section('script')
     <script>
-        let appURL = @php echo json_encode(url('/')) @endphp;
+        let appURL = @json(url('/'));
 
         let productId = {{ $item->id }};
         let attributes = [];

@@ -156,7 +156,7 @@ export default function CartPage() {
       discount = Number(discount.toFixed(2))
     }
   }
-  const shipping = subtotal > 500 ? 0 : 40
+  const shipping = subtotal > 499 ? 0 : 40
   const total = subtotal - discount + shipping
 
   const updateQuantity = (id, quantity) => {

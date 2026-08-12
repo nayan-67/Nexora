@@ -38,13 +38,13 @@ class Customer extends Controller
             return redirect()->route('admin.login');
         }
         $id = decrypt($id);
-        $item = User::find($id);
+        $user = User::find($id);
         $billingresult = Address::where('user_id', $id)->orderBy('id', 'ASC')->get();
         $orders = Orders::where('user_id', $id)->orderBy('id', 'desc')->get();
 
         $order_items = OrderItems::where('user_id', $id)->get();
         $order_value = Orders::where('user_id', $id)->sum('total_price');
-        return view('user.view', compact('item', 'billingresult', 'orders', 'order_items', 'order_value'));
+        return view('user.view', compact('user', 'billingresult', 'orders', 'order_items', 'order_value'));
     }
 
     public function update(Request $request, string $id)
@@ -108,5 +108,29 @@ class Customer extends Controller
         $uid = decrypt($id);
         $data = Orders::where('user_id', $uid)->get();
         return view('user.order', compact('data'));
+    }
+
+    public function updateStatus(Request $request)
+    {
+        try {
+            $id = $request->post('id');
+            $status = $request->post('status');
+
+            if (!$id || !$status) {
+                return response()->json(['status' => 'error', 'message' => 'Invalid input'], 422);
+            }
+
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+            }
+
+            $user->status = $status;
+            $user->save();
+
+            return response()->json(['status' => 'success']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 }

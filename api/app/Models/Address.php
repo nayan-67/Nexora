@@ -24,8 +24,6 @@ class Address extends Model
 
     protected $casts = [
         'is_default' => 'boolean',
-        'postcode' => 'numeric',
-        'phone' => 'numeric'
     ];
 
     public function user()

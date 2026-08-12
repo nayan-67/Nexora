@@ -91,6 +91,7 @@ Route::controller(Customer::class)->group(function () {
     Route::delete('/customer/destroy', 'destroy')->name('user.destroy');
     Route::get('/customer/order/{id}', 'userOrder')->name('user.order');
     Route::delete('/customer/order/destroy', 'delorder')->name('order.delete');
+    Route::post('/update/status','updateStatus')->name('user.status');
 });
 
 // Route::get('/loader', function () {

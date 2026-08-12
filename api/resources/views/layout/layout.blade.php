@@ -11,6 +11,7 @@
     <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <!--end::Accessibility Meta Tags-->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--begin::Primary Meta Tags-->
     <meta name="title" content="Admin | @yield('title')" />
     <meta name="author" content="ColorlibHQ" />

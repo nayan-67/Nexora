@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('order_number', 100)->unique()->nullable();
-            $table->tinyInteger('order_status')->nullable()->default(1)->comment('1: Pending, 2: Complete, 3:Canceled');
+            $table->tinyInteger('order_status')->nullable()->default(1)->comment('1: Pending, 2:Partially Shipped, 3: Complete, 4:Canceled');
             $table->tinyInteger('payment_status')->nullable()->default(1)->comment('1: Pending, 2: Paid, 3: Refunded');
             $table->string('payment_mode', 100);
             $table->foreignId('billing_address_id')->constrained('order_address');

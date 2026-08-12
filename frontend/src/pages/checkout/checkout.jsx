@@ -40,7 +40,7 @@ function PrdCard({ item, prd, variants, order }) {
     return (
       <div key={item.prd_id} className="flex items-center gap-3">
         <div className="h-12 w-12 overflow-hidden rounded-lg bg-muted">
-          <img src={`${apiBase}/uploads/${imageType}_sm_${displayData?.featured_image}`} alt={item.name} className="h-full w-full object-cover" />
+          <img src={`${apiBase}/uploads/${imageType}_sm_${displayData?.featured_image}`} alt={item.name} className="h-full w-auto mx-auto mix-blend-multiply" />
         </div>
         <div className="flex-1">
           <p className="text-sm font-medium text-foreground">{prdDetails?.name} {name.length != 0 ? `(${name.join(',')})` : ''}</p>
@@ -56,7 +56,7 @@ function PrdCard({ item, prd, variants, order }) {
   return (
     <div key={item.prd_id} className="flex items-center gap-3">
       <div className="relative h-14 w-14">
-        <img src={`${apiBase}/uploads/${imageType}_sm_${displayData?.featured_image}`} alt={prdDetails?.name} className="h-full w-full object-cover rounded-lg" />
+        <img src={`${apiBase}/uploads/${imageType}_sm_${displayData?.featured_image}`} alt={prdDetails?.name} className="h-full w-auto mx-auto rounded-lg" />
         <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
           {item.quantity}
         </span>
@@ -192,7 +192,14 @@ export default function CheckoutPage() {
     return sum + ((displayData?.sale_price || displayData?.price) * item.quantity || 0)
   }, 0)
   const coupon = JSON.parse(sessionStorage.getItem("coupon"))
-  const discount = coupon ? (coupon.type == 2 ? Number(coupon.amount) : subtotal * (coupon.amount / 100)) : 0
+  let discount = coupon ? (coupon.type == 2 ? Number(coupon.discount_value) : subtotal * (coupon.discount_value / 100)) : 0
+  if (coupon && coupon?.max_discount) {
+    if (discount > coupon.max_discount) {
+      discount = coupon.max_discount
+    } else {
+      discount = Number(discount.toFixed(2))
+    }
+  }
   const shipping = subtotal > 499 ? 0 : 40
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax - discount
@@ -1091,8 +1098,8 @@ export default function CheckoutPage() {
                   </div>
                   {discount != 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-600">Discount ({coupon.type == 2 ? `₹ ${coupon.amount}` : `${coupon.amount}%`})</span>
-                      <span className="text-green-600">-₹ {discount.toFixed(2)}</span>
+                      <span className="text-green-600">Discount ({coupon.type == 2 ? `₹ ${coupon.discount_value}` : `${coupon.discount_value}%`})</span>
+                      <span className="text-green-600">-₹ {discount}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
