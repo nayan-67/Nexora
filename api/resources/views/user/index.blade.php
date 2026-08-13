@@ -3,8 +3,29 @@
 @section('title', 'Customer')
 @section('uactive', 'active')
 
-@section('modal-head', 'USER')
-@section('delete-route', route('user.destroy'))
+@section('css')
+    <style>
+        .block-modal {
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #000000cc;
+            z-index: 2000;
+            display: grid;
+            place-items: center;
+            display: none;
+        }
+
+        .block-modal-dialog {
+            height: auto;
+            width: 325px;
+            opacity: 0;
+            transition: .8s;
+        }
+    </style>
+@endsection
 
 @section('content')
     <main class="app-main">
@@ -34,6 +55,34 @@
         <!--begin::App Content-->
         <div class="app-content" style="min-height:88%;">
             <!--begin::Container-->
+            <!-- ========= Modal ============ -->
+            <div class="block-modal" id="block-modal">
+                <div class="block-modal-dialog bg-body rounded-3">
+                    <!-- Modal content-->
+                    <div class="row modal-top d-flex align-items-center px-4 py-3">
+                        <div class="col-sm-3 fs-1">
+                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                        </div>
+                        <div class=" col-sm-9 m-content">
+                            <h5 class="p-0 m-0 fw-bold text-uppercase">Block User</h5>
+                            {{-- <p class="p-0 m-0">This action cannot be undone.</p> --}}
+                        </div>
+                    </div>
+                    <hr class="m-0 text-secondery opacity-10">
+                    <div class="row modal-btn d-flex align-items-center justify-content-space-between px-4 py-3">
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-outline-secondary btn-md w-100 shadow-sm modal-close"
+                                name="">CANCEL</button>
+                        </div>
+                        <form action="{{ route('user.block') }}" method="POST" class=" col-sm-6 m-content">
+                            @csrf
+                            <input type="hidden" id="user-id" value="" name="id">
+                            <input type="submit" class="btn btn-danger btn-md w-100 shadow-sm" value="BLOCK">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
 
             <!-- ====== Customer Section ======= -->
 
@@ -48,7 +97,7 @@
                                 <div class="row g-2 align-items-center">
                                     <div class="col-12 col-md-6 d-flex gap-4">
                                         <div class="d-flex align-items-center gap-3">
-                                            <label>Show Data</label>
+                                            <label for="show-data">Show Data</label>
                                             <select id="show-data" class="form-select form-select-sm w-auto">
                                                 <option value="10" selected>10</option>
                                                 <option value="25">25</option>
@@ -82,14 +131,6 @@
                                                     placeholder="Search users" aria-label="Search users"
                                                     style="width: 180px" />
                                             </div>
-                                            {{-- <select id="user-role-filter" class="form-select form-select-sm w-auto"
-                                                aria-label="Filter by role">
-                                                <option value="all" selected>All roles</option>
-                                                <option value="administrator">Administrator</option>
-                                                <option value="editor">Editor</option>
-                                                <option value="author">Author</option>
-                                                <option value="subscriber">Subscriber</option>
-                                            </select> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +174,26 @@
         showDataSelect.addEventListener('change', () => {
             reloadUserTable();
         });
+
+        let blockModal = document.querySelector("#block-modal");
+        let blockModalBox = document.querySelector(".block-modal-dialog");
+        let modalClose = document.querySelector(".modal-close");
+        let userId = document.querySelector("#user-id");
+
+        function openBlockModal(val) {
+            userId.value = val;
+            blockModal.style.display = "grid";
+            blockModalBox.style.opacity = "1";
+        }
+        modalClose.addEventListener("click", () => {
+            blockModal.style.display = "none";
+            blockModalBox.style.opacity = "0";
+        });
+        blockModal.addEventListener("click", () => {
+            blockModal.style.display = "none";
+            blockModalBox.style.opacity = "0";
+        });
+
         // document
         //   .getElementById('export-csv')
         //   .addEventListener('click', () => table.download('csv', 'users.csv'));

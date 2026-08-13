@@ -24,7 +24,7 @@ return new class extends Migration
             $table->dateTime('request_date')->nullable()->comment('Return/Replacement Request Date');
             $table->dateTime('rr_date')->nullable()->comment('Return/Replacement Date');
             $table->dateTime('refund_date')->nullable()->comment('Refund Date');
-            $table->tinyInteger('status')->unsigned()->default(0)->comment('1: Processing, 2: Shipped, 3: Out for Delivery, 4: Delivered, 5: Cancelled, 6: Return Requested, 7: Replacement Requested, 8: Returned, 9: Replaced, 10: Refund Requested, 11: Refund Initiated, 12: Refunded');
+            $table->tinyInteger('status')->unsigned()->default(1)->comment('1: Processing, 2: Shipped, 3: Out for Delivery, 4: Delivered, 5: Cancelled, 6: Return Requested, 7: Replacement Requested, 8: Returned, 9: Replaced, 10: Refund Requested, 11: Refund Initiated, 12: Refunded');
 
             $table->timestamps();
             $table->index(['user_id','order_id', 'product_id', 'sku']);

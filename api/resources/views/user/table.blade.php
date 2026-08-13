@@ -21,6 +21,16 @@
                             $ordresult = DB::table('orders')->where('user_id', $row->id)->get();
                             $profile = $row->profile_image ? 'uploads/' . $row->profile_image : 'avatar.jpg';
                             $date = substr($row->created_at, 0, 10);
+                            if ($row->status === 1) {
+                                $stClass = 'text-bg-success';
+                                $status = 'Active';
+                            } elseif ($row->status === 2) {
+                                $stClass = 'text-bg-warning';
+                                $status = 'Inctive';
+                            } else {
+                                $stClass = 'text-bg-danger';
+                                $status = 'Blocked';
+                            }
                         @endphp
                         <tr align="center">
                             <td>
@@ -35,8 +45,7 @@
                             <td>{{ count($ordresult) }}</td>
                             <td>{{ date('M j, Y', strtotime($date)) }}</td>
                             <td>
-                                <span
-                                    class='list-badge {{ $row->status == '1' ? 'text-bg-success' : 'text-bg-warning' }}'>{{ $row->status == '1' ? 'Active' : 'Inactive' }}</span>
+                                <span class='list-badge {{ $stClass }}'>{{ $status }}</span>
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
@@ -52,11 +61,12 @@
                                         <i class="bi bi-cart3 d-flex" aria-hidden="true">
                                         </i>
                                     </a> --}}
-                                    <button type="button" class="btn btn-outline-danger"
-                                        data-bs-toggle="tooltip" data-bs-title="Block User"
-                                        onclick="openModal('{{ $row->id }}');">
-                                        <i class="bi bi-ban d-flex" aria-hidden="true"></i>
-                                    </button>
+                                    @if ($row->status !== 3)
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip"
+                                            data-bs-title="Block User" onclick="openBlockModal('{{ $row->id }}');">
+                                            <i class="bi bi-ban d-flex" aria-hidden="true"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

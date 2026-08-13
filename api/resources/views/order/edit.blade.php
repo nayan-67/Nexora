@@ -10,6 +10,7 @@
         $billingresult = DB::table('order_address')->where('id', $bill_id)->first();
         $shippingresult = DB::table('order_address')->where('id', $ship_id)->first();
         $date = substr($data->created_at, 0, 10);
+        $couponValue = '';
 
         $billingaddress =
             $billingresult->address1 .
@@ -40,7 +41,7 @@
             $statusText = 'Processing';
         } elseif ($data->order_status === 2) {
             $statusClass = 'text-bg-info';
-            $statusText = 'Partially Shipped';
+            $statusText = 'Partially Delivered';
         } elseif ($data->order_status === 3) {
             $statusClass = 'text-bg-success';
             $statusText = 'Completed';
@@ -65,10 +66,10 @@
         } else {
             $paymentStatusClass = 'border border-danger-subtle';
         }
-        // if ($data->discount) {
-        //    $discountData= DB::table('discounts')->where('id', $data->discount_id)->first();
-        // }
-        // $discountValue = $data->discount;
+        if ($data->discount_value) {
+            $couponData = DB::table('used_coupon')->where('order_number', $data->order_number)->first();
+            $couponValue = $couponData->type === 2 ? "(₹ $couponData->amount)" : "($couponData->amount%)";
+        }
     @endphp
     <main class="app-main">
         <!--begin::App Content Header-->
@@ -189,12 +190,36 @@
                                                                 Shipped</option>
                                                             <option {{ $orderItem->status === 3 ? 'selected' : '' }}
                                                                 value="3">
+                                                                Out for Delivery</option>
+                                                            <option {{ $orderItem->status === 4 ? 'selected' : '' }}
+                                                                value="4">
                                                                 Delivered</option>
-                                                            @if ($orderItem->status != 3)
-                                                                <option {{ $orderItem->status === 0 ? 'selected' : '' }}
-                                                                    value="0">
+                                                            @if ($orderItem->status != 4)
+                                                                <option {{ $orderItem->status === 5 ? 'selected' : '' }}
+                                                                    value="5">
                                                                     Canceled</option>
                                                             @endif
+                                                            <option {{ $orderItem->status === 6 ? 'selected' : '' }}
+                                                                value="6">
+                                                                Return Requested</option>
+                                                            <option {{ $orderItem->status === 7 ? 'selected' : '' }}
+                                                                value="7">
+                                                                Replacement Requested</option>
+                                                            <option {{ $orderItem->status === 8 ? 'selected' : '' }}
+                                                                value="8">
+                                                                Returned</option>
+                                                            <option {{ $orderItem->status === 9 ? 'selected' : '' }}
+                                                                value="9">
+                                                                Replaced</option>
+                                                            <option {{ $orderItem->status === 10 ? 'selected' : '' }}
+                                                                value="10">
+                                                                Refund Requested</option>
+                                                            <option {{ $orderItem->status === 11 ? 'selected' : '' }}
+                                                                value="11">
+                                                                Refund Initiated</option>
+                                                            <option {{ $orderItem->status === 12 ? 'selected' : '' }}
+                                                                value="12">
+                                                                Refunded</option>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -270,9 +295,12 @@
                                                             {{ $data->sub_total }}</span>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
-                                                        <span>Discount :</span>
+                                                        <span>Discount {{ $couponValue }}:</span>
                                                         <span>- ₹
                                                             {{ $data->discount_value }}</span>
+                                                    </div>
+                                                    <div class="fs-8 text-info">
+                                                        {{ $data->used_coupon ? "Coupon ($data->used_coupon)" : '' }}
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <span>Shipping :</span>
@@ -328,12 +356,13 @@
 
 @section('script')
     <script>
-        let button = document.querySelector("#order_update");
-        let icon = document.querySelector("#arrow_repeat");
-        button.addEventListener("click", async function() {
+        let button = document.getElementById("order_update");
+        let icon = document.getElementById("arrow_repeat");
+        let loader = document.getElementById("loader");
+
+        button.addEventListener("click", () => {
             icon.style.animation = "spin 1s linear infinite";
-            await new Promise(resolve => setTimeout(resolve, 500));
-            this.disabled = true;
+            loader.classList.replace("d-none", "d-flex");
         });
     </script>
 @endsection

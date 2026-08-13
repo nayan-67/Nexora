@@ -88,7 +88,8 @@ Route::controller(Customer::class)->group(function () {
     Route::get('/customer', 'index')->name('admin.user');
     Route::get('/customer/view/{id}', 'view')->name('user.view');
     Route::put('/customer/update/{id}', 'update')->name('user.update');
-    Route::delete('/customer/destroy', 'destroy')->name('user.destroy');
+    // Route::delete('/customer/destroy', 'destroy')->name('user.destroy');
+    Route::post('/user/block','blockUser')->name('user.block');
     Route::get('/customer/order/{id}', 'userOrder')->name('user.order');
     Route::delete('/customer/order/destroy', 'delorder')->name('order.delete');
     Route::post('/update/status','updateStatus')->name('user.status');

@@ -63,32 +63,44 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = User::where(['email' => $request->email, 'status' => 1])->first();
+        $user = User::where('email', $request->email)->first();
 
-        if (!$user) {
+        if ($user) {
+            if ($user->status === 2) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Your account is inactive. Please contact support.'
+                ], 403);
+            } elseif ($user->status === 3) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Your account is blocked.'
+                ], 403);
+            } else {
+                // optional: delete old tokens
+                $user->tokens()->delete();
+
+                $token = $user->createToken('auth_token')->plainTextToken;
+                $address = Address::where(['user_id' => $user->id, 'is_default' => 1])->first();
+                $cartItems = Cart::where('user_id', $user->id)->get();
+
+                return response()->json([
+                    'status' => true,
+                    'user' => $user,
+                    'token' => $token,
+                    'address' => $address,
+                    'cartdata' => $cartItems,
+                    'stats' => [
+                        'orders' => Orders::where('user_id', $user->id)->count(),
+                        'wishlist' => Wishlist::where('user_id', $user->id)->count(),
+                    ],
+                ], 200);
+            }
+        } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Your account is inactive. Please contact support.'
-            ], 403);
+                'message' => 'Invalid email'
+            ], 401);
         }
-
-        // optional: delete old tokens
-        $user->tokens()->delete();
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $address = Address::where(['user_id' => $user->id, 'is_default' => 1])->first();
-        $cartItems = Cart::where('user_id', $user->id)->get();
-
-        return response()->json([
-            'status' => true,
-            'user' => $user,
-            'token' => $token,
-            'address' => $address,
-            'cartdata' => $cartItems,
-            'stats' => [
-                'orders' => Orders::where('user_id', $user->id)->count(),
-                'wishlist' => Wishlist::where('user_id', $user->id)->count(),
-            ],
-        ], 200);
     }
 }

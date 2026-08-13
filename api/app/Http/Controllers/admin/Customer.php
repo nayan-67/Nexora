@@ -94,12 +94,14 @@ class Customer extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function blockUser(Request $request)
     {
         $id = $request->id;
-        if (User::destroy($id)) {
-            toast('Discount Deleted Successfully', 'success');
-            return redirect()->route('admin.discount');
+        $user = User::find($id);
+        $user->status = 3;
+        if ($user->save()) {
+            toast('User Blocked', 'success');
+            return redirect()->route('admin.user');
         }
     }
 
