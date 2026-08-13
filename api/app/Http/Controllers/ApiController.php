@@ -556,6 +556,18 @@ class ApiController extends Controller
         return response($data->order_number, 200);
     }
 
+    public function orderDetails(int $id)
+    {
+        $order = Orders::find($id);
+        $orderItems = orderItems::where('order_id', $id)->get();
+        $usedCoupon = UsedCoupon::where('order_number', $order->order_number)->first();
+        return response()->json([
+            'orderData' => $order,
+            'orderItems' => $orderItems,
+            'coupon' => $usedCoupon
+        ]);
+    }
+
     public function updateprofile(Request $request)
     {
         $user = Auth::user();
