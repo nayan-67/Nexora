@@ -677,11 +677,11 @@ export default function OrderDetailPage() {
 
                             {/* Action Buttons */}
                             <div className="flex flex-col sm:flex-row gap-3 border-t border-slate-200 dark:border-slate-700 pt-6">
-                                <Button className="flex-1 gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+                                <Button variant="custom" className="flex-1 gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold">
                                     <Download className="h-4 w-4" />
                                     Download Invoice
                                 </Button>
-                                <Button className="flex-1 gap-2 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold">
+                                <Button variant="custom" className="flex-1 gap-2 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold">
                                     <X className="h-4 w-4" />
                                     Cancel Order
                                 </Button>
