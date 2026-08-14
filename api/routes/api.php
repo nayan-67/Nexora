@@ -17,6 +17,7 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('/products', 'products');
     Route::get('/featured-products', 'featuredProducts');
     Route::get('/products/{id}', 'productDetails');
+    Route::get('/productdata/{id}', 'productData');
     Route::get('/products/category/{slug}', 'productsByCategory');
     Route::get('/attr', 'attr');
     Route::get('/product/variants', 'prdVariants');
@@ -42,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/address/update', 'updateAddr');
         Route::post('/order/create', 'createOrder');
         Route::get('/order/{id}', 'orderData');
+        Route::get('/orderdetails/{id}', 'orderDetails');
         Route::get('/wishlist', 'wishlist');
         Route::post('/wishlist/add', 'addWish');
         Route::get('/applydiscount/{code}', 'applyDiscount');

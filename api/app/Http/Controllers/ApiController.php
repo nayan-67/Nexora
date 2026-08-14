@@ -78,6 +78,20 @@ class ApiController extends Controller
         return response()->json($products, 200);
     }
 
+    public  function productData(int $id)
+    {
+        $product = Products::find($id);
+        $variants = Variant::where('product_id', $id)->get();
+        if ($product->type === 1) {
+            return response()->json($product, 200);
+        } else {
+            return response()->json([
+                'name' => $product->name,
+                'variants' => $variants
+            ], 200);
+        }
+    }
+
     public function productsByCategory(string $slug)
     {
         $cat = Category::where('slug', $slug)->first();
@@ -559,13 +573,58 @@ class ApiController extends Controller
     public function orderDetails(int $id)
     {
         $order = Orders::find($id);
-        $orderItems = orderItems::where('order_id', $id)->get();
-        $usedCoupon = UsedCoupon::where('order_number', $order->order_number)->first();
+
+        $orderItems = OrderItems::where('order_id', $order->id)
+            ->get()
+            ->map(function ($item) {
+                $variant = null;
+                $product = null;
+
+                if ((int) $item->product_type === 2) {
+                    $variant = Variant::where('sku', $item->sku)->first();
+                    $product = $variant ? $variant->product()->first() : null;
+                } else {
+                    $product = Products::find($item->product_id);
+                }
+
+                $item->name = $product?->name ?? 'Product';
+                $item->image = $variant?->featured_image ?? $product?->featured_image ?? null;
+                $item->attributes = $variant?->attributes ?? null;
+                // $item->variant = $variant ? [
+                //     'id' => $variant->id,
+                //     'sku' => $variant->sku,
+                //     'attributes' => $variant->attributes,
+                //     'price' => $variant->sale_price ?? $variant->price,
+                //     'stock' => $variant->stock,
+                //     'featured_image' => $variant->featured_image,
+                //     'gallery_images' => $variant->gallery_images,
+                // ] : null;
+                // $item->product = $product ? [
+                //     'id' => $product->id,
+                //     'name' => $product->name,
+                //     'slug' => $product->slug,
+                //     'sku' => $product->sku,
+                //     'type' => $product->type,
+                //     'featured_image' => $product->featured_image,
+                //     'gallery_images' => $product->gallery_images,
+                // ] : null;
+
+                // if ($item->price === null) {
+                //     $item->price = $variant?->sale_price ?? $variant?->price ?? $product?->sale_price ?? $product?->price ?? 0;
+                // }
+
+                return $item;
+            });
+
         return response()->json([
-            'orderData' => $order,
+            'orderData' => [
+                'order' => $order,
+                'billing' => OrderAddress::find($order->billing_address_id),
+                'shipping' => OrderAddress::find($order->shipping_address_id),
+            ],
             'orderItems' => $orderItems,
-            'coupon' => $usedCoupon
-        ]);
+            'coupon' => UsedCoupon::where('order_number', $order->order_number)->first(),
+        ], 200);
     }
 
     public function updateprofile(Request $request)
