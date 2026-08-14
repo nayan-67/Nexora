@@ -541,13 +541,13 @@ export default function OrderDetailPage() {
                                                         <Button asChild size="sm" variant="outline" className="flex-1">
                                                             <Link to={`/products/${item.id}`}>View Product</Link>
                                                         </Button>
-                                                        {item.status === 'processing' || item.status === 'shipped' ? (
+                                                        {item.status === 1 || item.status === 2 ? (
                                                             <Button asChild size="sm" className="flex-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800">
                                                                 <Link to={`/orders/${orderData.id}/cancel?item=${item.id}`}>
                                                                     Cancel Item
                                                                 </Link>
                                                             </Button>
-                                                        ) : item.status === 'delivered' ? (
+                                                        ) : item.status === 4 ? (
                                                             <Button asChild size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                                                                 <Link to={`/orders/${orderData.id}/return?item=${item.id}`}>
                                                                     Return Item
@@ -690,7 +690,7 @@ export default function OrderDetailPage() {
                     </div>
 
                 ) : (
-                    <div>
+                    <div className='h-screen flex items-center justify-center'>
                         Loading ...
                     </div>
                 )}
