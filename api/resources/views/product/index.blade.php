@@ -285,7 +285,7 @@
                                                     return (attr.name || '') + ': ' + (attr.value.name || JSON.stringify(attr.value));
                                                 }
                                                 return (attr.name || '') + ': ' + (attr.value ?? '');
-                                            }).join(', ')
+                                            }).join('<br>')
                                             : '-';
                                             let img=`${appURL}/uploads/var_sm_${variant.featured_image}`;
                                             let salePrice = variant.sale_price ? `₹ ${variant.sale_price}` : '---';
@@ -298,7 +298,7 @@
                                                 <td>₹ ${variant.price ?? '-'}</td>
                                                 <td>${salePrice}</td>
                                                 <td><span class='dot bg-${variant.stock >= 20 ? 'success' : variant.stock >= 10 ? 'primary' : variant.stock >= 5 ? 'warning' : 'danger'}'></span>${variant.stock ?? '-'}</td>
-                                                <td>${attrText}</td>
+                                                <td align="left">${attrText}</td>
                                             </tr>
                                         `;
                                     }).join('')}
