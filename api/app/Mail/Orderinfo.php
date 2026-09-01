@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -18,10 +19,12 @@ class Orderinfo extends Mailable
      */
     protected $data;
     protected $ord_id;
-    public function __construct($data, $id)
+    protected $path;
+    public function __construct($data, $id, $path = null)
     {
         $this->data = $data;
         $this->ord_id = $id;
+        $this->path = $path;
     }
 
     /**
@@ -42,13 +45,13 @@ class Orderinfo extends Mailable
         return new Content(
             view: 'email.orderinfo-temp',
             with: [
-                'ordresult' => $this->data['ordresult'],
-                'billingresult' => $this->data['billingresult'],
-                'shippingresult' => $this->data['shippingresult'],
-                'prdresult' => $this->data['prdresult'],
-                'couponresult' => $this->data['couponresult'] ?? false,
-                'date' => $this->data['date'],
-                'time' => $this->data['time'],
+                // 'ordresult' => $this->data['ordresult'],
+                // 'billingresult' => $this->data['billingresult'],
+                // 'shippingresult' => $this->data['shippingresult'],
+                // 'prdresult' => $this->data['prdresult'],
+                // 'couponresult' => $this->data['couponresult'] ?? false,
+                // 'date' => $this->data['date'],
+                // 'time' => $this->data['time'],
             ]
         );
     }
@@ -60,6 +63,8 @@ class Orderinfo extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            Attachment::fromPath($this->path)->as('Invoice.pdf')->withMime('application/pdf')
+        ];
     }
 }
